@@ -711,7 +711,6 @@ namespace winrt::WuiFET::implementation
                 item.Tag(winrt::box_value((long long)0));
                 item.Click([&](IInspectable const&, RoutedEventArgs const&)
                     {
-                        int p = 100;
                         SelectedLeft2 = 0;
                         Percentage(100);
                         Refresh(L"Percentage");

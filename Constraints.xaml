@@ -156,17 +156,25 @@
                 </StackPanel>
                 <!-- Data -->
                 <local:DGDataGrid  Visibility="{x:Bind IsGridRightVisible,Mode=OneWay}" x:Name="zz1_gr" Grid.Row="2" Grid.Column="0" ItemsSource="{x:Bind zz1_is,Mode=OneWay}" ColumnHeaders="{x:Bind zz1_ch,Mode=OneWay}" />
-                <ListView  Visibility="{x:Bind IsListRightVisible,Mode=OneWay}"  x:Name="Right_ListView" Grid.Row="2" ItemsSource="{x:Bind Right_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="RightChanged" SelectionMode="Multiple">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Item">
-                            <StackPanel Orientation="Horizontal" Margin="10" >
-                                <SymbolIcon Symbol="Page2" />
-                                <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0">
-                                </TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <Grid x:Name="C1_Right" Visibility="{x:Bind IsListRightVisible,Mode=OneWay}" Grid.Row="2" Grid.Column="0"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <AutoSuggestBox x:Name="fb11r" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}"  Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnRightFilter" />
+                    <ListView    x:Name="Right_ListView" Grid.Row="1" ItemsSource="{x:Bind Right_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="RightChanged" SelectionMode="Multiple" ContainerContentChanging="GenericContentChanging">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:Item">
+                                <StackPanel Orientation="Horizontal" Margin="10" >
+                                    <SymbolIcon Symbol="Page2" />
+                                    <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0">
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+                
             </Grid>
 
         </Grid>

@@ -436,7 +436,7 @@ namespace winrt::WuiFET::implementation
                         {
                             newel.AddElement(param.x1.c_str()).SetContent(std::to_string(param.def).c_str());
 						}
-                        Refresh(L"RightList");
+                        Refresh(L"Right_List");
                         Refresh(L"IsGridRightVisible");
                         Refresh(L"zz1_is");
                         Refresh(L"zz1_ch");
@@ -545,6 +545,39 @@ namespace winrt::WuiFET::implementation
                 }
 
 
+                if (SpecialView == 2)
+                {
+                    std::string search_for = "ConstraintSubjectPreferredRoom";
+                    std::string search_for2 = "Room";
+                    const char* s1 = "Space_Constraints_List";
+                    auto x = project->x;
+                    XML3::XMLElement* root = &x->GetRootElement();
+                    if (ViewingConstraint && ViewingConstraint->Type == 0)
+                        s1 = "Time_Constraints_List";
+                    auto r0 = root->FindElementZ(s1, true);
+                    for (auto& r1 : *r0)
+                    {
+                        if (r1.GetElementName() != search_for)
+                            continue;
+                        auto tn = trim(r1.FindElementZ(search_for2.c_str(), true)->GetContent());
+                        if (tn != SelectedLeftName)
+                            continue;
+
+                        SelectedLeft2 = &r1; // default editable the first one
+                        int p = 100;
+                        p = _wtoi(trim(SelectedLeft2->FindElementZ("Weight_Percentage", true)->GetContent()).c_str());
+                        _Percentage = p;
+                        Refresh(L"Percentage");
+                        Refresh(L"zz1_ch");
+                        Refresh(L"zz1_is");
+
+                        // There is one found, change y
+                        y.Format(L"%s #%i", s(82), 1);
+                        str3(y.c_str());
+                        break;
+                    }
+                }
+
 
             }
 
@@ -630,6 +663,16 @@ namespace winrt::WuiFET::implementation
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
+                    else
+                    if (SpecialView == 2)
+                    {
+						std::string search_for = "ConstraintSubjectPreferredRoom";
+                        if (LeftMode == 3)
+                        {
+                        }
+                        if (c0.GetElementName() != search_for)
+                            continue;
+                    }
 
                     std::string SearchElement1 = "";
                     std::string SearchElement2 = "";
@@ -642,6 +685,10 @@ namespace winrt::WuiFET::implementation
                     {
                         SearchElement1 = "Students";
 					}
+                    if (LeftMode == 3)
+                    {
+                        SearchElement1 = "Subject";
+                    }
                     if (LeftMode == 4)
                     {
                         SearchElement1 = "Room";
@@ -676,7 +723,7 @@ namespace winrt::WuiFET::implementation
             Refresh(L"IsMultiple");
             Refresh(L"IsPercentageVisible");
             Refresh(L"IsGridRightVisible");
-            Refresh(L"RightList");
+            Refresh(L"Right_List");
             Refresh(L"Percentage");
             Refresh(L"zz1_ch");
             Refresh(L"zz1_is");
@@ -686,6 +733,23 @@ namespace winrt::WuiFET::implementation
         void RightChanged(IInspectable, IInspectable)
         {
             // right list
+			auto lv = Right_ListView();
+            auto sels = lv.SelectedItems();
+            if (SelectedLeft2 && SpecialView == 2)
+            {
+                // Remove all "Room"
+                for (int i = (int)SelectedLeft2->GetChildrenNum() - 1; i >= 0; i--)
+                {
+                    auto& el = SelectedLeft2->GetChildren().at(i);
+                    if (el->GetElementName() == "Room")
+						SelectedLeft2->RemoveElement(i);
+                }
+
+                if (sels.Size() == 0)
+                {
+                    // Remove it
+                }
+            }
         }
 
         void zz1_Click(IInspectable sender, IInspectable)
@@ -958,9 +1022,84 @@ namespace winrt::WuiFET::implementation
             return rows;
         }
 
+        ystring RightFilter;
+        void OnRightFilter(IInspectable const&, IInspectable const&)
+        {
+            RightFilter = fb11r().Text().c_str();
+            Refresh(L"Right_List");
+        }
+
+
+        void GenericContentChanging(IInspectable const& sender,
+            winrt::Microsoft::UI::Xaml::Controls::ContainerContentChangingEventArgs const& args)
+        {
+            if (args.InRecycleQueue())
+                return;
+
+            auto lv = sender.as<winrt::Microsoft::UI::Xaml::Controls::ListView>();
+            if (!lv)
+                return;
+
+            auto sels = lv.SelectedItems();
+            if (!sels)
+                return;
+
+            auto it = args.Item().try_as<winrt::WuiFET::Item>();
+            if (!it)
+                return;
+
+            uint32_t idx = 0;
+            bool exists = sels.IndexOf(it, idx);
+
+            if (it.Sel())
+            {
+                if (!exists)
+                    sels.Append(it);
+            }
+            else if (exists)
+            {
+                sels.RemoveAt(idx);
+            }
+        }
+
+
+
+
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Right_List()
         {
             auto items = winrt::single_threaded_observable_vector<winrt::WuiFET::Item>();
+            if (SpecialView == 2)
+            {
+                // Rooms
+                auto x = project->x;
+                auto& re = x->GetRootElement()["Rooms_List"];
+                for (auto& rr2 : re)
+                {
+                    auto name2 = trim(rr2.FindElementZ("Name", true)->GetContent().c_str());
+                    std::transform(name2.begin(), name2.end(), name2.begin(), towlower);
+                    if (name2.find(RightFilter.c_str()) == ystring::npos)
+                        continue;
+
+                    winrt::WuiFET::Item it;
+                    it.Name1(name2.c_str());
+                    it.ptr((long long)&rr2);
+                    if (SelectedLeft2)
+                    {
+						std::string search_for = "Room";
+                        for(auto& s : *SelectedLeft2)
+                        {
+                            if (s.GetElementName() != search_for)
+                                continue;
+                            auto v = trim(s.GetContent());
+                            if (v == name2)
+                                it.Sel(true);
+						}
+					}
+                    items.Append(it);
+
+                }
+
+            }
             return items;
         }
 
@@ -1418,10 +1557,11 @@ namespace winrt::WuiFET::implementation
 		// Space + Subject
         void SS_Lesson_PreferredRoom(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
         {
+            str2(s(147));
             LeftMode = 3; // Lesson
+            SpecialView = 2;
             ViewingConstraint = nullptr;
             _LeftVisible = 1;
-            _IsActiveVisible = true;
             _IsMultiple = true;
             _IsPercentageVisible = true;
             _RightVisible = false;
@@ -1432,10 +1572,11 @@ namespace winrt::WuiFET::implementation
         }
         void SS_Lesson_PreferredRooms(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
         {
+            str2(s(148));
             LeftMode = 3; // Lesson
+            SpecialView = 2;
             ViewingConstraint = nullptr;
             _LeftVisible = 1;
-            _IsActiveVisible = true;
             _IsMultiple = true;
             _IsPercentageVisible = true;
             _RightVisible = false;

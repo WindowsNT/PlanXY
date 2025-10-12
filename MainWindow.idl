@@ -1,0 +1,17 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass MainWindow : Microsoft.UI.Xaml.Window
+    {
+        MainWindow();
+        static String txt(Int32 sidx);
+        Int64 wnd;
+        Int64 ptrx{ get; };
+        String file;
+        void PushUndo();
+        void PushRedo();
+        void Undo();
+        void Redo();
+        void Dirty();
+    }
+}

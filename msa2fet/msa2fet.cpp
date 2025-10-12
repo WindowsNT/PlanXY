@@ -521,6 +521,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 			std::wstring k = L"X-key: ";
 			k += res;
 			auto i3 = r.RequestWithBuffer(L"fetresults.php", L"POST", { k }, d0.data(), d0.size());
+			ShellExecute(0, L"open", L"https://www.msa-apps.com/fet/?real=1", 0, 0, SW_SHOWNORMAL);
 		}
 	}
 

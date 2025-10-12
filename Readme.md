@@ -1,5 +1,5 @@
 # Plan XY
-A WinUI 3 port of [FET](https://lalescu.ro/liviu/fet).
+A WinUI 3 port of [FET](https://lalescu.ro/liviu/fet) with new GUI, Generation and Result features.
 
 
 ![screenshot](1.jpg)
@@ -11,6 +11,7 @@ Work in progress.
 
 # License
 Plan XY is MIT
-FET is AGPL
+
+FET is AGPL 
 
 

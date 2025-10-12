@@ -112,6 +112,14 @@ namespace WuiFET
         String Kid_Name;
         Int32 Kid_Code;
 
+        Double Parents_V1;
+        Microsoft.UI.Xaml.GridLength Parents_VV1{ get; };
+        Double Parents_V2;
+        Microsoft.UI.Xaml.GridLength Parents_VV2{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Parents_List{ get; };
+        String Parent_Name;
+        Int32 Parent_Code;
+
 
         Double Assi_V1;
         Microsoft.UI.Xaml.GridLength Assi_VV1{ get; };

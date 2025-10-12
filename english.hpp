@@ -145,9 +145,13 @@ L"Max bulding changes (Interval)",
 L"About",
 L"Preferred rooms",
 L"Preferred room",
+L"Creating parents is not needed to generate a timetable but it is useful for exporting it for each parent.",
+L"Parents",
+L"Parent",
+L"Parent name,Parent code",
 };
 
-#define MAX_LANG 147
+#define MAX_LANG 151
 
 
 

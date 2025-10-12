@@ -51,6 +51,7 @@
                 <SelectorBarItem x:Name="sb1_subjects"  Text="{x:Bind txt(26);}" />
                 <SelectorBarItem x:Name="sb1_classes" Text="{x:Bind txt(55);}" />
                 <SelectorBarItem x:Name="sb1_students" Text="{x:Bind txt(27);}" />
+                <SelectorBarItem x:Name="sb1_parents" Text="{x:Bind txt(149);}" />
                 <SelectorBarItem x:Name="sb1_assignments"  Text="{x:Bind txt(87);}" />
                 <SelectorBarItem x:Name="sb1_tags"  Text="{x:Bind txt(29);}" />
                 <SelectorBarItem x:Name="sb1_activities"  Text="{x:Bind txt(25);}" />
@@ -1056,7 +1057,7 @@
                         <DropDownButton.Flyout>
                             <MenuFlyout Placement="Bottom">
                                 <MenuFlyoutItem  Click="OnKid_Add" Text="{x:Bind txt(41);}"/>
-                                <MenuFlyoutItem  Click="OnKids_Import" Text="{x:Bind txt(106);}" ToolTipService.ToolTip="{x:Bind txt(111);}"/>
+                                <MenuFlyoutItem  Click="OnKids_Import" Text="{x:Bind txt(106);}" ToolTipService.ToolTip="{x:Bind txt(11);}"/>
                                 <MenuFlyoutItem  Click="OnKids_Sort" Text="{x:Bind txt(70);}"/>
                                 <MenuFlyoutSubItem Text="{x:Bind txt(80);}">
                                     <MenuFlyoutItem Click="OnKids_FilterType0" Text="{x:Bind txt(42);}" />
@@ -1149,6 +1150,133 @@
 
         </Grid>
         
+        <!-- Parents -->
+        <Grid Grid.Row="3" x:Name="Data_Parents" Visibility="{x:Bind DataVisibleWhat(19);,Mode=Oneway}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{x:Bind Parents_VV1,Mode=OneWay}"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="{x:Bind Parents_VV2,Mode=OneWay}"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <InfoBar Grid.Row="0" Grid.ColumnSpan="5" IsOpen="True" Severity="Warning"  IsClosable="True" VerticalAlignment="Top" Title="{x:Bind txt(148);}" />
+
+            <InfoBar Grid.Row="1" IsOpen="True" Severity="Informational"  IsClosable="False" VerticalAlignment="Top">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind txt(149);}" Margin="4" Grid.Column="0" VerticalAlignment="Center"/>
+                    <DropDownButton Margin="4" Grid.Column="1" VerticalAlignment="Center">
+                        <IconSourceElement>
+                            <FontIconSource  Glyph="&#xE700;"  FontSize="16"/>
+                        </IconSourceElement>
+                        <DropDownButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem  Click="OnParent_Add" Text="{x:Bind txt(41);}"/>
+                                <MenuFlyoutItem  Click="OnParents_Import" Text="{x:Bind txt(106);}" ToolTipService.ToolTip="{x:Bind txt(151);}"/>
+                                <MenuFlyoutItem  Click="OnParents_Sort" Text="{x:Bind txt(70);}"/>
+                                <MenuFlyoutSubItem Text="{x:Bind txt(80);}">
+                                    <MenuFlyoutItem Click="OnParents_FilterType0" Text="{x:Bind txt(42);}" />
+                                    <MenuFlyoutItem Click="OnParents_FilterType1" Text="{x:Bind txt(34);}" />
+                                </MenuFlyoutSubItem>
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                    <AutoSuggestBox x:Name="fb9a" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}" Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnParents_Filter" />
+                </Grid>
+            </InfoBar>
+
+
+            <ListView x:Name="ParentsList" Grid.Row="2" Grid.Column="0" ItemsSource="{x:Bind Parents_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="ParentChanged" SelectionMode="{x:Bind lvsm(17),Mode=OneWay}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Item">
+                        <StackPanel Orientation="Horizontal" Margin="10" >
+                            <SymbolIcon Symbol="Page2" />
+                            <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0">
+                                <TextBlock.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="{x:Bind txt(46);}" Click="OnParentSelected_Delete"/>
+                                    </MenuFlyout>
+                                </TextBlock.ContextFlyout>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <local:Resizer Grid.Column="1" Margin="10" Grid.RowSpan="2" Grid.Row="1"
+                            Width="1"
+	                        Minimum="-1000"
+	                        Maximum="1000"
+	                        Orientation="Vertical"
+	                        Value="{x:Bind Parents_V1,Mode=TwoWay}"/>
+
+            <InfoBar Visibility="{x:Bind PropertyVisibleWhat(17),Mode=OneWay}" Grid.Row="1" Grid.Column="2" IsOpen="True" Severity="Informational"  IsClosable="False" VerticalAlignment="Top">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind txt(55);}" Margin="4" Grid.Column="0" VerticalAlignment="Center"/>
+                    <AutoSuggestBox x:Name="fb13a" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}" Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnClass_Filter" />
+                </Grid>
+            </InfoBar>
+
+            <ListView Visibility="{x:Bind PropertyVisibleWhat(17),Mode=OneWay}" x:Name="Kids2_List" Grid.Row="2" Grid.Column="2" ItemsSource="{x:Bind Kids_List,Mode=OneWay}"  VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="ParentKidChanged" ContainerContentChanging="GenericContentChanging" SelectionMode="{x:Bind lvsm(25),Mode=OneWay}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Item">
+                        <StackPanel Orientation="Horizontal" Margin="10" >
+                            <SymbolIcon Symbol="Page2" />
+                            <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0">
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <local:Resizer Grid.Column="3" Margin="10" Grid.RowSpan="2" Grid.Row="1"
+                            Width="1"
+	                        Minimum="-1000"
+	                        Maximum="1000"
+	                        Orientation="Vertical"
+	                        Value="{x:Bind Parents_V2,Mode=TwoWay}"/>
+
+            <InfoBar Grid.Row="1" Grid.Column="4" Visibility="{x:Bind PropertyVisibleWhat(17);,Mode=Oneway}" Message="{x:Bind txt(40);}" Severity="Informational"  IsClosable="False" IsOpen="True">
+            </InfoBar>
+
+            <!-- Parent -->
+            <Grid Grid.Row="2" Grid.Column="4" Visibility="{x:Bind PropertyVisibleWhat(17);,Mode=Oneway}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Parent_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Parent_Code,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+            </Grid>
+
+
+        </Grid>
+
+
         <!-- Assignments Data -->
         <Grid Grid.Row="3" x:Name="Data_Assignments" Visibility="{x:Bind DataVisibleWhat(17);,Mode=Oneway}">
 

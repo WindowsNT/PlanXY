@@ -50,6 +50,8 @@ void DbClean(const char* xy)
 				continue;
 			if (r["name"] == "PERSONSINSCHOOL")
 				continue;
+			if (r["name"] == "PARENTSMYSCHOOL")
+				continue;
 			if (r["name"] == "BUILDINGS")
 				continue;
 			if (r["name"] == "TROOMPREF")
@@ -242,6 +244,7 @@ std::vector<K> AllKidLoaded;
 #include "lessons.h"
 #include "teachers.h"
 #include "kids.h"
+#include "parents.h"
 #include "tag.h"
 #include "activities.h"
 #include "timeconstraints.h"
@@ -555,6 +558,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet)
 	CreateLessons(x,sql);
 	CreateTeachers(x, sql);
 	CreateKids(x, sql);
+	CreateParents(x, sql);
 	FindTeachersWithSynola(x, sql);
 
 

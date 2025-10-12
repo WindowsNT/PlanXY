@@ -2,6 +2,7 @@
 #include "DGCellModel.g.h"
 ystring trim(ystring s);
 #include "constraintclass.hpp"
+extern int _NewPutGlobalPercNext;
 
 namespace winrt::WuiFET::implementation
 {
@@ -100,7 +101,7 @@ namespace winrt::WuiFET::implementation
             }
 
 
-            if ((_whatx == 1 || _whatx == 2 || _whatx == 3) && _ptr2 && _ptr3)
+            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 7) && _ptr2 && _ptr3)
             {
                 // pi1 = DGDataGrid
                 // pi2 = MainWindow
@@ -113,7 +114,7 @@ namespace winrt::WuiFET::implementation
                 auto root = (XML3::XMLElement*)_ptr2;
                 XML3::XMLElement* Teacher = (XML3::XMLElement*)_ptr3;
                 const char* tofind = "Time_Constraints_List";
-                if (_whatx == 3)
+                if (_whatx >= 7)
 					tofind = "Space_Constraints_List";
                 auto Time_Constraints_List = root->FindElementZ(tofind, true);
 
@@ -146,7 +147,7 @@ namespace winrt::WuiFET::implementation
 						const char* whatadd = "ConstraintTeacherNotAvailableTimes";
                         if (_whatx == 2)
 							whatadd = "ConstraintStudentsSetNotAvailableTimes";
-						if (_whatx == 3)
+						if (_whatx == 7)
 							whatadd = "ConstraintRoomNotAvailableTimes";
                         auto& t0 = Time_Constraints_List->AddElement(whatadd);
 						Ptr4((long long)&t0);
@@ -174,10 +175,10 @@ namespace winrt::WuiFET::implementation
                             t0.AddElement("Teacher").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
                         if (_whatx == 2)
                             t0.AddElement("Students").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
-						if (_whatx == 3)
+						if (_whatx == 7)
 							t0.AddElement("Room").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
 
-                        t0.AddElement("Weight_Percentage").SetContent("100");
+                        t0.AddElement("Weight_Percentage").SetContent(std::to_string(_NewPutGlobalPercNext).c_str());
                     }
                 }
                 XML3::XMLElement* ConstraintTeacherNotAvailableTimes = (XML3::XMLElement*)_ptr4;
@@ -410,7 +411,7 @@ namespace winrt::WuiFET::implementation
             }
 		}
 
-        int _whatx = 0; // 1 -> TimeNotAvailable Teacher
+        int _whatx = 0; // 1 -> TimeNotAvailable Teacher 2 StudentSet, 3 Room, 7+ Space, 11 Generic
         int _minwidth = 150;
         long long _ptr = 0;
         long long _ptr2 = 0;

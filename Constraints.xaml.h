@@ -3,11 +3,17 @@
 #include "Constraints.g.h"
 #include "constraintclass.hpp"
 inline int _ConstraintsMode = 0;
+inline int _NewPutGlobalPercNext = 100;
 ystring trim(ystring s);
 winrt::Windows::Foundation::IInspectable WindowFromPage(winrt::Windows::Foundation::IInspectable pg);
 
 namespace winrt::WuiFET::implementation
 {
+    using namespace winrt;
+    using namespace Microsoft::UI::Xaml;
+    using namespace Microsoft::UI::Xaml::Controls;
+    using namespace Microsoft::UI::Xaml::Input;
+
     struct Constraints : ConstraintsT<Constraints>
     {
         Constraints()
@@ -52,7 +58,7 @@ namespace winrt::WuiFET::implementation
             return s(jx);
         }
         winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
-        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons
+        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms
         XML3::XMLElement* SelectedLeft = 0;
         XML3::XMLElement* SelectedLeft2 = 0;
         ystring LeftFilter;
@@ -93,6 +99,30 @@ namespace winrt::WuiFET::implementation
             if (LeftMode == 3) // Subjects
             {
                 auto& r = x->GetRootElement()["Subjects_List"];
+                for (auto& rr : r)
+                {
+                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
+                    ystring name = trim(ee->GetContent());
+                    winrt::WuiFET::Item it;
+                    it.Name1(name.c_str());
+                    it.ptr((long long)&rr);
+
+                    if (LeftFilter.length())
+                    {
+                        // Must be in name
+                        auto name21 = name;
+                        auto filter2 = LeftFilter;
+                        std::transform(name21.begin(), name21.end(), name21.begin(), towlower);
+                        std::transform(filter2.begin(), filter2.end(), filter2.begin(), towlower);
+                        if (name21.find(filter2.c_str()) == ystring::npos)
+                            continue;
+                    }
+                    items.Append(it);
+                }
+            }
+            if (LeftMode == 4) // Rooms
+            {
+                auto& r = x->GetRootElement()["Rooms_List"];
                 for (auto& rr : r)
                 {
                     std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
@@ -188,6 +218,8 @@ namespace winrt::WuiFET::implementation
                     }
                 }
             }
+
+
             return items;
         }
 
@@ -427,7 +459,7 @@ namespace winrt::WuiFET::implementation
 		}
 
 
-		int _Percentage = 0;
+		int _Percentage = 100;
         int Percentage()
         {
             return _Percentage;
@@ -437,6 +469,18 @@ namespace winrt::WuiFET::implementation
             if (_Percentage != value)
             {
                 _Percentage = value;
+
+                if (SelectedLeft2)
+                {
+                    ystring v;
+                    v.Format(L"%i", value);
+                    SelectedLeft2->FindElementZ("Weight_Percentage", true)->SetContent(v);
+                }
+                else
+                {
+                    _NewPutGlobalPercNext = _Percentage;
+                }
+
             }
 		}
 
@@ -449,6 +493,59 @@ namespace winrt::WuiFET::implementation
 				_Percentage = _wtoi(trim(SelectedLeft2->FindElementZ("Weight_Percentage", true)->GetContent()).c_str());
                 Refresh(L"IsActiveChecked");
                 Refresh(L"Percentage");
+
+				ystring SelectedLeftName = trim(SelectedLeft->FindElementZ("Name", true)->GetContent());
+
+                // Special Load
+                ystring y;
+                y.Format(L"%s", s(83));
+                str3(y.c_str());
+
+                if (SpecialView == 1)
+                {
+                    std::string search_for = "ConstraintTeacherNotAvailableTimes";
+                    std::string search_for2 = "Teacher";
+                    if (LeftMode == 2)
+                    {
+						search_for = "ConstraintStudentsSetNotAvailableTimes";
+						search_for2 = "Students";
+                    }
+                    if (LeftMode == 4)
+                    {
+						search_for = "ConstraintRoomNotAvailableTimes";
+						search_for2 = "Room";
+                    }
+                    const char* s1 = "Time_Constraints_List";
+                    auto x = project->x;
+                    XML3::XMLElement* root = &x->GetRootElement();
+                    if (ViewingConstraint && ViewingConstraint->Type == 1)
+                        s1 = "Space_Constraints_List";
+                    auto r0 = root->FindElementZ(s1, true);
+                    for (auto& r1 : *r0)
+                    {
+                        if (r1.GetElementName() != search_for)
+                            continue;
+                        auto tn = trim(r1.FindElementZ(search_for2.c_str(), true)->GetContent());
+                        if (tn != SelectedLeftName)
+                            continue;
+
+						SelectedLeft2 = &r1; // default editable the first one
+                        int p = 100;
+                        p = _wtoi(trim(SelectedLeft2->FindElementZ("Weight_Percentage", true)->GetContent()).c_str());
+                        _Percentage = p;
+                        Refresh(L"Percentage");
+                        Refresh(L"zz1_ch");
+                        Refresh(L"zz1_is");
+
+                        // There is one found, change y
+                        y.Format(L"%s #%i", s(82), 1);
+                        str3(y.c_str());
+                        break;
+                    }
+                }
+
+
+
             }
 
         }
@@ -458,13 +555,15 @@ namespace winrt::WuiFET::implementation
             auto x = project->x;
             XML3::XMLElement* root = &x->GetRootElement();
             const char* s1 = "Time_Constraints_List";
-            if (ViewingConstraint->Type == 1)
+            if (ViewingConstraint && ViewingConstraint->Type == 1)
                 s1 = "Space_Constraints_List";
             auto r0 = root->FindElementZ(s1, true);
             _Percentage = 100;
             _IsActiveChecked = false;
             for (auto& r1 : *r0)
             {
+                if (!ViewingConstraint)
+					break;
                 if (r1.GetElementName() != ViewingConstraint->x0)
                     continue;
 
@@ -499,16 +598,39 @@ namespace winrt::WuiFET::implementation
             {
                 _RightVisible = 1;
                 
+
+                // Special Load
+                ystring y;
+                y.Format(L"%s", s(83));
+                str3(y.c_str());
+
                 // Find the entry in the XML
                 auto x = project->x;
                 XML3::XMLElement* root = &x->GetRootElement();
                 auto r0 = root->FindElementZ(_ConstraintsMode == 1 ? "Space_Constraints_List" : "Time_Constraints_List", true);
                 for (auto& c0 : *r0)
                 {
-                    if (!ViewingConstraint)
-						break;
-                    if (c0.GetElementName() != ViewingConstraint->x0)
-						continue;
+                    if (ViewingConstraint)
+                    {
+                        if (c0.GetElementName() != ViewingConstraint->x0)
+                            continue;
+                    }
+                    else
+                    if (SpecialView == 1)
+                    {
+						std::string search_for = "ConstraintTeacherNotAvailableTimes";
+                        if (LeftMode == 2)
+                        {
+							search_for = "ConstraintStudentsSetNotAvailableTimes";
+                        }
+                        if (LeftMode == 4)
+                        {
+							search_for = "ConstraintRoomNotAvailableTimes";
+                        }
+                        if (c0.GetElementName() != search_for)
+                            continue;
+                    }
+
                     std::string SearchElement1 = "";
                     std::string SearchElement2 = "";
                     if (LeftMode == 1)
@@ -516,6 +638,17 @@ namespace winrt::WuiFET::implementation
                         SearchElement1 = "Teacher_Name";
                         SearchElement2 = "Teacher";
                     }
+                    if (LeftMode == 2)
+                    {
+                        SearchElement1 = "Students";
+					}
+                    if (LeftMode == 4)
+                    {
+                        SearchElement1 = "Room";
+                    }
+
+                    if (SearchElement1.length() == 0 && SearchElement2.length() == 0)
+						continue;
 					auto elf = c0.FindElementZ(SearchElement1.c_str());
                     if (!elf)
                         elf = c0.FindElementZ(SearchElement2.c_str());
@@ -544,20 +677,112 @@ namespace winrt::WuiFET::implementation
             Refresh(L"IsPercentageVisible");
             Refresh(L"IsGridRightVisible");
             Refresh(L"RightList");
-            Refresh(L"z1_ch");
+            Refresh(L"Percentage");
+            Refresh(L"zz1_ch");
             Refresh(L"zz1_is");
 
         }
 
-        void zz1_Click(IInspectable, IInspectable)
+        void RightChanged(IInspectable, IInspectable)
         {
+            // right list
+        }
+
+        void zz1_Click(IInspectable sender, IInspectable)
+        {
+            if (!SelectedLeft)
+                return;
+
+            auto button = sender.as<DropDownButton>();
+            MenuFlyout flyout;
+            flyout.Placement(Microsoft::UI::Xaml::Controls::Primitives::FlyoutPlacementMode::Bottom);
+            ystring SelectedName = trim(SelectedLeft->FindElementZ("Name", true)->GetContent());
+            auto x = project->x;
+            XML3::XMLElement* root = &x->GetRootElement();
+            auto r0 = root->FindElementZ(_ConstraintsMode == 1 ? "Space_Constraints_List" : "Time_Constraints_List", true);
+
+            // New Entry
+            if (1)
+            {
+                ystring y;
+                y.Format(L"%s", s(83));
+                MenuFlyoutItem item;
+                item.Text(y.c_str());
+                item.Tag(winrt::box_value((long long)0));
+                item.Click([&](IInspectable const&, RoutedEventArgs const&)
+                    {
+                        int p = 100;
+                        SelectedLeft2 = 0;
+                        Percentage(100);
+                        Refresh(L"Percentage");
+                        Refresh(L"zz1_is");
+                        Refresh(L"zz1_ch");
+                        str3(s(83));
+                    });
+                flyout.Items().Append(item);
+            }
+
+
+            int yy = 0;
+            std::string search_for1;
+            if (SpecialView == 1)
+                search_for1 = "ConstraintTeacherNotAvailableTimes";
+            std::string search_for2 = "Teacher";
+            if (LeftMode == 2)
+            {
+				search_for1 = "ConstraintStudentsSetNotAvailableTimes";
+				search_for2 = "Students";
+            }
+            if (LeftMode == 4)
+            {
+                search_for1 = "ConstraintRoomNotAvailableTimes";
+                search_for2 = "Room";
+            }
+
+            for (auto& r1 : *r0)
+            {
+                if (r1.GetElementName() != search_for1)
+                    continue;
+                // This teacher?
+                auto tn = trim(r1.FindElementZ(search_for2.c_str(), true)->GetContent());
+                if (tn != SelectedName)
+                    continue;
+                ystring y;
+                yy++;
+                auto whatper = _wtoi(trim(r1.FindElementZ("Weight_Percentage", true)->GetContent()).c_str());
+                y.Format(L"%s #%i (%i%%)", s(82), yy, whatper);
+
+                MenuFlyoutItem item;
+                item.Text(y.c_str());
+                item.Tag(winrt::box_value((long long)&r1));
+                item.Click([&](IInspectable const& sender, RoutedEventArgs const&)
+                    {
+                        auto it = sender.as<MenuFlyoutItem>();
+                        SelectedLeft2 = (XML3::XMLElement*)unbox_value<long long>(it.Tag());
+                        _Percentage = _wtoi(trim(SelectedLeft2->FindElementZ("Weight_Percentage", true)->GetContent()).c_str());
+                        Refresh(L"Percentage");
+                        Refresh(L"zz1_is");
+                        Refresh(L"zz1_ch");
+                        ystring y = it.Text().c_str();
+                        wchar_t buf[256] = {};
+                        wcscpy_s(buf, 256, y.c_str());
+                        auto ch = wcschr(buf, L'(');
+                        if (ch)
+                            *ch = 0;
+                        str3(buf);
+                    });
+                flyout.Items().Append(item);
+            }
+
+
+            button.Flyout(flyout);
 
         }
 
 		bool _IsGridRightVisible = false;
         bool IsGridRightVisible()
         {
-            return _IsGridRightVisible && _IsActiveChecked;
+            return _IsGridRightVisible && (_IsActiveChecked || SpecialView);
         }
 		bool _IsListRightVisible = false;
         bool IsListRightVisible()
@@ -568,6 +793,26 @@ namespace winrt::WuiFET::implementation
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::DGHeaderModel> zz1_ch()
         {
             auto headers = winrt::single_threaded_observable_vector<winrt::WuiFET::DGHeaderModel>();
+            if (SpecialView == 1)
+            {
+                // Should show the days
+                auto x = project->x;
+                XML3::XMLElement* root = &x->GetRootElement();
+                auto days = root->FindElementZ("Days_List", true);
+                winrt::WuiFET::DGHeaderModel it0;
+                headers.Append(it0); // empty first 
+                for (auto& j : *days)
+                {
+                    if (j.GetElementName() != "Day")
+                        continue;
+                    std::shared_ptr<XML3::XMLElement> ee = j.FindElementZ("Name", true);
+                    ystring name = trim(ee->GetContent());
+                    winrt::WuiFET::DGHeaderModel it;
+                    it.Name(name.c_str());
+                    headers.Append(it);
+                }
+
+            }
             return headers;
         }
 
@@ -576,6 +821,92 @@ namespace winrt::WuiFET::implementation
             auto rows = winrt::single_threaded_observable_vector<DGRowModel>();
             if (!project->x)
                 return rows;
+            if (SpecialView == 1)
+            {
+                // Showing the Not Available 
+                auto x = project->x;
+                XML3::XMLElement* root = &x->GetRootElement();
+                auto days = root->FindElementZ("Days_List", true);
+                auto hours = root->FindElementZ("Hours_List", true);
+
+                std::vector<std::wstring> days2;
+                for (auto& j : *days)
+                {
+                    if (j.GetElementName() != "Day")
+                        continue;
+                    days2.push_back(trim(j.FindElementZ("Name", true)->GetContent()).c_str());
+                }
+                std::vector<std::wstring> hours2;
+                for (auto& hou : *hours)
+                {
+                    if (hou.GetElementName() != "Hour")
+                        continue;
+                    hours2.push_back(trim(hou.FindElementZ("Name", true)->GetContent()).c_str());
+                }
+
+
+
+                int i = -1;
+                for (auto& hou : *hours)
+                {
+                    if (hou.GetElementName() != "Hour")
+                        continue;
+                    i++;
+                    auto cells = winrt::single_threaded_observable_vector<DGCellModel>();
+
+                    int y = -1;
+                    DGCellModel c10(i, 0, DGCellType::Block, std::to_wstring(i + 1));
+
+                    cells.Append(c10);
+                    for (auto& day : *days)
+                    {
+                        if (day.GetElementName() != "Day")
+                            continue;
+                        y++;
+
+                        DGCellModel c1(i, y + 1, DGCellType::Check, L"");
+                        if (LeftMode == 1)
+                            c1.WhatX(1);
+						if (LeftMode == 2)
+							c1.WhatX(2);
+                        if (LeftMode == 3)
+							c1.WhatX(3);
+						if (LeftMode == 4)
+							c1.WhatX(7);
+
+                        c1.pi1(zz1_gr());
+                        c1.pi2(WindowFromPage(*this));
+
+                        if (SelectedLeft2) // ConstraintTeacherNotAvailableTimes
+                        {
+                            bool Put = 0;
+                            c1.Ptr4((long long)SelectedLeft2);
+                            for (auto& el : *SelectedLeft2)
+                            {
+                                if (el.GetElementName() != "Not_Available_Time")
+                                    continue;
+                                if (trim(el.FindElementZ("Day", true)->GetContent()) != days2[y])
+                                    continue;
+                                if (trim(el.FindElementZ("Hour", true)->GetContent()) != hours2[i])
+                                    continue;
+                                c1.ValueBB(true);
+                                c1.Ptr((long long)&el);
+                                Put = 1;
+                                break;
+                            }
+                        }
+
+                        c1.Ptr3((long long)SelectedLeft); 
+                        c1.Ptr2((long long)root);
+                        c1.Ptr5((long long)project);
+                        cells.Append(c1);
+                    }
+
+                    DGRowModel rr(i, cells);
+                    rows.Append(rr);
+                }
+                return rows;
+            }
             if (!ViewingConstraint)
                 return rows;
             for (size_t row = 0; row < ViewingConstraint->params.size(); row++)
@@ -636,22 +967,28 @@ namespace winrt::WuiFET::implementation
 
 
         std::shared_ptr<A_CONSTRAINT> ViewingConstraint;
+        int SpecialView = 0; // 1 - Not Available Times
 
         // Time + Teacher
         void TS_Teacher_NotAvailableTimes(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
         {
+            str2(s(77));
             LeftMode = 1; // Teachers
             _LeftVisible = 1;
+            _Percentage = 100;
             _IsActiveVisible = false;
             _IsMultiple = true;
             _IsPercentageVisible = true;
             _IsGridRightVisible = true;
             _IsListRightVisible = false;
+            ViewingConstraint = nullptr;
+            SpecialView = 1;
             Refresh();
         }
 
         void TS_Teacher_Single(std::wstring d0,std::string x0,std::string x1,int from,int to,int def,bool R = 1)
         {
+            SpecialView = 0;
             LeftMode = 1; // Teachers
             _LeftVisible = 1;
             _IsActiveVisible = true;
@@ -738,6 +1075,7 @@ namespace winrt::WuiFET::implementation
         // Time + Teachers
         void TS_Teachers_Single(std::wstring d0, std::string x0, std::string x1, int from, int to, int def, bool R = 1)
         {
+            SpecialView = 0;
             LeftMode = 0; // None
             _LeftVisible = 0;
             _IsActiveVisible = true;
@@ -825,12 +1163,47 @@ namespace winrt::WuiFET::implementation
 
 
 
+        // Time + Class
+        void TS_Class_NotAvailableTimes(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(77));
+            LeftMode = 2; // Class
+            _LeftVisible = 1;
+            _Percentage = 100;
+            _IsActiveVisible = false;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _IsGridRightVisible = true;
+            _IsListRightVisible = false;
+            ViewingConstraint = nullptr;
+            SpecialView = 1;
+            Refresh();
+        }
+
+
+        // Time + Space + Room
+        void SS_Room_NotAvailableTimes(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(77));
+            LeftMode = 4; // Room
+            _LeftVisible = 1;
+            _Percentage = 100;
+            _IsActiveVisible = false;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _IsGridRightVisible = true;
+            _IsListRightVisible = false;
+            ViewingConstraint = nullptr;
+            SpecialView = 1;
+            Refresh();
+        }
 
 
 
         // Space + Teacher
         void SS_Teacher_Single(std::wstring d0, std::string x0, std::string x1, int from, int to, int def, bool R = 1)
         {
+            SpecialView = 0;
             LeftMode = 1; // Teachers
             _LeftVisible = 1;
             _IsActiveVisible = true;
@@ -946,6 +1319,7 @@ namespace winrt::WuiFET::implementation
 		// Space + Teachers
         void SS_Teachers_Single(std::wstring d0, std::string x0, std::string x1, int from, int to, int def, bool R = 1)
         {
+            SpecialView = 0;
             LeftMode = 0; // None
             _LeftVisible = 0;
             _IsActiveVisible = true;
@@ -996,6 +1370,7 @@ namespace winrt::WuiFET::implementation
         // Space + Class
         void SS_Class_Single(std::wstring d0, std::string x0, std::string x1, int from, int to, int def, bool R = 1)
         {
+            SpecialView = 0;
             LeftMode = 2; // Class
             _LeftVisible = 1;
             _IsActiveVisible = true;

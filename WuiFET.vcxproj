@@ -10,7 +10,7 @@
     <ProjectGuid>{3422B937-8FA8-41D5-9B71-45D249A88360}</ProjectGuid>
     <ProjectName>WuiFET</ProjectName>
     <RootNamespace>WuiFET</RootNamespace>
-    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsPackageType>MSIX</WindowsPackageType>
     <!--
       $(TargetName) should be same as $(RootNamespace) so that the produced binaries (.exe/.pri/etc.)
       have a name that matches the .winmd

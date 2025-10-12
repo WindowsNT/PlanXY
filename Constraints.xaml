@@ -62,6 +62,7 @@
             <MenuBarItem Title="{x:Bind txt(33)}" >
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(92)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(77)}" Click="TS_Class_NotAvailableTimes"/>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(52)}" >
             </MenuBarItem>
@@ -101,6 +102,9 @@
                 <MenuFlyoutItem Text="{x:Bind txt(147)}" Click="SS_Lesson_PreferredRoom"/>
                 <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Lesson_PreferredRooms"/>
             </MenuBarItem>
+            <MenuBarItem Title="{x:Bind txt(52)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(77)}" Click="SS_Room_NotAvailableTimes"/>
+            </MenuBarItem>
         </MenuBar>
         
         <!-- Row 2 : Data -->
@@ -138,7 +142,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -148,12 +151,22 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <CheckBox Visibility="{x:Bind IsActiveVisible,Mode=OneWay}" IsChecked="{x:Bind IsActiveChecked,Mode=TwoWay}" Content="{x:Bind txt(95)}" Margin="5"></CheckBox>
                     <DropDownButton Visibility="{x:Bind IsMultiple,Mode=OneWay}" x:Name="zz1_dd" Content="{x:Bind str3,Mode=OneWay}" Click="zz1_Click" Margin="5" />
+                    <TextBlock  Visibility="{x:Bind IsPercentageVisible,Mode=OneWay}" Text="{x:Bind txt(84)}" VerticalAlignment="Center" Margin="5"/>
+                    <NumberBox  Visibility="{x:Bind IsPercentageVisible,Mode=OneWay}"  x:Name="z1_p" HorizontalAlignment="Stretch" Margin="5" PlaceholderText="{x:Bind txt(84)}" Value="{x:Bind Percentage,Mode=TwoWay}" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" />
                 </StackPanel>
-                <!-- Percentage -->
-                <NumberBox Grid.Row="2"  Visibility="{x:Bind IsPercentageVisible,Mode=OneWay}" x:Name="z1_p" HorizontalAlignment="Stretch" Margin="5" PlaceholderText="{x:Bind txt(84)}" Value="{x:Bind Percentage,Mode=TwoWay}" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" />
                 <!-- Data -->
                 <local:DGDataGrid  Visibility="{x:Bind IsGridRightVisible,Mode=OneWay}" x:Name="zz1_gr" Grid.Row="2" Grid.Column="0" ItemsSource="{x:Bind zz1_is,Mode=OneWay}" ColumnHeaders="{x:Bind zz1_ch,Mode=OneWay}" />
-
+                <ListView  Visibility="{x:Bind IsListRightVisible,Mode=OneWay}"  x:Name="Right_ListView" Grid.Row="2" ItemsSource="{x:Bind Right_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="RightChanged" SelectionMode="Multiple">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Item">
+                            <StackPanel Orientation="Horizontal" Margin="10" >
+                                <SymbolIcon Symbol="Page2" />
+                                <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0">
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
 
         </Grid>

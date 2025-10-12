@@ -1,0 +1,14 @@
+import "Item.idl";
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass ResultList : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        ResultList();
+        static String txt(Int32 sidx);
+        void Refresh();
+        Windows.Foundation.Collections.IObservableVector<Item> Results_List{ get; };
+        String Loaded_File{ get; };
+
+    }
+}

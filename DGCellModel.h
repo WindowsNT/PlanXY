@@ -318,6 +318,19 @@ namespace winrt::WuiFET::implementation
             return _ptr5;
 		}
 
+        int MinimumHeight()
+        {
+            return _minheight;
+		}
+        void MinimumHeight(int value)
+        {
+            if (_minheight != value)
+            {
+                _minheight = value;
+                m_propertyChanged(*this, Microsoft::UI::Xaml::Data::PropertyChangedEventArgs{ L"MinimumHeight" });
+            }
+		}
+
         int MinimumWidth()
         {
             return _minwidth;
@@ -413,6 +426,7 @@ namespace winrt::WuiFET::implementation
 
         int _whatx = 0; // 1 -> TimeNotAvailable Teacher 2 StudentSet, 3 Room, 7+ Space, 11 Generic
         int _minwidth = 150;
+        int _minheight = 50;
         long long _ptr = 0;
         long long _ptr2 = 0;
         long long _ptr3 = 0;

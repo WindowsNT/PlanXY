@@ -24,6 +24,7 @@ namespace WuiFET
 		IInspectable pi3;
 		Int32 WhatX;
 		Int32 MinimumWidth;
+		Int32 MinimumHeight;
 
 
 		DGCellType Type;

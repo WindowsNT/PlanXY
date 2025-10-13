@@ -21,32 +21,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind txt(75);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
-<!--                <TextBlock Text="{x:Bind FolderX,Mode=OneWay}" Margin="10,0,0,0" Grid.Column="1" VerticalAlignment="Center"/>-->
+                <TextBlock Text="{x:Bind txt(73);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
             </Grid>
         </InfoBar>
-        
-        
-        <Grid Grid.Row="1" x:Name="Results_1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <InfoBar Grid.Row="0" Grid.ColumnSpan="2" IsOpen="True" Severity="Informational"  IsClosable="False" VerticalAlignment="Top" Title="{x:Bind txt(73);}">
-            </InfoBar>
-
-<!--            <Button VerticalAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="1" Content="{x:Bind txt(74);}" Click="OpenFolder" Style="{StaticResource SuccessButtonStyle}" ></Button> -->
-
-        </Grid>
-
-
-
-
 
     </Grid>
+    
 </Page>

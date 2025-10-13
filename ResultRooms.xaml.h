@@ -2,6 +2,7 @@
 
 #include "ResultRooms.g.h"
 ystring trim(ystring s);
+std::wstring TempFile();
 
 namespace winrt::WuiFET::implementation
 {
@@ -94,7 +95,7 @@ namespace winrt::WuiFET::implementation
             {
                 // Get actual length first
                 auto top = Content();
-                auto grid = top.as<Microsoft::UI::Xaml::FrameworkElement>().FindName(L"TC_SingleKid").as<Microsoft::UI::Xaml::Controls::Grid>();
+                auto grid = top.as<Microsoft::UI::Xaml::FrameworkElement>().FindName(L"TC_SingleRoom").as<Microsoft::UI::Xaml::Controls::Grid>();
                 if (!grid)
                     return Microsoft::UI::Xaml::GridLength{ 1, Microsoft::UI::Xaml::GridUnitType::Star };
 
@@ -228,6 +229,133 @@ namespace winrt::WuiFET::implementation
         }
 
 
+        void Export1(IInspectable, IInspectable)
+        {
+            auto x = _ResultP->x;
+            XML3::XMLElement* project_root = &x->GetRootElement();
+//            XML3::XMLElement* result_root = _ResultX;
+
+            // Fill days/hours 
+            auto days = project_root->FindElementZ("Days_List", true);
+            auto hours = project_root->FindElementZ("Hours_List", true);
+            std::vector<std::wstring> days2;
+            for (auto& j : *days)
+            {
+                if (j.GetElementName() != "Day")
+                    continue;
+                days2.push_back(trim(j.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+            std::vector<std::wstring> hours2;
+            for (auto& hou : *hours)
+            {
+                if (hou.GetElementName() != "Hour")
+                    continue;
+                hours2.push_back(trim(hou.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+
+            // Create HTML
+            std::string html;
+            ystring y;
+
+            // Header
+            y.Format(LR"(
+<html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   <title>%s</title>
+   <div style="margin: 20px;">
+   <h2>%s</h2>  
+)", s(51),s(51));
+            html += y;
+
+            if (1)
+            {
+                // Create links to all rooms
+                auto& r = (*project_root)["Rooms_List"];
+                int t1 = 1;
+                for (auto& rr : r)
+                {
+                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
+                    ystring name = trim(ee->GetContent());
+                    y.Format(LR"(<a class="btn btn-small btn-primary" href="#tea%i" style="margin: 2">%s</a> )", t1, name.c_str());
+                    html += y;
+                    t1++;
+                }
+                html += R"(<p style="page-break-after:always;"></p>)";
+            }
+
+            auto& r = (*project_root)["Rooms_List"];
+            int t1 = 1;
+            for (auto& rr : r)
+            {
+                std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
+                ystring name = trim(ee->GetContent());
+                y.Format(LR"(<h4 id="tea%i">%s</h4><hr>)", t1, name.c_str());
+                t1++;
+                html += y;
+
+/*                auto tr = (*result_root)["Teachers_Timetable"];
+                for (auto& j : tr)
+                {
+                    // Find the teacher name
+                    auto name2 = j.vv("name").GetWideValue();
+                    if (name2 != name)
+                        continue;
+                    tr = j; // the timetable for that teacher
+                    break;
+                }
+*/
+
+                // Create a bootstrap table 
+                html += R"(<table class="table table-bordered table-striped" style="width:100%; font-family: 'Noto Serif', serif;">)";
+                html += R"(<thead><th></th>)";
+
+                // the days
+                for (auto& d : days2)
+                {
+                    y.Format(LR"(<th>%s</th>)", d.c_str());
+                    html += y;
+                }
+                html += R"(</thead><tbody>)";
+                // the hours
+                for (size_t hour = 0; hour < hours2.size(); hour++)
+                {
+                    html += "<tr>";
+                    y.Format(LR"(<th>%s</th>)", hours2[hour].c_str());
+                    html += y;
+
+                    for (size_t day = 0; day < days2.size(); day++)
+                    {
+                        // Add a center text column
+                        html += "<td style=\"text-align:center; vertical-align: middle;\">";
+
+//                        html += "Test";
+
+
+                        html += "</td>";
+                    }
+                    html += "</tr>";
+
+                }
+                html += R"(</tbody></table>)";
+
+                html += R"(<p style="page-break-after:always;"></p>)";
+            }
+
+            auto tf = TempFile();
+            tf += L".html";
+            std::vector<char> d;
+            d.resize(html.size());
+            memcpy(d.data(), html.data(), html.size());
+            PutFile(tf.c_str(), d);
+            ShellExecute(0, L"open", tf.c_str(), 0, 0, SW_SHOWNORMAL);
+
+        }
     };
 }
 

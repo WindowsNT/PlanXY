@@ -11,6 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,12 +25,20 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind txt(27);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind txt(51);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
             </Grid>
         </InfoBar>
 
 
-        <Grid x:Name="TC_SingleRoom" Grid.Row="1" Grid.Column="0">
+        <MenuBar HorizontalAlignment="Left" x:Name="menu" Grid.Row="1">
+            <MenuBarItem Title="{x:Bind txt(116)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(51)}" Click="Export1" />
+
+            </MenuBarItem>
+        </MenuBar>
+
+
+        <Grid x:Name="TC_SingleRoom" Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{x:Bind Resizer_VV1,Mode=OneWay}" />
                 <ColumnDefinition Width="Auto" />
@@ -46,9 +55,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <local:Resizer Grid.Column="1" Margin="10" Grid.RowSpan="2"  Width="1" Minimum="-1000"   Maximum="1000" Orientation="Vertical"   Value="{x:Bind Resizer_V1,Mode=TwoWay}"/>
+            <local:Resizer Grid.Column="1" Grid.Row="1" Margin="10" Grid.RowSpan="2"  Width="1" Minimum="-1000"   Maximum="1000" Orientation="Vertical"   Value="{x:Bind Resizer_V1,Mode=TwoWay}"/>
 
-            <Grid Grid.Column="2" Grid.Row="0">
+            <Grid Grid.Column="2" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>

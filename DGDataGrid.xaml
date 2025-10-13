@@ -20,13 +20,13 @@
         <ItemsRepeater x:Name="HeaderRepeater"
                              Grid.Row="0">
             <ItemsRepeater.Layout>
-                <UniformGridLayout Orientation="Horizontal"/>
+                <StackLayout  Orientation="Horizontal"/>
             </ItemsRepeater.Layout>
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate x:DataType="local:DGHeaderModel">
                     <TextBlock Text="{x:Bind Name,Mode=OneWay}" 
-                               FontWeight="Bold"
-                               Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}"/>
+                               FontWeight="Bold" 
+                               Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}"  />
                 </DataTemplate>
             </ItemsRepeater.ItemTemplate>
         </ItemsRepeater>
@@ -46,11 +46,11 @@
                             <ItemsRepeater.ItemTemplate>
                                 <DataTemplate x:DataType="local:DGCellModel">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Visibility="{x:Bind VisBlock,Mode=OneWay}" Text="{x:Bind Value, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}"  TextWrapping="Wrap" />
-                                        <TextBox Visibility="{x:Bind VisText,Mode=OneWay}" Text="{x:Bind Value, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}"  />
-                                        <NumberBox Visibility="{x:Bind VisNumber,Mode=OneWay}" Text="{x:Bind ValueN, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" Minimum="{x:Bind ValueNMin,Mode=OneWay}" Maximum="{x:Bind ValueNMax,Mode=OneWay}" SpinButtonPlacementMode="Inline" />
-                                        <Button Visibility="{x:Bind VisButton,Mode=OneWay}" Content="{x:Bind Value, Mode=OneWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" Click="ButtonClick1" />
-                                        <CheckBox Visibility="{x:Bind VisCheck,Mode=OneWay}" Content="{x:Bind Value, Mode=OneWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" IsChecked="{x:Bind ValueB,Mode=TwoWay}" />
+                                        <TextBlock Visibility="{x:Bind VisBlock,Mode=OneWay}" Text="{x:Bind Value, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" MinHeight="{x:Bind MinimumHeight,Mode=OneWay}"  TextWrapping="Wrap" />
+                                        <TextBox Visibility="{x:Bind VisText,Mode=OneWay}" Text="{x:Bind Value, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" MinHeight="{x:Bind MinimumHeight,Mode=OneWay}"  />
+                                        <NumberBox Visibility="{x:Bind VisNumber,Mode=OneWay}" Text="{x:Bind ValueN, Mode=TwoWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" MinHeight="{x:Bind MinimumHeight,Mode=OneWay}"  Minimum="{x:Bind ValueNMin,Mode=OneWay}" Maximum="{x:Bind ValueNMax,Mode=OneWay}" SpinButtonPlacementMode="Inline" />
+                                        <Button Visibility="{x:Bind VisButton,Mode=OneWay}" Content="{x:Bind Value, Mode=OneWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" MinHeight="{x:Bind MinimumHeight,Mode=OneWay}"  Click="ButtonClick1" />
+                                        <CheckBox Visibility="{x:Bind VisCheck,Mode=OneWay}" Content="{x:Bind Value, Mode=OneWay}" Padding="8" MinWidth="{x:Bind MinimumWidth,Mode=OneWay}" MinHeight="{x:Bind MinimumHeight,Mode=OneWay}"  IsChecked="{x:Bind ValueB,Mode=TwoWay}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsRepeater.ItemTemplate>

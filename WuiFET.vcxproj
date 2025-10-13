@@ -10,7 +10,7 @@
     <ProjectGuid>{3422B937-8FA8-41D5-9B71-45D249A88360}</ProjectGuid>
     <ProjectName>WuiFET</ProjectName>
     <RootNamespace>WuiFET</RootNamespace>
-    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsPackageType>MSIX</WindowsPackageType>
     <!--
       $(TargetName) should be same as $(RootNamespace) so that the produced binaries (.exe/.pri/etc.)
       have a name that matches the .winmd
@@ -169,12 +169,20 @@
       <DependentUpon>ResultList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="ResultRooms.xaml.h">
+      <DependentUpon>ResultRooms.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="ResultsClasses.xaml.h">
       <DependentUpon>ResultsClasses.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="ResultsKids.xaml.h">
       <DependentUpon>ResultsKids.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="ResultsParents.xaml.h">
+      <DependentUpon>ResultsParents.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="ResultsSummary.xaml.h">
@@ -226,10 +234,16 @@
     <Page Include="ResultList.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ResultRooms.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ResultsClasses.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ResultsKids.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ResultsParents.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ResultsSummary.xaml">
@@ -294,12 +308,20 @@
       <DependentUpon>ResultList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="ResultRooms.xaml.cpp">
+      <DependentUpon>ResultRooms.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="ResultsClasses.xaml.cpp">
       <DependentUpon>ResultsClasses.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="ResultsKids.xaml.cpp">
       <DependentUpon>ResultsKids.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="ResultsParents.xaml.cpp">
+      <DependentUpon>ResultsParents.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="ResultsSummary.xaml.cpp">
@@ -354,12 +376,20 @@
       <DependentUpon>ResultList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
+    <Midl Include="ResultRooms.idl">
+      <DependentUpon>ResultRooms.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="ResultsClasses.idl">
       <DependentUpon>ResultsClasses.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
     <Midl Include="ResultsKids.idl">
       <DependentUpon>ResultsKids.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
+    <Midl Include="ResultsParents.idl">
+      <DependentUpon>ResultsParents.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
     <Midl Include="ResultsSummary.idl">

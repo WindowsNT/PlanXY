@@ -129,9 +129,9 @@ namespace winrt::WuiFET::implementation
             OPENFILENAME of = { 0 };
             of.lStructSize = sizeof(of);
             of.hwndOwner = (HWND)0;
-            ystring filt;
-            filt.Format(L"%s\0*.fet\0\0", s(151));
-            of.lpstrFilter = filt.c_str();
+            wchar_t filt[100] = {};
+            swprintf_s(filt, 100, L"%s\0*.fet\0\0", s(127));
+            of.lpstrFilter = filt;
             std::vector<wchar_t> fnx(10000);
             of.lpstrFile = fnx.data();
             of.nMaxFile = 10000;
@@ -164,8 +164,7 @@ namespace winrt::WuiFET::implementation
                 if (topnv)
                 {
                     auto fr = topnv.FindName(L"contentFrame").as<winrt::Microsoft::UI::Xaml::Controls::Frame>();
-                  fr.Navigate(winrt::xaml_typename<winrt::WuiFET::DataPage>(), winrt::box_value<long long>((long long)project));
-
+                    fr.Navigate(winrt::xaml_typename<winrt::WuiFET::DataPage>(), winrt::box_value<long long>((long long)project));
                 }
             }
             else
@@ -183,6 +182,19 @@ namespace winrt::WuiFET::implementation
                 return L"";
             return wi.file();
 		}
+
+        void OnShare(IInspectable const&, IInspectable const&)
+        {
+            void ShareScreen(int f);
+			std::thread thr(ShareScreen, 1);
+			thr.detach();
+		}
+        void OnJoin(IInspectable const&, IInspectable const&)
+        {
+            void JoinScreen();
+            std::thread thr(JoinScreen);
+            thr.detach();
+        }
 
         void OnAbout(IInspectable const&, IInspectable const&)
         {
@@ -205,9 +217,7 @@ namespace winrt::WuiFET::implementation
             // Save it
 			if (!project->x)
 				return;
-            XML3::XMLSerialization x1 = {};
-            x1.NoContentIndent = 1;
-            project->x->Save(fi.c_str(), &x1);
+            project->x->Save(fi.c_str());
         }
         void OnExit(IInspectable const&, IInspectable const&)
         {
@@ -224,9 +234,9 @@ namespace winrt::WuiFET::implementation
             OPENFILENAME of = { 0 };
             of.lStructSize = sizeof(of);
             of.hwndOwner = (HWND)0;
-            ystring filt;
-            filt.Format(L"%s\0*.fet\0\0", s(151));
-            of.lpstrFilter = filt.c_str();
+            wchar_t filt[100] = {};
+            swprintf_s(filt,100,L"%s\0*.fet\0\0", s(127));
+            of.lpstrFilter = filt;
             std::vector<wchar_t> fnx(10000);
             of.lpstrFile = fnx.data();
 			wcscpy_s(fnx.data(), 10000, wi.file().c_str());

@@ -103,6 +103,10 @@ namespace winrt::WuiFET::implementation
 				fr.Navigate(winrt::xaml_typename<winrt::WuiFET::ResultsClasses>(), winrt::box_value<long long>((long long)par));
 			if (n == L"Kids")
 				fr.Navigate(winrt::xaml_typename<winrt::WuiFET::ResultsKids>(), winrt::box_value<long long>((long long)par));
+			if (n == L"Parents")
+				fr.Navigate(winrt::xaml_typename<winrt::WuiFET::ResultsParents>(), winrt::box_value<long long>((long long)par));
+			if (n == L"Rooms")
+				fr.Navigate(winrt::xaml_typename<winrt::WuiFET::ResultRooms>(), winrt::box_value<long long>((long long)par));
 
         }
 

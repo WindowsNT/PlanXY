@@ -140,6 +140,8 @@ namespace winrt::WuiFET::implementation
 					project->file = fil;
 				}
 				project->x = std::make_shared<XML3::XML>(project->file.c_str());
+				void MigrateFetFile(XML3::XML * x);
+				MigrateFetFile(project->x.get());
 			}
 			else
 			{

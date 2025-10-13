@@ -149,9 +149,15 @@ L"Creating parents is not needed to generate a timetable but it is useful for ex
 L"Parents",
 L"Parent",
 L"Parent name,Parent code",
+L"Collaboration",
+L"Share screen",
+L"Join",
+L"Copy key to clipboard",
+L"Waiting for users. Please send them the invitation key and keep this window open.",
+L"Enter the invitation key:",
 };
 
-#define MAX_LANG 151
+#define MAX_LANG 157
 
 
 

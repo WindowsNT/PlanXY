@@ -71,6 +71,8 @@
         <!-- Menu for SS -->
         <MenuBar HorizontalAlignment="Left" Grid.Row="1" Visibility="{x:Bind IsSS,Mode=OneWay}">
             <MenuBarItem Title="{x:Bind txt(31)}" > <!-- Teacher -->
+                <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Teacher_PreferredRooms"/>
+                <MenuFlyoutSeparator/>
                 <MenuFlyoutSubItem Text="{x:Bind txt(100);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Teacher_MaxRoomChangesDay"/>
                     <MenuFlyoutItem Text="{x:Bind txt(140)}" Click="SS_Teacher_MaxRoomChangesDayInterval"/>
@@ -91,6 +93,8 @@
                 </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(92)}" > <!-- Class -->
+                <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Class_PreferredRooms"/>
+                <MenuFlyoutSeparator/>
                 <MenuFlyoutSubItem Text="{x:Bind txt(100);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Class_MaxRoomChangesDay"/>
                 </MenuFlyoutSubItem>
@@ -99,7 +103,6 @@
                 </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(33)}" > <!-- Lesson -->
-                <MenuFlyoutItem Text="{x:Bind txt(147)}" Click="SS_Lesson_PreferredRoom"/>
                 <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Lesson_PreferredRooms"/>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(52)}" >

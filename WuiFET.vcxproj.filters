@@ -25,32 +25,38 @@
     <Page Include="GeneratorPage.xaml">
       <Filter>Pages</Filter>
     </Page>
-    <Page Include="ViewResult.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="ResultsSummary.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="ResultsTeachers.xaml">
-      <Filter>Pages</Filter>
-    </Page>
     <Page Include="ResultList.xaml">
       <Filter>Pages</Filter>
     </Page>
     <Page Include="DGDataGrid.xaml">
       <Filter>DataGrid</Filter>
     </Page>
-    <Page Include="ResultsClasses.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="ResultsKids.xaml">
-      <Filter>Pages</Filter>
-    </Page>
     <Page Include="Statistics.xaml">
       <Filter>Pages</Filter>
     </Page>
     <Page Include="Constraints.xaml">
       <Filter>Pages</Filter>
+    </Page>
+    <Page Include="ResultRooms.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsKids.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsClasses.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsParents.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsTeachers.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsSummary.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ViewResult.xaml">
+      <Filter>Pages\Results</Filter>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +179,7 @@
     <ClInclude Include="msa2fet\kids.h">
       <Filter>msa2fet</Filter>
     </ClInclude>
+    <ClInclude Include="msa2fet\parents.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -233,6 +240,9 @@
     </Filter>
     <Filter Include="Charts">
       <UniqueIdentifier>{4747ad2c-a093-4c2f-8dfe-a2adbb04b416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages\Results">
+      <UniqueIdentifier>{53c7c5f9-0f91-4b83-b52b-bd56cff81a29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

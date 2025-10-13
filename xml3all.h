@@ -211,7 +211,7 @@ class XMLSerialization
 		bool ExcludeSelf = false;
 		bool NoCRLF = false;
 		bool Canonical = false;
-		bool NoContentIndent = true;
+//		bool NoContentIndent = true;
 	};
 
 class XMLContent
@@ -2455,7 +2455,7 @@ inline int _vscprintf(const char *format, va_list argptr)
 			if (srz->Canonical)
 				v += ">";
 			else
-				v += (srz->NoCRLF || (srz->NoContentIndent && children.empty())) ? ">" : ">\r\n";
+				v += (srz->NoCRLF || (/*srz->NoContentIndent && */children.empty())) ? ">" : ">\r\n";
 			}
 
 
@@ -2515,12 +2515,12 @@ inline int _vscprintf(const char *format, va_list argptr)
 			//	v += "\n";
 			}
 			else
-			if (srz->NoContentIndent)
+//			if (srz->NoContentIndent)
 			{
 				v += Format("%s", e.c_str());
 			}
-			else
-				v += Format(srz->NoCRLF ? "%s%s" : "%s%s\r\n", padd.c_str(), e.c_str());
+	//		else
+		//		v += Format(srz->NoCRLF ? "%s%s" : "%s%s\r\n", padd.c_str(), e.c_str());
 			}
 
 
@@ -2528,7 +2528,7 @@ inline int _vscprintf(const char *format, va_list argptr)
 			v += Format("%s</%s>", padd.c_str(), EorE(el, srz->NoEnc).c_str());
 		else
 		{
-			if (srz->NoContentIndent && !contents.empty())
+			if (/*srz->NoContentIndent && */!contents.empty())
 				v += Format("</%s>\r\n", EorE(el, srz->NoEnc).c_str());
 			else
 			if (!srz->ExcludeSelf)

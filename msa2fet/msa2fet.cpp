@@ -406,7 +406,9 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 					continue;
 				int hh = _wtoi(hour.vv("name").GetWideValue().c_str());
 				if (hh == 7 && dd == 1 && tid == 4)
-					MessageBeep(0);
+				{
+
+				}
 				int aid = 0, cid = 0, lid = 0, kid = 0;
 				for (int pass = 0; pass < 2; pass++)
 				{
@@ -417,7 +419,9 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 							auto whatr = sub.vv("name").GetWideValue();
 							aid = room_to_aid[whatr];
 							if (aid == 0)
-								MessageBeep(0);
+							{
+
+							}
 						}
 
 						if (sub.GetElementName() == "Subject" && lid == 0)
@@ -548,7 +552,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet)
 
 	auto& root = x.GetRootElement();
 	root.SetElementName("fet");
-	root.vv("version").SetValue("7.5.2");
+	root.vv("version").SetValue("7.5.3");
 	root["Institution_Name"].SetContent(XML3::XMLU(L"Μουσικό Σχολείο Αλίμου"));
 
 	// Statics
@@ -584,9 +588,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet)
 	RemoveNonExistingActivities(x);
 	CheckActivitiesWithoutStudents(x);
 
-	XML3::XMLSerialization se;
-	se.NoContentIndent = 1;
-	x.Save(targetfet,&se);
+	x.Save(targetfet);
 
 
 	return 0;

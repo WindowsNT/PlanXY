@@ -205,11 +205,16 @@ namespace winrt::WuiFET::implementation
     /// <param name="e">Details about the launch request and process.</param>
     void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e)
     {
-        if (__argc > 1)
+        if (__argc < 1)
+            window = CreateWi();
+        else
         {
-            fil = __wargv[1];
-		}
-        window = CreateWi();
+            for (int i = 1; i < __argc; i++)
+            {
+                fil = __wargv[i];
+                window = CreateWi();
+            }
+        }
     }
 }
 

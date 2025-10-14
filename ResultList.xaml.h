@@ -85,6 +85,24 @@ namespace winrt::WuiFET::implementation
 
 
                     void BuildNewVersion(const char* dbf, std::string groups, std::string teachers, std::string activities);
+                    if (dbimportfile.empty())
+                    {
+                        OPENFILENAME of = { 0 };
+                        of.lStructSize = sizeof(of);
+                        of.hwndOwner = (HWND)0;
+                        wchar_t filt[100] = {};
+                        swprintf_s(filt, 100, L"*.db\0*.db\0\0");
+                        of.lpstrFilter = filt;
+                        std::vector<wchar_t> fnx(10000);
+                        of.lpstrFile = fnx.data();
+                        of.nMaxFile = 10000;
+                        of.lpstrDefExt = L"db";
+                        of.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+                        if (!GetOpenFileName(&of))
+                            return;
+						dbimportfile = fnx.data();
+
+                    }
                     BuildNewVersion(dbimportfile.a_str(), sx4, sx3, sx2);
 
                 }

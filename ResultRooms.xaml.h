@@ -114,6 +114,112 @@ namespace winrt::WuiFET::implementation
         }
 
 
+        struct RESULTRIGHT
+        {
+            std::set<std::wstring> teachers;
+            std::set<std::wstring> subjects;
+            std::set<std::wstring> students;
+        };
+        std::map<std::wstring, std::map<size_t, std::map<size_t, RESULTRIGHT>>> ResultsMap; // room, day, hour, result
+
+        void CreateResultMap()
+        {
+            auto x = _ResultP->x;
+            XML3::XMLElement* project_root = &x->GetRootElement();
+            XML3::XMLElement* result_root = _ResultX;
+
+            // Fill days/hours 
+            auto days = project_root->FindElementZ("Days_List", true);
+            auto hours = project_root->FindElementZ("Hours_List", true);
+            std::vector<std::wstring> days2;
+            for (auto& j : *days)
+            {
+                if (j.GetElementName() != "Day")
+                    continue;
+                days2.push_back(trim(j.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+            std::vector<std::wstring> hours2;
+            for (auto& hou : *hours)
+            {
+                if (hou.GetElementName() != "Hour")
+                    continue;
+                hours2.push_back(trim(hou.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+
+            auto tr = (*result_root)["Teachers_Timetable"];
+
+            // Find the content for that day
+            for (auto& j1 : tr)
+            {
+                for (auto& j : j1)
+                {
+                    if (j.GetElementName() != "Day")
+                        continue;
+                    auto day_name = j.vv("name").GetWideValue();
+                    for (auto& j2 : j)
+                    {
+                        if (j2.GetElementName() != "Hour")
+                            continue;
+                        auto hour_name = j2.vv("name").GetWideValue();
+
+                        int what_day = -1;
+                        int what_hour = -1;
+                        // find what_day 
+                        for (int i = 0; i < days2.size(); i++)
+                        {
+                            if (days2[i] == day_name)
+                            {
+                                what_day = i;
+                                break;
+                            }
+                        }
+                        // find what_hour
+                        for (int i = 0; i < hours2.size(); i++)
+                        {
+                            if (hours2[i] == hour_name)
+                            {
+                                what_hour = i;
+                                break;
+                            }
+                        }
+                        if (what_day == -1 || what_hour == -1)
+                            continue;
+
+
+                        for (auto& j3 : j2)
+                        {
+                            if (j3.GetElementName() == "Room")
+                            {
+                                ystring room_name = trim(j3.vv("name").GetWideValue());
+                                RESULTRIGHT& r = ResultsMap[room_name][what_day][what_hour];
+
+								r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
+                                for (auto& j33 : j2)
+                                {
+                                    if (j33.GetElementName() == "Subject")
+                                    {
+                                        ystring sub = trim(j33.vv("name").GetWideValue());
+                                        r.subjects.insert(sub.c_str());
+                                    }
+                                    if (j33.GetElementName() == "Students")
+                                    {
+                                        ystring sub = trim(j33.vv("name").GetWideValue());
+                                        r.students.insert(sub.c_str());
+                                    }
+                                }
+
+
+                            }
+                        }
+                        
+
+                    }
+                }
+            }
+        }
+
+
+
         // WhatX 1: Room
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Rooms_List()
         {
@@ -215,6 +321,27 @@ namespace winrt::WuiFET::implementation
                     else
                     {
                         // TT per student
+                        ystring y;
+                        auto& r1 = ResultsMap[SelectedRoomName][column - 1][row];
+                        for (auto& j : r1.subjects)
+                        {
+                            y += j;
+                            y += L"\r\n";
+                        }
+                        for (auto& j : r1.students)
+                        {
+                            y += j;
+                            y += L"\r\n";
+                        }
+                        for (auto& j : r1.teachers)
+                        {
+                            y += j;
+                            y += L"\r\n";
+                        }
+
+                        DGCellModel c1(row, column, DGCellType::Block, y);
+                        c1.MinimumWidth(200);
+                        cells.Append(c1);
                     }
                 }
 
@@ -231,6 +358,7 @@ namespace winrt::WuiFET::implementation
 
         void Export1(IInspectable, IInspectable)
         {
+            CreateResultMap();
             auto x = _ResultP->x;
             XML3::XMLElement* project_root = &x->GetRootElement();
 //            XML3::XMLElement* result_root = _ResultX;
@@ -299,18 +427,6 @@ namespace winrt::WuiFET::implementation
                 t1++;
                 html += y;
 
-/*                auto tr = (*result_root)["Teachers_Timetable"];
-                for (auto& j : tr)
-                {
-                    // Find the teacher name
-                    auto name2 = j.vv("name").GetWideValue();
-                    if (name2 != name)
-                        continue;
-                    tr = j; // the timetable for that teacher
-                    break;
-                }
-*/
-
                 // Create a bootstrap table 
                 html += R"(<table class="table table-bordered table-striped" style="width:100%; font-family: 'Noto Serif', serif;">)";
                 html += R"(<thead><th></th>)";
@@ -335,6 +451,22 @@ namespace winrt::WuiFET::implementation
                         html += "<td style=\"text-align:center; vertical-align: middle;\">";
 
 //                        html += "Test";
+						auto& rm = ResultsMap[name.c_str()][day][hour];
+                        for(auto& t : rm.teachers)
+                        {
+                            y.Format(LR"(<b>%s</b><br>)", t.c_str());
+                            html += y;
+						}
+                        for (auto& s : rm.subjects)
+                        {
+                            y.Format(LR"(<div><b>%s</b></div>)", s.c_str());
+                            html += y;
+						}
+                        for (auto& s : rm.students)
+                        {
+                            y.Format(LR"(<div>%s</div>)", s.c_str());
+                            html += y;
+                        }
 
 
                         html += "</td>";

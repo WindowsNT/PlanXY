@@ -155,9 +155,11 @@ L"Join",
 L"Copy key to clipboard",
 L"Waiting for users. Please send them the invitation key and keep this window open.",
 L"Enter the invitation key:",
+L"Mode",
+L"Default",
 };
 
-#define MAX_LANG 157
+#define MAX_LANG 159
 
 
 

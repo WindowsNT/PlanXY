@@ -69,6 +69,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -85,6 +86,14 @@
 
             <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(44);}" VerticalAlignment="Center"></TextBlock>
             <TextBox VerticalAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Hours_Work,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}" ></TextBox>
+
+            <TextBlock Margin="5" Grid.Column="0" Grid.Row="4" Text="{x:Bind txt(158);}" VerticalAlignment="Center"></TextBlock>
+            <ComboBox x:Name="ComboMode" Margin="5" Grid.Column="1" Grid.Row="4"  SelectedIndex="{x:Bind SelectedMode,Mode=TwoWay}">
+                <x:String>Official</x:String>
+                <x:String>Mornings-Afternoons</x:String>
+                <x:String>Block planning</x:String>
+                <x:String>Terms</x:String>
+            </ComboBox>
 
         </Grid>
         

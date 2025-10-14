@@ -20,6 +20,7 @@ namespace WuiFET
         String Institution_Name;
         String Days_Work;
         String Hours_Work;
+        Int32 SelectedMode;
 
         Double Teachers_V1;
         Microsoft.UI.Xaml.GridLength Teachers_VV1{ get; };

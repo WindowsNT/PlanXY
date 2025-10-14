@@ -1,10 +1,6 @@
 #pragma once
 #define DISABLE_XAML_GENERATED_MAIN
 #define _SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING
-#ifdef _DEBUG
-#pragma warning(disable:4189)
-#pragma warning(disable:4100)
-#endif
 #include <ws2tcpip.h>
 #include <winsock2.h>
 #include <windows.h>

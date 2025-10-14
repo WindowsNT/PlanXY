@@ -492,3 +492,10 @@ namespace sqlite
 };
 
 inline bool ReadOnly = false;
+
+winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> GetList(XML3::XMLElement& r, const wchar_t* filter = 0, std::vector<std::wstring>* sel = 0);
+void SortList(XML3::XMLElement& r);
+ystring trim(ystring s);
+ystring uniquestring();
+ystring DisplayName(XML3::XMLElement& e);
+

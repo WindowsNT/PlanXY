@@ -104,9 +104,9 @@ L"One day exception",
 L"Min hours/day",
 L"Max continuous hours",
 L"Import CSV...",
-L"Building name,Building long name,Building code,Building comments",
+L"Building name,Building code,Building comments",
 L"Minutes to wait",
-L"Room name,Room long name,Building code,Room capacity,Building comments",
+L"Room name,Room code,Room capacity,Building comments",
 L"Number of hours",
 L"Kid name,Kid code",
 L"Creating students is not needed to generate a timetable but it is useful for exporting it for each student.",
@@ -157,9 +157,11 @@ L"Waiting for users. Please send them the invitation key and keep this window op
 L"Enter the invitation key:",
 L"Mode",
 L"Default",
+L"Unique ID",
+L"Display name",
 };
 
-#define MAX_LANG 159
+#define MAX_LANG 161
 
 
 

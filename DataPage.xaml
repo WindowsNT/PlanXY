@@ -232,9 +232,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Building_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(47);}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox IsReadOnly="True"  Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Building_Name,Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Building_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Building_Code,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
@@ -254,9 +254,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Room_Name,Mode=TwoWay}"></TextBox>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(47);}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" IsReadOnly="True"  Grid.Column="1" Grid.Row="0" Text="{x:Bind Room_Name,Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Room_LongName,Mode=TwoWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Room_Code,Mode=TwoWay}"></TextBox>
@@ -349,9 +349,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Teacher_Name,Mode=TwoWay}"  IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(47);}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox IsReadOnly="True" Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Teacher_Name,Mode=OneWay}"  ></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Teacher_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(44);}" VerticalAlignment="Center"></TextBlock>
                 <NumberBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Teacher_NumHours,Mode=TwoWay}" ></NumberBox>

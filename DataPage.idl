@@ -25,7 +25,7 @@ namespace WuiFET
         Double Teachers_V1;
         Microsoft.UI.Xaml.GridLength Teachers_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Teachers_List{ get; };
-        String Teacher_Name;
+        String Teacher_Name{ get; };
         String Teacher_LongName;
         String Teacher_Comment;
         Int32 Teacher_NumHours;
@@ -41,7 +41,7 @@ namespace WuiFET
         Double Buildings_V1;
         Microsoft.UI.Xaml.GridLength Buildings_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Buildings_List{ get; };
-        String Building_Name;
+        String Building_Name{ get; };
         String Building_LongName;
         String Building_Comment;
         Int32 Building_Code;
@@ -49,7 +49,7 @@ namespace WuiFET
         Double Rooms_V1;
         Microsoft.UI.Xaml.GridLength Rooms_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Rooms_List{ get; };
-        String Room_Name;
+        String Room_Name{ get; };
         String Room_LongName;
         String Room_Comment;
         Int32 Room_Code;

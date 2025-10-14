@@ -223,23 +223,7 @@ namespace winrt::WuiFET::implementation
         // WhatX 1: Room
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Rooms_List()
         {
-            auto items = winrt::single_threaded_observable_vector<winrt::WuiFET::Item>();
-            auto x = _ResultP->x;
-            if (!x)
-                return items;
-
-            auto& r = x->GetRootElement()["Rooms_List"];
-            for (auto& rr : r)
-            {
-                std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                ystring name = trim(ee->GetContent());
-
-                winrt::WuiFET::Item it;
-                it.Name1(name.c_str());
-                it.ptr((long long)&rr);
-                items.Append(it);
-            }
-            return items;
+            return GetList((_ResultP->x->GetRootElement()["Rooms_List"]));
         }
         XML3::XMLElement* _SelectedRoom = 0;
         void RoomChanged(IInspectable, IInspectable)

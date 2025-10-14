@@ -78,51 +78,11 @@ namespace winrt::WuiFET::implementation
             auto x = project->x;
             if (LeftMode == 1)
             {
-                auto& r = x->GetRootElement()["Teachers_List"];
-                for (auto& rr : r)
-                {
-                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                    ystring name = trim(ee->GetContent());
-                    winrt::WuiFET::Item it;
-                    it.Name1(name.c_str());
-                    it.ptr((long long)&rr);
-
-                    if (LeftFilter.length())
-                    {
-                        // Must be in name
-                        auto name21 = name;
-                        auto filter2 = LeftFilter;
-                        std::transform(name21.begin(), name21.end(), name21.begin(), towlower);
-                        std::transform(filter2.begin(), filter2.end(), filter2.begin(), towlower);
-                        if (name21.find(filter2.c_str()) == ystring::npos)
-                            continue;
-                    }
-                    items.Append(it);
-                }
+				return GetList(x->GetRootElement()["Teachers_List"], LeftFilter.c_str(), 0);
             }
             if (LeftMode == 3) // Subjects
             {
-                auto& r = x->GetRootElement()["Subjects_List"];
-                for (auto& rr : r)
-                {
-                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                    ystring name = trim(ee->GetContent());
-                    winrt::WuiFET::Item it;
-                    it.Name1(name.c_str());
-                    it.ptr((long long)&rr);
-
-                    if (LeftFilter.length())
-                    {
-                        // Must be in name
-                        auto name21 = name;
-                        auto filter2 = LeftFilter;
-                        std::transform(name21.begin(), name21.end(), name21.begin(), towlower);
-                        std::transform(filter2.begin(), filter2.end(), filter2.begin(), towlower);
-                        if (name21.find(filter2.c_str()) == ystring::npos)
-                            continue;
-                    }
-                    items.Append(it);
-                }
+                return GetList(x->GetRootElement()["Subjects_List"], LeftFilter.c_str(), 0);
             }
             if (LeftMode == 5) // Activities
             {
@@ -150,27 +110,7 @@ namespace winrt::WuiFET::implementation
             }
             if (LeftMode == 4) // Rooms
             {
-                auto& r = x->GetRootElement()["Rooms_List"];
-                for (auto& rr : r)
-                {
-                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                    ystring name = trim(ee->GetContent());
-                    winrt::WuiFET::Item it;
-                    it.Name1(name.c_str());
-                    it.ptr((long long)&rr);
-
-                    if (LeftFilter.length())
-                    {
-                        // Must be in name
-                        auto name21 = name;
-                        auto filter2 = LeftFilter;
-                        std::transform(name21.begin(), name21.end(), name21.begin(), towlower);
-                        std::transform(filter2.begin(), filter2.end(), filter2.begin(), towlower);
-                        if (name21.find(filter2.c_str()) == ystring::npos)
-                            continue;
-                    }
-                    items.Append(it);
-                }
+                return GetList(x->GetRootElement()["Rooms_List"], LeftFilter.c_str(), 0);
             }
             if (LeftMode == 2)
             {

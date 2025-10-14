@@ -105,8 +105,12 @@
             <MenuBarItem Title="{x:Bind txt(33)}" > <!-- Lesson -->
                 <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Lesson_PreferredRooms"/>
             </MenuBarItem>
-            <MenuBarItem Title="{x:Bind txt(52)}" >
+            <MenuBarItem Title="{x:Bind txt(52)}" > <!-- Room -->
                 <MenuFlyoutItem Text="{x:Bind txt(77)}" Click="SS_Room_NotAvailableTimes"/>
+            </MenuBarItem>
+            <MenuBarItem Title="{x:Bind txt(32)}" >
+                <!-- Activity -->
+                <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Activity_PreferredRooms"/>
             </MenuBarItem>
         </MenuBar>
         

@@ -11,6 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -28,8 +29,15 @@
             </Grid>
         </InfoBar>
 
+        <MenuBar HorizontalAlignment="Left" x:Name="menu" Grid.Row="1">
+            <MenuBarItem Title="{x:Bind txt(116)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(55)}" Click="Export1" />
 
-        <Grid x:Name="TC_SingleClass" Grid.Row="1" Grid.Column="0">
+            </MenuBarItem>
+        </MenuBar>
+
+
+        <Grid x:Name="TC_SingleClass" Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{x:Bind Resizer_VV1,Mode=OneWay}" />
                 <ColumnDefinition Width="Auto" />

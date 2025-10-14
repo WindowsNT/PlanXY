@@ -62,7 +62,7 @@ namespace winrt::WuiFET::implementation
             return s(jx);
         }
         winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
-        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms
+        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms, 5 Activities
         XML3::XMLElement* SelectedLeft = 0;
         XML3::XMLElement* SelectedLeft2 = 0;
         ystring LeftFilter;
@@ -106,6 +106,30 @@ namespace winrt::WuiFET::implementation
                 for (auto& rr : r)
                 {
                     std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
+                    ystring name = trim(ee->GetContent());
+                    winrt::WuiFET::Item it;
+                    it.Name1(name.c_str());
+                    it.ptr((long long)&rr);
+
+                    if (LeftFilter.length())
+                    {
+                        // Must be in name
+                        auto name21 = name;
+                        auto filter2 = LeftFilter;
+                        std::transform(name21.begin(), name21.end(), name21.begin(), towlower);
+                        std::transform(filter2.begin(), filter2.end(), filter2.begin(), towlower);
+                        if (name21.find(filter2.c_str()) == ystring::npos)
+                            continue;
+                    }
+                    items.Append(it);
+                }
+            }
+            if (LeftMode == 5) // Activities
+            {
+                auto& r = x->GetRootElement()["Activities_List"];
+                for (auto& rr : r)
+                {
+                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Id", true);
                     ystring name = trim(ee->GetContent());
                     winrt::WuiFET::Item it;
                     it.Name1(name.c_str());
@@ -514,6 +538,11 @@ namespace winrt::WuiFET::implementation
 						search_for = "ConstraintStudentsSetNotAvailableTimes";
 						search_for2 = "Students";
                     }
+                    if (LeftMode == 5)
+                    {
+						search_for = "ConstraintActivityNotAvailableTimes";
+						search_for2 = "Activity_Id";
+                    }
                     if (LeftMode == 4)
                     {
 						search_for = "ConstraintRoomNotAvailableTimes";
@@ -562,6 +591,11 @@ namespace winrt::WuiFET::implementation
                     {
 						search_for = "ConstraintStudentsSetPreferredRooms";
 						search_for2 = "Students";
+                    }
+                    if (LeftMode == 5)
+                    {
+                        search_for = "ConstraintActivityPreferredRooms";
+                        search_for2 = "Activity_Id";
                     }
                     const char* s1 = "Space_Constraints_List";
                     auto x = project->x;
@@ -671,6 +705,8 @@ namespace winrt::WuiFET::implementation
 							search_for = "ConstraintStudentsSetNotAvailableTimes";
                         if (LeftMode == 4)
 							search_for = "ConstraintRoomNotAvailableTimes";
+						if (LeftMode == 5)
+							search_for = "ConstraintActivityNotAvailableTimes";
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
@@ -682,6 +718,8 @@ namespace winrt::WuiFET::implementation
 							search_for = "ConstraintTeacherPreferredRooms";
 						if (LeftMode == 2)
 							search_for = "ConstraintStudentsSetPreferredRooms";
+						if (LeftMode == 5)
+							search_for = "ConstraintActivityPreferredRooms";
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
@@ -705,6 +743,10 @@ namespace winrt::WuiFET::implementation
                     {
                         SearchElement1 = "Room";
                     }
+                    if (LeftMode == 5)
+                    {
+                        SearchElement1 = "Activity_Id";
+					}
 
                     if (SearchElement1.length() == 0 && SearchElement2.length() == 0)
 						continue;
@@ -809,6 +851,8 @@ namespace winrt::WuiFET::implementation
 						search_for = "ConstraintTeacherPreferredRooms";
 					if (LeftMode == 2)
 						search_for = "ConstraintStudentsSetPreferredRooms";
+					if (LeftMode == 5)
+						search_for = "ConstraintActivityPreferredRooms";
 
 					auto& l2 = r0->AddElement(search_for.c_str());
 					SelectedLeft2 = &l2;
@@ -833,7 +877,11 @@ namespace winrt::WuiFET::implementation
 						s2 = "Teacher";
 					if (LeftMode == 2)
 						s2 = "Students";
+					if (LeftMode == 5)
+						s2 = "Activity_Id";
                     SelectedLeft2->AddElement(s2).SetContent(trim(SelectedLeft->FindElementZ("Name", true)->GetContent()));
+                    if (LeftMode == 5)
+                        SelectedLeft2->AddElement(s2).SetContent(trim(SelectedLeft->FindElementZ("Id", true)->GetContent()));
                 }
             }
         }
@@ -905,6 +953,11 @@ namespace winrt::WuiFET::implementation
                     search_for1 = "ConstraintStudentsSetPreferredRooms";
                     search_for2 = "Students";
 				}
+                if (LeftMode == 5)
+                {
+					search_for1 = "ConstraintActivityPreferredRooms";
+					search_for2 = "Activity_Id";
+                }
 
             }
 
@@ -1714,6 +1767,22 @@ namespace winrt::WuiFET::implementation
 
         }
 
+        // Space + Activity
+        void SS_Activity_PreferredRooms(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(146));
+            LeftMode = 5; // Activities
+            SpecialView = 2;
+            SpecialSubView = 0;
+            ViewingConstraint = nullptr;
+            _LeftVisible = 1;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _RightVisible = false;
+            _IsGridRightVisible = false;
+            _IsListRightVisible = true;
+            Refresh();
+        }
 
     };
 }

@@ -282,7 +282,8 @@ namespace winrt::WuiFET::implementation
             auto rows = winrt::single_threaded_observable_vector<DGRowModel>();
             if (!_SelectedRoom)
                 return rows;
-
+            if (ResultsMap.empty()) 
+                CreateResultMap();
             ystring SelectedRoomName = trim(_SelectedRoom->FindElementZ("Name", true)->GetContent());
             if (!_ResultP->x)
                 return rows;
@@ -358,7 +359,8 @@ namespace winrt::WuiFET::implementation
 
         void Export1(IInspectable, IInspectable)
         {
-            CreateResultMap();
+            if (ResultsMap.empty())
+                CreateResultMap();
             auto x = _ResultP->x;
             XML3::XMLElement* project_root = &x->GetRootElement();
 //            XML3::XMLElement* result_root = _ResultX;

@@ -2,6 +2,7 @@
 
 #include "ResultsClasses.g.h"
 ystring trim(ystring s);
+std::wstring TempFile();
 
 namespace winrt::WuiFET::implementation
 {
@@ -113,6 +114,109 @@ namespace winrt::WuiFET::implementation
             }
         }
 
+        struct RESULTRIGHT
+        {
+            std::set<std::wstring> teachers;
+            std::set<std::wstring> subjects;
+            std::set<std::wstring> rooms;
+        };
+        std::map<std::wstring, std::map<size_t, std::map<size_t, RESULTRIGHT>>> ResultsMap; // class, day, hour, result
+
+        void CreateResultMap()
+        {
+            auto x = _ResultP->x;
+            XML3::XMLElement* project_root = &x->GetRootElement();
+            XML3::XMLElement* result_root = _ResultX;
+
+            // Fill days/hours 
+            auto days = project_root->FindElementZ("Days_List", true);
+            auto hours = project_root->FindElementZ("Hours_List", true);
+            std::vector<std::wstring> days2;
+            for (auto& j : *days)
+            {
+                if (j.GetElementName() != "Day")
+                    continue;
+                days2.push_back(trim(j.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+            std::vector<std::wstring> hours2;
+            for (auto& hou : *hours)
+            {
+                if (hou.GetElementName() != "Hour")
+                    continue;
+                hours2.push_back(trim(hou.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+
+            auto tr = (*result_root)["Teachers_Timetable"];
+
+            // Find the content for that day
+            for (auto& j1 : tr)
+            {
+                for (auto& j : j1)
+                {
+                    if (j.GetElementName() != "Day")
+                        continue;
+                    auto day_name = j.vv("name").GetWideValue();
+                    for (auto& j2 : j)
+                    {
+                        if (j2.GetElementName() != "Hour")
+                            continue;
+                        auto hour_name = j2.vv("name").GetWideValue();
+
+                        int what_day = -1;
+                        int what_hour = -1;
+                        // find what_day 
+                        for (int i = 0; i < days2.size(); i++)
+                        {
+                            if (days2[i] == day_name)
+                            {
+                                what_day = i;
+                                break;
+                            }
+                        }
+                        // find what_hour
+                        for (int i = 0; i < hours2.size(); i++)
+                        {
+                            if (hours2[i] == hour_name)
+                            {
+                                what_hour = i;
+                                break;
+                            }
+                        }
+                        if (what_day == -1 || what_hour == -1)
+                            continue;
+
+
+                        for (auto& j3 : j2)
+                        {
+                            if (j3.GetElementName() == "Students")
+                            {
+                                ystring room_name = trim(j3.vv("name").GetWideValue());
+                                RESULTRIGHT& r = ResultsMap[room_name][what_day][what_hour];
+
+                                r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
+                                for (auto& j33 : j2)
+                                {
+                                    if (j33.GetElementName() == "Subject")
+                                    {
+                                        ystring sub = trim(j33.vv("name").GetWideValue());
+                                        r.subjects.insert(sub.c_str());
+                                    }
+                                    if (j33.GetElementName() == "Room")
+                                    {
+                                        ystring sub = trim(j33.vv("name").GetWideValue());
+                                        r.rooms.insert(sub.c_str());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
 
         // WhatX 1: Class
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Classes_List()
@@ -204,6 +308,8 @@ namespace winrt::WuiFET::implementation
             auto rows = winrt::single_threaded_observable_vector<DGRowModel>();
             if (!_SelectedClass)
                 return rows;
+            if (ResultsMap.empty())
+                CreateResultMap();
 
             ystring SelectedClassName = trim(_SelectedClass->FindElementZ("Name", true)->GetContent());
             if (!_ResultP->x)
@@ -281,13 +387,10 @@ namespace winrt::WuiFET::implementation
 
                                 }
                             }
-
                         }
-
                         DGCellModel c1(row, column, DGCellType::Block, y);
                         c1.MinimumWidth(200);
                         cells.Append(c1);
-
                     }
                 }
 
@@ -302,7 +405,167 @@ namespace winrt::WuiFET::implementation
         }
 
 
+        void Export1(IInspectable, IInspectable)
+        {
+            if (ResultsMap.empty())
+                CreateResultMap();
+            auto x = _ResultP->x;
+            XML3::XMLElement* project_root = &x->GetRootElement();
+            //            XML3::XMLElement* result_root = _ResultX;
+
+                        // Fill days/hours 
+            auto days = project_root->FindElementZ("Days_List", true);
+            auto hours = project_root->FindElementZ("Hours_List", true);
+            std::vector<std::wstring> days2;
+            for (auto& j : *days)
+            {
+                if (j.GetElementName() != "Day")
+                    continue;
+                days2.push_back(trim(j.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+            std::vector<std::wstring> hours2;
+            for (auto& hou : *hours)
+            {
+                if (hou.GetElementName() != "Hour")
+                    continue;
+                hours2.push_back(trim(hou.FindElementZ("Name", true)->GetContent()).c_str());
+            }
+
+            // Create HTML
+            std::string html;
+            ystring y;
+
+            // Header
+            y.Format(LR"(
+<html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   <title>%s</title>
+   <div style="margin: 20px;">
+   <h2>%s</h2>  
+)", s(55), s(55));
+            html += y;
+
+			std::vector<std::wstring> ClassList;
+            if (1)
+            {
+                auto& r = x->GetRootElement()["Students_List"];
+                for (auto& rr : r)
+                {
+                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
+                    ystring name = trim(ee->GetContent());
+                    ClassList.push_back(name);
+                    for (auto& rrr : rr)
+                    {
+                        if (rrr.GetElementName() != "Group")
+                            continue;
+
+                        std::shared_ptr<XML3::XMLElement> ee2 = rrr.FindElementZ("Name", true);
+                        ystring name2 = trim(ee2->GetContent());
+                        ClassList.push_back(name2);
+
+                        for (auto& rrrr : rrr)
+                        {
+                            if (rrrr.GetElementName() != "Subgroup")
+                                continue;
+
+                            std::shared_ptr<XML3::XMLElement> ee3 = rrrr.FindElementZ("Name", true);
+                            ystring name3 = trim(ee3->GetContent());
+                            ClassList.push_back(name3);
+                        }
+                    }
+                }
+
+            }
+            if (1)
+            {
+                // Create links to all rooms
+                int t1 = 1;
+                for (auto& name : ClassList)
+                {
+                    y.Format(LR"(<a class="btn btn-small btn-primary" href="#tea%i" style="margin: 2">%s</a> )", t1, name.c_str());
+                    html += y;
+                    t1++;
+                }
+                html += R"(<p style="page-break-after:always;"></p>)";
+            }
+
+            int t1 = 1;
+            for (auto& name : ClassList)
+            {
+                y.Format(LR"(<h4 id="tea%i">%s</h4><hr>)", t1, name.c_str());
+                t1++;
+                html += y;
+
+                // Create a bootstrap table 
+                html += R"(<table class="table table-bordered table-striped" style="width:100%; font-family: 'Noto Serif', serif;">)";
+                html += R"(<thead><th></th>)";
+
+                // the days
+                for (auto& d : days2)
+                {
+                    y.Format(LR"(<th>%s</th>)", d.c_str());
+                    html += y;
+                }
+                html += R"(</thead><tbody>)";
+                // the hours
+                for (size_t hour = 0; hour < hours2.size(); hour++)
+                {
+                    html += "<tr>";
+                    y.Format(LR"(<th>%s</th>)", hours2[hour].c_str());
+                    html += y;
+
+                    for (size_t day = 0; day < days2.size(); day++)
+                    {
+                        // Add a center text column
+                        html += "<td style=\"text-align:center; vertical-align: middle;\">";
+
+                        //                        html += "Test";
+                        auto& rm = ResultsMap[name.c_str()][day][hour];
+                        for (auto& t : rm.teachers)
+                        {
+                            y.Format(LR"(<b>%s</b><br>)", t.c_str());
+                            html += y;
+                        }
+                        for (auto& s : rm.subjects)
+                        {
+                            y.Format(LR"(<div><b>%s</b></div>)", s.c_str());
+                            html += y;
+                        }
+                        for (auto& s : rm.rooms)
+                        {
+                            y.Format(LR"(<div>%s</div>)", s.c_str());
+                            html += y;
+                        }
+
+
+                        html += "</td>";
+                    }
+                    html += "</tr>";
+
+                }
+                html += R"(</tbody></table>)";
+
+                html += R"(<p style="page-break-after:always;"></p>)";
+            }
+
+            auto tf = TempFile();
+            tf += L".html";
+            std::vector<char> d;
+            d.resize(html.size());
+            memcpy(d.data(), html.data(), html.size());
+            PutFile(tf.c_str(), d);
+            ShellExecute(0, L"open", tf.c_str(), 0, 0, SW_SHOWNORMAL);
+
+        }
     };
+
+
 }
 
 namespace winrt::WuiFET::factory_implementation

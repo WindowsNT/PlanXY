@@ -7,11 +7,4 @@ todo
 3. Export HTMLs 
 4. On Generation Window, on finish actions
 
-Only update long name: ( sort, import, add, filtertype, read only in xaml, 160 161 oneway, long_name xaml update item, list in data, ALL Results)
-	Teachers OK			
-	Subjects
-	Lessons
-	Rooms                   +   +                                   +       +   +   +             +                        +
-	Buildings				+	+		+		?					+		+	+	+	          +                        +
-	Tags
-	Activities
+Check Activity click

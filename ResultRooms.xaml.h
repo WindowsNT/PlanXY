@@ -193,17 +193,27 @@ namespace winrt::WuiFET::implementation
                                 ystring room_name = trim(j3.vv("name").GetWideValue());
                                 RESULTRIGHT& r = ResultsMap[room_name][what_day][what_hour];
 
-								r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
+                                auto j30 = _ResultP->FindSubElementByName(&_ResultP->x->GetRootElement()["Teachers_List"], j1.vv("name").GetWideValue().c_str());
+                                if (j30)
+                                    r.teachers.insert(DisplayName(*j30));
+								else
+    								r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
                                 for (auto& j33 : j2)
                                 {
                                     if (j33.GetElementName() == "Subject")
                                     {
                                         ystring sub = trim(j33.vv("name").GetWideValue());
+										auto j300 = _ResultP->FindSubElementByName(&_ResultP->x->GetRootElement()["Subjects_List"], sub.c_str());
+										if (j300)
+											sub = DisplayName(*j300);
                                         r.subjects.insert(sub.c_str());
                                     }
                                     if (j33.GetElementName() == "Students")
                                     {
                                         ystring sub = trim(j33.vv("name").GetWideValue());
+                                        auto j331 = _ResultP->FindSubElementByName2(&_ResultP->x->GetRootElement()["Students_List"], sub.c_str());
+                                        if (j331)
+                                            sub = DisplayName(*j331);
                                         r.students.insert(sub.c_str());
                                     }
                                 }
@@ -221,9 +231,15 @@ namespace winrt::WuiFET::implementation
 
 
         // WhatX 1: Room
+        ystring LeftFilter;
+        void OnLeftFilter(IInspectable const&, IInspectable const&)
+        {
+            LeftFilter = fb11().Text().c_str();
+            Refresh(L"Rooms_List");
+        }
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Rooms_List()
         {
-            return GetList((_ResultP->x->GetRootElement()["Rooms_List"]));
+            return GetList((_ResultP->x->GetRootElement()["Rooms_List"]), LeftFilter.c_str());
         }
         XML3::XMLElement* _SelectedRoom = 0;
         void RoomChanged(IInspectable, IInspectable)

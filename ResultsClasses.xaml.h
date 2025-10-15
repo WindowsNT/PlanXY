@@ -193,17 +193,30 @@ namespace winrt::WuiFET::implementation
                                 ystring room_name = trim(j3.vv("name").GetWideValue());
                                 RESULTRIGHT& r = ResultsMap[room_name][what_day][what_hour];
 
-                                r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
+
+                                auto j30 = _ResultP->FindSubElementByName(&_ResultP->x->GetRootElement()["Teachers_List"], j1.vv("name").GetWideValue().c_str());
+                                if (j30)
+                                    r.teachers.insert(DisplayName(*j30));
+                                else
+                                    r.teachers.insert(trim(j1.vv("name").GetWideValue()).c_str());
+
+
                                 for (auto& j33 : j2)
                                 {
                                     if (j33.GetElementName() == "Subject")
                                     {
                                         ystring sub = trim(j33.vv("name").GetWideValue());
+										auto j300 = _ResultP->FindSubElementByName(&_ResultP->x->GetRootElement()["Subjects_List"], sub.c_str());
+                                        if (j300)
+											sub = DisplayName(*j300);
                                         r.subjects.insert(sub.c_str());
                                     }
                                     if (j33.GetElementName() == "Room")
                                     {
-                                        ystring sub = trim(j33.vv("name").GetWideValue());
+                                        ystring sub = trim(j3.vv("name").GetWideValue());
+                                        auto j31 = _ResultP->FindSubElementByName(&_ResultP->x->GetRootElement()["Rooms_List"], sub.c_str());
+                                        if (j31)
+                                            sub = DisplayName(*j31);
                                         r.rooms.insert(sub.c_str());
                                     }
                                 }
@@ -219,6 +232,13 @@ namespace winrt::WuiFET::implementation
 
 
         // WhatX 1: Class
+        ystring LeftFilter;
+        void OnLeftFilter(IInspectable const&, IInspectable const&)
+        {
+            LeftFilter = fb11().Text().c_str();
+            Refresh(L"Classes_List");
+        }
+
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Classes_List()
         {
             auto items = winrt::single_threaded_observable_vector<winrt::WuiFET::Item>();
@@ -229,35 +249,59 @@ namespace winrt::WuiFET::implementation
             auto& r = x->GetRootElement()["Students_List"];
             for (auto& rr : r)
             {
-                std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                ystring name = trim(ee->GetContent());
+                ystring name = DisplayName(rr);
                 winrt::WuiFET::Item it;
                 it.Name1(name.c_str());
                 it.ptr((long long)&rr);
-                items.Append(it);
+
+                // If Filter
+                bool S = 1;
+                if (!LeftFilter.empty())
+                {
+                    if (name.find(LeftFilter) == ystring::npos)
+                        S = 0;
+				}
+                if (S == 1) 
+                    items.Append(it);
+                S = 1;
+
                 for (auto& rrr : rr)
                 {
                     if (rrr.GetElementName() != "Group")
 						continue;
 
-                    std::shared_ptr<XML3::XMLElement> ee2 = rrr.FindElementZ("Name", true);
-                    ystring name2 = trim(ee2->GetContent());
+                    ystring name2 = DisplayName(rrr);
                     winrt::WuiFET::Item it2;
                     it2.Name1(name2.c_str());
                     it2.ptr((long long)&rrr);
-                    items.Append(it2);
+					// If Filter
+                    if (!LeftFilter.empty())
+                    {
+                        if (name2.find(LeftFilter) == ystring::npos)
+                            S = 0;
+					}
+					if (S == 1)
+                        items.Append(it2);
+					S = 1;
 
                     for (auto& rrrr : rrr)
                     {
                         if (rrrr.GetElementName() != "Subgroup")
                             continue;
 
-                        std::shared_ptr<XML3::XMLElement> ee3 = rrrr.FindElementZ("Name", true);
-                        ystring name3 = trim(ee3->GetContent());
+                        ystring name3 = DisplayName(rrrr);
                         winrt::WuiFET::Item it3;
                         it3.Name1(name3.c_str());
                         it3.ptr((long long)&rrrr);
-                        items.Append(it3);
+                        // Check filter
+                        if (!LeftFilter.empty())
+                        {
+                            if (name3.find(LeftFilter) == ystring::npos)
+                                S = 0;
+                        }
+						if (S == 1)
+                            items.Append(it3);
+						S = 1;
                     }
 
                 }
@@ -452,21 +496,22 @@ namespace winrt::WuiFET::implementation
             html += y;
 
 			std::vector<std::wstring> ClassList;
+			std::map<std::wstring, std::wstring> NameToLong;
             if (1)
             {
                 auto& r = x->GetRootElement()["Students_List"];
                 for (auto& rr : r)
                 {
-                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Name", true);
-                    ystring name = trim(ee->GetContent());
+                    ystring name = DisplayName(rr);
                     ClassList.push_back(name);
+					NameToLong[trim(rr.FindElementZ("Name", true)->GetContent().c_str())] = name;
                     for (auto& rrr : rr)
                     {
                         if (rrr.GetElementName() != "Group")
                             continue;
 
-                        std::shared_ptr<XML3::XMLElement> ee2 = rrr.FindElementZ("Name", true);
-                        ystring name2 = trim(ee2->GetContent());
+                        ystring name2 = DisplayName(rrr);
+						NameToLong[trim(rrr.FindElementZ("Name", true)->GetContent().c_str())] = name2;
                         ClassList.push_back(name2);
 
                         for (auto& rrrr : rrr)
@@ -474,8 +519,8 @@ namespace winrt::WuiFET::implementation
                             if (rrrr.GetElementName() != "Subgroup")
                                 continue;
 
-                            std::shared_ptr<XML3::XMLElement> ee3 = rrrr.FindElementZ("Name", true);
-                            ystring name3 = trim(ee3->GetContent());
+                            ystring name3 = DisplayName(rrrr);
+							NameToLong[trim(rrrr.FindElementZ("Name", true)->GetContent().c_str())] = name3;
                             ClassList.push_back(name3);
                         }
                     }
@@ -526,7 +571,16 @@ namespace winrt::WuiFET::implementation
                         html += "<td style=\"text-align:center; vertical-align: middle;\">";
 
                         //                        html += "Test";
-                        auto& rm = ResultsMap[name.c_str()][day][hour];
+                        ystring shortname = name;
+                        for(auto& j : NameToLong)
+                        {
+                            if (j.second == name)
+                            {
+                                shortname = j.first;
+                                break;
+                            }
+						}
+                        auto& rm = ResultsMap[shortname.c_str()][day][hour];
                         for (auto& t : rm.teachers)
                         {
                             y.Format(LR"(<b>%s</b><br>)", t.c_str());

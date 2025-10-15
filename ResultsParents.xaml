@@ -8,8 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -24,16 +26,17 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind txt(27);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind txt(149);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
             </Grid>
         </InfoBar>
 
+        <Line Stroke="SteelBlue" Grid.Row="2" X1="0" Y1="0" HorizontalAlignment="Stretch"  X2="{Binding ActualWidth, ElementName=MainGrid}" Y2="0"    StrokeThickness="2"/>
 
-        <Grid x:Name="TC_SingleParent" Grid.Row="1" Grid.Column="0">
+        <Grid x:Name="TC_SingleParent" Grid.Row="3" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{x:Bind Resizer_VV1,Mode=OneWay}" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
             <ListView x:Name="Parents_ListView" Grid.Row="0" Grid.Column="0" ItemsSource="{x:Bind Parents_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="ParentChanged" SelectionMode="Single">

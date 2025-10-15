@@ -202,13 +202,15 @@ namespace winrt::WuiFET::implementation
             {
                 ULARGE_INTEGER ul = {};
 				ul.QuadPart = rr.vv("ts").GetValueULongLong();
+				long long seconds_finished = rr.vv("finishseconds").GetValueLongLong();
 				SYSTEMTIME st = {};
 				FILETIME ft = {};
 				ft.dwLowDateTime = ul.LowPart;
 				ft.dwHighDateTime = ul.HighPart;
 				FileTimeToSystemTime(&ft, &st);
 				wchar_t t[1000] = {};
-				swprintf_s(t, 1000, L"%04d-%02d-%02d %02d:%02d:%02d", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond
+				swprintf_s(t, 1000, L"%04d-%02d-%02d %02d:%02d:%02d (%02zi:%02zi:%02zi)", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond,
+					seconds_finished / 3600, (seconds_finished % 3600) / 60, (seconds_finished % 60)
                     );
                 winrt::WuiFET::Item it;
                 it.Name1(t);

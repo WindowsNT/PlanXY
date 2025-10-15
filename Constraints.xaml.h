@@ -118,8 +118,7 @@ namespace winrt::WuiFET::implementation
                 bool S1 = 0;
                 for (auto& rr : r)
                 {
-                    std::shared_ptr<XML3::XMLElement> ee1 = rr.FindElementZ("Name", true);
-                    ystring name1 = trim(ee1->GetContent());
+                    ystring name1 = DisplayName(rr);
                     winrt::WuiFET::Item it1;
                     it1.Name1(name1.c_str());
                     it1.ptr((long long)&rr);
@@ -141,8 +140,7 @@ namespace winrt::WuiFET::implementation
                         if (rr2.GetElementName() != "Group")
                             continue;
 
-                        std::shared_ptr<XML3::XMLElement> ee2 = rr2.FindElementZ("Name", true);
-                        ystring name2 = trim(ee2->GetContent());
+                        ystring name2 = DisplayName(rr2);
                         winrt::WuiFET::Item it2;
                         it2.Name1(name2.c_str());
                         it2.ptr((long long)&rr2);
@@ -164,8 +162,8 @@ namespace winrt::WuiFET::implementation
                             if (rr3.GetElementName() != "Subgroup")
                                 continue;
 
-                            std::shared_ptr<XML3::XMLElement> ee3 = rr3.FindElementZ("Name", true);
-                            ystring name3 = trim(ee3->GetContent());
+                            ystring name3 = DisplayName(rr3);
+
                             winrt::WuiFET::Item it3;
                             it3.Name1(name3.c_str());
                             it3.ptr((long long)&rr3);
@@ -1176,7 +1174,8 @@ namespace winrt::WuiFET::implementation
                 auto& re = x->GetRootElement()["Rooms_List"];
                 for (auto& rr2 : re)
                 {
-                    auto name2 = trim(rr2.FindElementZ("Name", true)->GetContent().c_str());
+                    auto name1 = trim(rr2.FindElementZ("Name", true)->GetContent().c_str());
+                    auto name2 = DisplayName(rr2);
                     std::transform(name2.begin(), name2.end(), name2.begin(), towlower);
                     if (name2.find(RightFilter.c_str()) == ystring::npos)
                         continue;
@@ -1192,7 +1191,7 @@ namespace winrt::WuiFET::implementation
                             if (s.GetElementName() != search_for)
                                 continue;
                             auto v = trim(s.GetContent());
-                            if (v == name2)
+                            if (v == name1)
                                 it.Sel(true);
 						}
 					}

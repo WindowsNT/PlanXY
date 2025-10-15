@@ -33,7 +33,7 @@ namespace WuiFET
         Double Subjects_V1;
         Microsoft.UI.Xaml.GridLength Subjects_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Subjects_List{ get; };
-        String Subject_Name;
+        String Subject_Name{ get; };
         String Subject_LongName;
         String Subject_Comment;
         Int32 Subject_Code;
@@ -59,21 +59,24 @@ namespace WuiFET
         Double Years_V1;
         Microsoft.UI.Xaml.GridLength Years_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Years_List{ get; };
-        String Year_Name;
+        String Year_Name{ get; };
+        String Year_LongName;
         String Year_Comment;
         Int32 Year_NumberOfStudents;
 
         Double Groups_V1;
         Microsoft.UI.Xaml.GridLength Groups_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Groups_List{ get; };
-        String Group_Name;
+        String Group_Name{ get; };
+        String Group_LongName;
         String Group_Comment;
         Int32 Group_NumberOfStudents;
 
         Double Subgroups_V1;
         Microsoft.UI.Xaml.GridLength Subgroups_VV1{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Subgroups_List{ get; };
-        String Subgroup_Name;
+        String Subgroup_Name{ get; };
+        String Subgroup_LongName;
         String Subgroup_Comment;
         Int32 Subgroup_NumberOfStudents;
 
@@ -110,7 +113,8 @@ namespace WuiFET
         Double Kids_V2;
         Microsoft.UI.Xaml.GridLength Kids_VV2{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Kids_List{ get; };
-        String Kid_Name;
+        String Kid_Name{ get; };
+        String Kid_LongName;
         Int32 Kid_Code;
 
         Double Parents_V1;
@@ -118,7 +122,8 @@ namespace WuiFET
         Double Parents_V2;
         Microsoft.UI.Xaml.GridLength Parents_VV2{ get; };
         Windows.Foundation.Collections.IObservableVector<Item> Parents_List{ get; };
-        String Parent_Name;
+        String Parent_Name{ get; };
+        String Parent_LongName;
         Int32 Parent_Code;
 
 

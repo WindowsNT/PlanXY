@@ -444,9 +444,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Subject_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(47);}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Subject_Name,Mode=OneWay}" IsReadOnly="true"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Subject_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Subject_Code,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
@@ -644,8 +644,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Year_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Year_Name,Mode=OneWay}" IsReadOnly="true"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Year_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(72);}" VerticalAlignment="Center"></TextBlock>
                 <NumberBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Year_NumberOfStudents,Mode=TwoWay}"></NumberBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(43);}" VerticalAlignment="Center"></TextBlock>
@@ -664,8 +666,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Group_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Group_Name,Mode=OneWay}" IsReadOnly="true"/>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center" />
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Group_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(72);}" VerticalAlignment="Center"></TextBlock>
                 <NumberBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Group_NumberOfStudents,Mode=TwoWay}"></NumberBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(43);}" VerticalAlignment="Center"></TextBlock>
@@ -684,8 +688,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Subgroup_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Subgroup_Name,Mode=OneWay}" IsReadOnly="True"/>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center" />
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Subgroup_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(72);}" VerticalAlignment="Center"></TextBlock>
                 <NumberBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Subgroup_NumberOfStudents,Mode=TwoWay}"></NumberBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(43);}" VerticalAlignment="Center"></TextBlock>
@@ -775,7 +781,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Tag_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Text="{x:Bind txt(44);}" VerticalAlignment="Center"></TextBlock>
                 <CheckBox Margin="5" Grid.Column="1" Grid.Row="2" IsChecked="{x:Bind Tag_Printable,Mode=TwoWay}" ></CheckBox>
@@ -1150,8 +1156,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Kid_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Kid_Name,Mode=OneWay}" IsReadOnly="true"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Kid_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Kid_Code,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
             </Grid>
@@ -1276,8 +1284,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(42);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Parent_Name,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="0" Text="{x:Bind txt(160);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="0" Text="{x:Bind Parent_Name,Mode=OneWay}" IsReadOnly="true"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="1" Text="{x:Bind txt(161);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="1" Text="{x:Bind Parent_LongName,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(48);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Parent_Code,Mode=TwoWay}" IsReadOnly="{x:Bind rdo(),Mode=OneWay}"></TextBox>
             </Grid>

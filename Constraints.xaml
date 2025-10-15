@@ -43,6 +43,7 @@
                     <MenuFlyoutItem Text="{x:Bind txt(93)}" Click="TS_Teacher_MinDaysWeek"/>
                     <MenuFlyoutItem Text="{x:Bind txt(94)}" Click="TS_Teacher_MaxDaysWeek"/>
                     <MenuFlyoutItem Text="{x:Bind txt(97)}" Click="TS_Teacher_MaxGapsWeek"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(162)}" Click="TS_Teacher_NoTwoDays"/>
                 </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(24)}" > <!-- Teachers -->
@@ -65,6 +66,9 @@
                 <MenuFlyoutItem Text="{x:Bind txt(77)}" Click="TS_Class_NotAvailableTimes"/>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(52)}" >
+            </MenuBarItem>
+            <MenuBarItem Title="{x:Bind txt(32)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(163)}" Click="TS_Activity_PreferredStartingTimes"/>
             </MenuBarItem>
         </MenuBar>
 

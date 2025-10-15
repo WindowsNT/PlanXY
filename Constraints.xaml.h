@@ -6,6 +6,7 @@ inline int _ConstraintsMode = 0;
 inline int _NewPutGlobalPercNext = 100;
 ystring trim(ystring s);
 winrt::Windows::Foundation::IInspectable WindowFromPage(winrt::Windows::Foundation::IInspectable pg);
+ystring DisplayNameForActivity(PROJECT* root, XML3::XMLElement& e, unsigned long WhatAdd);
 
 namespace winrt::WuiFET::implementation
 {
@@ -89,8 +90,9 @@ namespace winrt::WuiFET::implementation
                 auto& r = x->GetRootElement()["Activities_List"];
                 for (auto& rr : r)
                 {
-                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Id", true);
-                    ystring name = trim(ee->GetContent());
+                    ystring name = DisplayNameForActivity(project, rr, 0xFFFFFFFF);
+//                    std::shared_ptr<XML3::XMLElement> ee = rr.FindElementZ("Id", true);
+ //                   ystring name = trim(ee->GetContent());
                     winrt::WuiFET::Item it;
                     it.Name1(name.c_str());
                     it.ptr((long long)&rr);
@@ -460,14 +462,14 @@ namespace winrt::WuiFET::implementation
                 Refresh(L"IsActiveChecked");
                 Refresh(L"Percentage");
 
-				ystring SelectedLeftName = trim(SelectedLeft->FindElementZ("Name", true)->GetContent());
+				ystring SelectedLeftName = trim(SelectedLeft->FindElementZ(LeftMode == 5  ? "Id" : "Name", true)->GetContent());
 
                 // Special Load
                 ystring y;
                 y.Format(L"%s", s(83));
                 str3(y.c_str());
 
-                if (SpecialView == 1)
+                if (SpecialView == 1 || SpecialView == 3)
                 {
                     std::string search_for = "ConstraintTeacherNotAvailableTimes";
                     std::string search_for2 = "Teacher";
@@ -478,7 +480,7 @@ namespace winrt::WuiFET::implementation
                     }
                     if (LeftMode == 5)
                     {
-						search_for = "ConstraintActivityNotAvailableTimes";
+						search_for = "ConstraintActivityPreferredStartingTimes";
 						search_for2 = "Activity_Id";
                     }
                     if (LeftMode == 4)
@@ -661,6 +663,13 @@ namespace winrt::WuiFET::implementation
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
+                    else
+                    if (SpecialView == 3)
+                    {
+                        std::string search_for = "ConstraintActivityPreferredStartingTimes";
+                        if (c0.GetElementName() != search_for)
+                            continue;
+                    }
 
                     std::string SearchElement1 = "";
                     std::string SearchElement2 = "";
@@ -694,7 +703,7 @@ namespace winrt::WuiFET::implementation
                     if (!elf)
                         continue;
                     auto tn = trim(elf->GetContent());
-                    auto seln = trim(SelectedLeft->FindElementZ("Name", true)->GetContent());
+                    auto seln = trim(SelectedLeft->FindElementZ(LeftMode == 5 ? "Id" : "Name", true)->GetContent());
                     if (tn != seln)
                         continue;
                     SelectedLeft2 = &c0; 
@@ -833,7 +842,7 @@ namespace winrt::WuiFET::implementation
             auto button = sender.as<DropDownButton>();
             MenuFlyout flyout;
             flyout.Placement(Microsoft::UI::Xaml::Controls::Primitives::FlyoutPlacementMode::Bottom);
-            ystring SelectedName = trim(SelectedLeft->FindElementZ("Name", true)->GetContent());
+            ystring SelectedName = trim(SelectedLeft->FindElementZ(LeftMode == 5 ? "Id" : "Name", true)->GetContent());
             auto x = project->x;
             XML3::XMLElement* root = &x->GetRootElement();
             auto r0 = root->FindElementZ(_ConstraintsMode == 1 ? "Space_Constraints_List" : "Time_Constraints_List", true);
@@ -863,7 +872,7 @@ namespace winrt::WuiFET::implementation
             int yy = 0;
             std::string search_for1;
             std::string search_for2 = "Teacher";
-            if (SpecialView == 1)
+            if (SpecialView == 1 || SpecialView == 3)
             {
                 search_for1 = "ConstraintTeacherNotAvailableTimes";
                 if (LeftMode == 2)
@@ -875,6 +884,11 @@ namespace winrt::WuiFET::implementation
                 {
                     search_for1 = "ConstraintRoomNotAvailableTimes";
                     search_for2 = "Room";
+                }
+                if (LeftMode == 5)
+                {
+                    search_for1 = "ConstraintActivityPreferredStartingTimes";
+                    search_for2 = "Activity_Id";
                 }
             }
             if (SpecialView == 2)
@@ -895,6 +909,18 @@ namespace winrt::WuiFET::implementation
                 {
 					search_for1 = "ConstraintActivityPreferredRooms";
 					search_for2 = "Activity_Id";
+                }
+
+            }
+            if (SpecialView == 3)
+            {
+                search_for1 = "ConstraintSubjectPreferredRooms";
+                search_for2 = "Subject";
+             
+                if (LeftMode == 5)
+                {
+                    search_for1 = "ConstraintActivityPreferredStartingTimes";
+                    search_for2 = "Activity_Id";
                 }
 
             }
@@ -955,7 +981,7 @@ namespace winrt::WuiFET::implementation
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::DGHeaderModel> zz1_ch()
         {
             auto headers = winrt::single_threaded_observable_vector<winrt::WuiFET::DGHeaderModel>();
-            if (SpecialView == 1)
+            if (SpecialView == 1 || SpecialView == 3)
             {
                 // Should show the days
                 auto x = project->x;
@@ -983,7 +1009,7 @@ namespace winrt::WuiFET::implementation
             auto rows = winrt::single_threaded_observable_vector<DGRowModel>();
             if (!project->x)
                 return rows;
-            if (SpecialView == 1)
+            if (SpecialView == 1 || SpecialView == 3)
             {
                 // Showing the Not Available 
                 auto x = project->x;
@@ -1035,6 +1061,8 @@ namespace winrt::WuiFET::implementation
 							c1.WhatX(3);
 						if (LeftMode == 4)
 							c1.WhatX(7);
+						if (LeftMode == 5)
+							c1.WhatX(5);
 
                         c1.pi1(zz1_gr());
                         c1.pi2(WindowFromPage(*this));
@@ -1045,8 +1073,16 @@ namespace winrt::WuiFET::implementation
                             c1.Ptr4((long long)SelectedLeft2);
                             for (auto& el : *SelectedLeft2)
                             {
-                                if (el.GetElementName() != "Not_Available_Time")
-                                    continue;
+                                if (SpecialView == 1)
+                                {
+                                    if (el.GetElementName() != "Not_Available_Time")
+                                        continue;
+                                }
+                                if (SpecialView == 3)
+                                {
+                                    if (el.GetElementName() != "Preferred_Starting_Time")
+                                        continue;
+								}
                                 if (trim(el.FindElementZ("Day", true)->GetContent()) != days2[y])
                                     continue;
                                 if (trim(el.FindElementZ("Hour", true)->GetContent()) != hours2[i])
@@ -1205,7 +1241,7 @@ namespace winrt::WuiFET::implementation
 
 
         std::shared_ptr<A_CONSTRAINT> ViewingConstraint;
-        int SpecialView = 0; // 1 - Not Available Times, 2 Rooms
+        int SpecialView = 0; // 1 - Not Available Times, 2 Rooms, 3 Preferred Starting Times
         int SpecialSubView = 0;
 
         // Time + Teacher
@@ -1247,7 +1283,7 @@ namespace winrt::WuiFET::implementation
             ViewingConstraint->w_to = 100;
             ViewingConstraint->SupportsMultiple = false;
 
-            if (1)
+            if (x1.length())
             {
                 CONSTRAINT_PARAM p1;
                 p1.d1 = d0;
@@ -1309,6 +1345,11 @@ namespace winrt::WuiFET::implementation
             TS_Teacher_Single(s(97), "ConstraintTeacherMaxGapsPerWeek", "Max_Gaps", 1, HowManyHours() * HowManyDays(), HowManyHours() * HowManyDays());
 
         }
+        void TS_Teacher_NoTwoDays(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Teacher_Single(s(162), "ConstraintTeacherNoTwoConsecutiveDays", "", 0, 0,0);
+
+        }
 
 
         // Time + Teachers
@@ -1333,7 +1374,7 @@ namespace winrt::WuiFET::implementation
             ViewingConstraint->w_to = 100;
             ViewingConstraint->SupportsMultiple = false;
 
-            if (1)
+            if (x1.length())
             {
                 CONSTRAINT_PARAM p1;
                 p1.d1 = d0;
@@ -1437,7 +1478,22 @@ namespace winrt::WuiFET::implementation
             Refresh();
         }
 
-
+        // Time + Activity
+        void TS_Activity_PreferredStartingTimes(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(163));
+            LeftMode = 5; // Activities
+            _LeftVisible = 1;
+            _Percentage = 100;
+            _IsActiveVisible = false;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _IsGridRightVisible = true;
+            _IsListRightVisible = false;
+            ViewingConstraint = nullptr;
+            SpecialView = 3;
+            Refresh();
+        }
 
         // Space + Teacher
         void SS_Teacher_PreferredRooms(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)

@@ -101,7 +101,7 @@ namespace winrt::WuiFET::implementation
             }
 
 
-            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 7) && _ptr2 && _ptr3)
+            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 5 || _whatx == 7) && _ptr2 && _ptr3)
             {
                 // pi1 = DGDataGrid
                 // pi2 = MainWindow
@@ -117,6 +117,10 @@ namespace winrt::WuiFET::implementation
                 if (_whatx >= 7)
 					tofind = "Space_Constraints_List";
                 auto Time_Constraints_List = root->FindElementZ(tofind, true);
+
+
+                std::string search_1 = _whatx == 5 ? "Preferred_Starting_Time" : "Not_Available_Time";
+				std::string search_2 = _whatx == 5 ? "Number_of_Preferred_Starting_Times" : "Number_of_Not_Available_Times";
 
                 auto days = root->FindElementZ("Days_List", true);
                 auto hours = root->FindElementZ("Hours_List", true);
@@ -147,7 +151,9 @@ namespace winrt::WuiFET::implementation
 						const char* whatadd = "ConstraintTeacherNotAvailableTimes";
                         if (_whatx == 2)
 							whatadd = "ConstraintStudentsSetNotAvailableTimes";
-						if (_whatx == 7)
+                        if (_whatx == 5)
+                            whatadd = "ConstraintActivityPreferredStartingTimes";
+                        if (_whatx == 7)
 							whatadd = "ConstraintRoomNotAvailableTimes";
                         auto& t0 = Time_Constraints_List->AddElement(whatadd);
 						Ptr4((long long)&t0);
@@ -175,7 +181,9 @@ namespace winrt::WuiFET::implementation
                             t0.AddElement("Teacher").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
                         if (_whatx == 2)
                             t0.AddElement("Students").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
-						if (_whatx == 7)
+                        if (_whatx == 5)
+                            t0.AddElement("Activity_Id").SetContent(trim(Teacher->FindElementZ("Id", true)->GetContent()).a_str());
+                        if (_whatx == 7)
 							t0.AddElement("Room").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
 
                         t0.AddElement("Weight_Percentage").SetContent(std::to_string(_NewPutGlobalPercNext).c_str());
@@ -185,7 +193,7 @@ namespace winrt::WuiFET::implementation
                 XML3::XMLElement* Not_Available_Time = 0;
                 for (auto& e : *ConstraintTeacherNotAvailableTimes)
                 {
-                    if (e.GetElementName() != "Not_Available_Time")
+                    if (e.GetElementName() != search_1)
                         continue;
 
                     int YF = 0;
@@ -219,7 +227,7 @@ namespace winrt::WuiFET::implementation
                             par->RemoveElement(Not_Available_Time);
 
                             // Decrease the "Number_of_Not_Available_Times"
-                            auto n = par->FindElementZ("Number_of_Not_Available_Times",true);
+                            auto n = par->FindElementZ(search_2.c_str(),true);
 							int nc = atoi(trim(n->GetContent().c_str()));
                             nc--;
                             if (nc < 0)
@@ -260,12 +268,12 @@ namespace winrt::WuiFET::implementation
                     {
                         // Create it
                         if (mw) mw.Dirty();
-                        auto& t1 = ConstraintTeacherNotAvailableTimes->AddElement("Not_Available_Time");
+                        auto& t1 = ConstraintTeacherNotAvailableTimes->AddElement(search_1.c_str());
 						Not_Available_Time = &t1;
                         Not_Available_Time->AddElement("Day").SetContent(trim(days2[m_col - 1].c_str()));
                         Not_Available_Time->AddElement("Hour").SetContent(trim(hours2[m_row].c_str()));
                         // Increase the "Number_of_Not_Available_Times"
-                        auto n = ConstraintTeacherNotAvailableTimes->FindElementZ("Number_of_Not_Available_Times", true);
+                        auto n = ConstraintTeacherNotAvailableTimes->FindElementZ(search_2.c_str(), true);
                         int nc = atoi(trim(n->GetContent().c_str()));
                         nc++;
                         n->SetContent(std::to_string(nc).c_str());

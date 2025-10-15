@@ -159,9 +159,11 @@ L"Mode",
 L"Default",
 L"Unique ID",
 L"Display name",
+L"No two consecutive days",
+L"Preferred starting times",
 };
 
-#define MAX_LANG 161
+#define MAX_LANG 163
 
 
 

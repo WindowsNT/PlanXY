@@ -306,4 +306,12 @@
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="fail.wav">
+      <Filter>Resources</Filter>
+    </Media>
+    <Media Include="success.wav">
+      <Filter>Resources</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

@@ -217,6 +217,13 @@ namespace winrt::WuiFET::implementation
             // Save it
 			if (!project->x)
 				return;
+
+
+            // Force official if nothing else
+            auto mode = trim(project->x->GetRootElement().FindElementZ("Mode", true)->GetContent());
+            if (mode == L"")
+                project->x->GetRootElement().FindElementZ("Mode", true)->SetContent("Official");
+
             project->x->Save(fi.c_str());
         }
         void OnExit(IInspectable const&, IInspectable const&)

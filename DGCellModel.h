@@ -101,7 +101,7 @@ namespace winrt::WuiFET::implementation
             }
 
 
-            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 5 || _whatx == 7) && _ptr2 && _ptr3)
+            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 5 || _whatx == 6 || _whatx == 7) && _ptr2 && _ptr3)
             {
                 // pi1 = DGDataGrid
                 // pi2 = MainWindow
@@ -119,8 +119,8 @@ namespace winrt::WuiFET::implementation
                 auto Time_Constraints_List = root->FindElementZ(tofind, true);
 
 
-                std::string search_1 = _whatx == 5 ? "Preferred_Starting_Time" : "Not_Available_Time";
-				std::string search_2 = _whatx == 5 ? "Number_of_Preferred_Starting_Times" : "Number_of_Not_Available_Times";
+                std::string search_1 = _whatx == 6 ? "Preferred_Time_Slot" : _whatx == 5 ? "Preferred_Starting_Time" : "Not_Available_Time";
+				std::string search_2 = _whatx == 6 ? "Number_of_Preferred_Time_Slots" : _whatx == 5 ? "Number_of_Preferred_Starting_Times" : "Number_of_Not_Available_Times";
 
                 auto days = root->FindElementZ("Days_List", true);
                 auto hours = root->FindElementZ("Hours_List", true);
@@ -153,6 +153,8 @@ namespace winrt::WuiFET::implementation
 							whatadd = "ConstraintStudentsSetNotAvailableTimes";
                         if (_whatx == 5)
                             whatadd = "ConstraintActivityPreferredStartingTimes";
+						if (_whatx == 6)
+							whatadd = "ConstraintActivityPreferredTimeSlots";
                         if (_whatx == 7)
 							whatadd = "ConstraintRoomNotAvailableTimes";
                         auto& t0 = Time_Constraints_List->AddElement(whatadd);
@@ -181,7 +183,7 @@ namespace winrt::WuiFET::implementation
                             t0.AddElement("Teacher").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
                         if (_whatx == 2)
                             t0.AddElement("Students").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
-                        if (_whatx == 5)
+                        if (_whatx == 5 || _whatx == 6)
                             t0.AddElement("Activity_Id").SetContent(trim(Teacher->FindElementZ("Id", true)->GetContent()).a_str());
                         if (_whatx == 7)
 							t0.AddElement("Room").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());

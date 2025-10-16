@@ -469,7 +469,7 @@ namespace winrt::WuiFET::implementation
                 y.Format(L"%s", s(83));
                 str3(y.c_str());
 
-                if (SpecialView == 1 || SpecialView == 3)
+                if (SpecialView == 1 || SpecialView == 3 || SpecialView == 4)
                 {
                     std::string search_for = "ConstraintTeacherNotAvailableTimes";
                     std::string search_for2 = "Teacher";
@@ -481,6 +481,8 @@ namespace winrt::WuiFET::implementation
                     if (LeftMode == 5)
                     {
 						search_for = "ConstraintActivityPreferredStartingTimes";
+                        if (SpecialView == 4)
+							search_for = "ConstraintActivityPreferredTimeSlots";
 						search_for2 = "Activity_Id";
                     }
                     if (LeftMode == 4)
@@ -667,6 +669,13 @@ namespace winrt::WuiFET::implementation
                     if (SpecialView == 3)
                     {
                         std::string search_for = "ConstraintActivityPreferredStartingTimes";
+                        if (c0.GetElementName() != search_for)
+                            continue;
+                    }
+                    else
+                    if (SpecialView == 4)
+                    {
+                        std::string search_for = "ConstraintActivityPreferredTimeSlots";
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
@@ -872,7 +881,7 @@ namespace winrt::WuiFET::implementation
             int yy = 0;
             std::string search_for1;
             std::string search_for2 = "Teacher";
-            if (SpecialView == 1 || SpecialView == 3)
+            if (SpecialView == 1 || SpecialView == 3 || SpecialView == 4)
             {
                 search_for1 = "ConstraintTeacherNotAvailableTimes";
                 if (LeftMode == 2)
@@ -888,6 +897,8 @@ namespace winrt::WuiFET::implementation
                 if (LeftMode == 5)
                 {
                     search_for1 = "ConstraintActivityPreferredStartingTimes";
+                    if (SpecialView == 4)
+						search_for1 = "ConstraintActivityPreferredTimeSlots";
                     search_for2 = "Activity_Id";
                 }
             }
@@ -912,7 +923,7 @@ namespace winrt::WuiFET::implementation
                 }
 
             }
-            if (SpecialView == 3)
+            if (SpecialView == 3 || SpecialView == 4)
             {
                 search_for1 = "ConstraintSubjectPreferredRooms";
                 search_for2 = "Subject";
@@ -920,6 +931,8 @@ namespace winrt::WuiFET::implementation
                 if (LeftMode == 5)
                 {
                     search_for1 = "ConstraintActivityPreferredStartingTimes";
+					if (SpecialView == 4)
+						search_for1 = "ConstraintActivityPreferredTimeSlots";
                     search_for2 = "Activity_Id";
                 }
 
@@ -981,7 +994,7 @@ namespace winrt::WuiFET::implementation
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::DGHeaderModel> zz1_ch()
         {
             auto headers = winrt::single_threaded_observable_vector<winrt::WuiFET::DGHeaderModel>();
-            if (SpecialView == 1 || SpecialView == 3)
+            if (SpecialView == 1 || SpecialView == 3 || SpecialView == 4)
             {
                 // Should show the days
                 auto x = project->x;
@@ -1009,7 +1022,7 @@ namespace winrt::WuiFET::implementation
             auto rows = winrt::single_threaded_observable_vector<DGRowModel>();
             if (!project->x)
                 return rows;
-            if (SpecialView == 1 || SpecialView == 3)
+            if (SpecialView == 1 || SpecialView == 3 || SpecialView == 4)
             {
                 // Showing the Not Available 
                 auto x = project->x;
@@ -1061,8 +1074,13 @@ namespace winrt::WuiFET::implementation
 							c1.WhatX(3);
 						if (LeftMode == 4)
 							c1.WhatX(7);
-						if (LeftMode == 5)
-							c1.WhatX(5);
+                        if (LeftMode == 5)
+                        {
+                            if (SpecialView == 4)
+                                c1.WhatX(6);
+							else
+                                c1.WhatX(5);
+                        }
 
                         c1.pi1(zz1_gr());
                         c1.pi2(WindowFromPage(*this));
@@ -1083,6 +1101,11 @@ namespace winrt::WuiFET::implementation
                                     if (el.GetElementName() != "Preferred_Starting_Time")
                                         continue;
 								}
+                                if (SpecialView == 4)
+                                {
+                                    if (el.GetElementName() != "Preferred_Time_Slot")
+                                        continue;
+                                }
                                 if (trim(el.FindElementZ("Day", true)->GetContent()) != days2[y])
                                     continue;
                                 if (trim(el.FindElementZ("Hour", true)->GetContent()) != hours2[i])
@@ -1241,7 +1264,7 @@ namespace winrt::WuiFET::implementation
 
 
         std::shared_ptr<A_CONSTRAINT> ViewingConstraint;
-        int SpecialView = 0; // 1 - Not Available Times, 2 Rooms, 3 Preferred Starting Times
+        int SpecialView = 0; // 1 - Not Available Times, 2 Rooms, 3 Preferred Starting Times , 4 Preferred Time Slots
         int SpecialSubView = 0;
 
         // Time + Teacher
@@ -1492,6 +1515,21 @@ namespace winrt::WuiFET::implementation
             _IsListRightVisible = false;
             ViewingConstraint = nullptr;
             SpecialView = 3;
+            Refresh();
+        }
+        void TS_Activity_PreferredTimeSlots(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(163));
+            LeftMode = 5; // Activities
+            _LeftVisible = 1;
+            _Percentage = 100;
+            _IsActiveVisible = false;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _IsGridRightVisible = true;
+            _IsListRightVisible = false;
+            ViewingConstraint = nullptr;
+            SpecialView = 4;
             Refresh();
         }
 

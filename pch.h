@@ -19,6 +19,7 @@
 #include <limits>
 #include <vector>
 #include <shlobj.h>
+#include <powrprof.h>
 #include <cmath>
 #include <future>
 #include <cstdlib>

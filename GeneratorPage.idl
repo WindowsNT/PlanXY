@@ -12,6 +12,8 @@ namespace WuiFET
         Int32 Num_Threads;
         Int32 Wait_Results;
         Int32 Wait_Minutes;
+        Boolean FinishSleep;
+        Boolean FinishShutdown;
         Boolean Running{ get; };
         String td_msg;
         String td_time1;

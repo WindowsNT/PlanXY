@@ -8,3 +8,7 @@ todo
 4. On Generation Window, on finish actions
 
 Check Activity click
+Dirty Ask
+Summary result
+Sort output
+Subclass output

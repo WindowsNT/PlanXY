@@ -69,6 +69,7 @@
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(32)}" >
                 <MenuFlyoutItem Text="{x:Bind txt(163)}" Click="TS_Activity_PreferredStartingTimes"/>
+                <MenuFlyoutItem Text="{x:Bind txt(168)}" Click="TS_Activity_PreferredTimeSlots"/>
             </MenuBarItem>
         </MenuBar>
 

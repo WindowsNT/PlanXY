@@ -32,7 +32,14 @@
                             </DataTemplate>
                         </ItemsRepeater.ItemTemplate>
                     </ItemsRepeater>
-                </ScrollViewer>                <StackPanel Orientation="Horizontal">                    <Button Content="{x:Bind txt(89);}" Click="WarningToggle" Style="{StaticResource WarningButtonStyle}"  Visibility="{x:Bind HasWarnings,Mode=OneWay}" Margin="5" />                    <Button Content="{x:Bind txt(5);}" Click="CancelG" Style="{StaticResource ErrorButtonStyle}"  Margin="5" />                </StackPanel>            </StackPanel>        </ContentDialog>
+                </ScrollViewer>                <StackPanel Orientation="Horizontal">                    <Button Content="{x:Bind txt(89);}" Click="WarningToggle" Style="{StaticResource WarningButtonStyle}"  Visibility="{x:Bind HasWarnings,Mode=OneWay}" Margin="5" />                    <DropDownButton Content="{x:Bind txt(164);}" Style="{StaticResource PrimaryButtonStyle}" >
+                        <DropDownButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <ToggleMenuFlyoutItem Text="{x:Bind txt(165);}" IsChecked="{x:Bind FinishSleep,Mode=TwoWay}"/>
+                                <ToggleMenuFlyoutItem Text="{x:Bind txt(166);}" IsChecked="{x:Bind FinishShutdown,Mode=TwoWay}"/>
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>                                        <Button Content="{x:Bind txt(5);}" Click="CancelG" Style="{StaticResource ErrorButtonStyle}"  Margin="5" />                </StackPanel>            </StackPanel>        </ContentDialog>
 
 
         <InfoBar x:Name="infoBar" Grid.Row="0" IsOpen="True" Message="" Severity="Success"  IsClosable="False" Grid.ColumnSpan="2">

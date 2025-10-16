@@ -11,6 +11,8 @@
 #pragma comment(lib,"shell32.lib")
 #pragma comment(lib,"wininet.lib")
 #pragma comment(lib,"winsqlite3.lib")
+#pragma comment(lib,"PowrProf.lib")
+#pragma comment(lib,"winmm.lib")
 
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' \

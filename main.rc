@@ -1,6 +1,8 @@
 #include <windows.h>
 
 
+SND1 WAVE "success.wav"
+SND2 WAVE "fail.wav"
 ICON_1 ICON "app.ico"
 DEFAULTFET DATA "default.fet"
 

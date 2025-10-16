@@ -161,9 +161,14 @@ L"Unique ID",
 L"Display name",
 L"No two consecutive days",
 L"Preferred starting times",
+L"On finish",
+L"PC sleep",
+L"PC shutdown",
+L"Generation completed. Shutting down in 1 minute.",
+L"Preferred time slots",
 };
 
-#define MAX_LANG 163
+#define MAX_LANG 168
 
 
 

@@ -265,6 +265,8 @@ std::vector<K> AllKidLoaded;
 /*
 	Server Side Requires
 		"MAIN" set in CLASSES
+		// Skarimba Kwtidou Haristou 6 hours kat
+
 		Students AB set in A/B Superadmin
 		Saltou - Bourakidou remove fake anath
 		ANATH set A and B in PE79 

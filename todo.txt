@@ -5,7 +5,6 @@ todo
 1. Time Constraints
 2. Space Constraints
 3. Export HTMLs 
-4. On Generation Window, on finish actions
 
 Check Activity click
 Dirty Ask

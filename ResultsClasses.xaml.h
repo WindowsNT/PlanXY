@@ -119,6 +119,7 @@ namespace winrt::WuiFET::implementation
             std::set<std::wstring> teachers;
             std::set<std::wstring> subjects;
             std::set<std::wstring> rooms;
+            std::wstring parent;
         };
         std::map<std::wstring, std::map<size_t, std::map<size_t, RESULTRIGHT>>> ResultsMap; // class, day, hour, result
 

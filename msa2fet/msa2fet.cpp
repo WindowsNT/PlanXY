@@ -551,7 +551,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet)
 	FindTeachersWithSynola(x, sql);
 
 
-	CreateActivitiesForSynola();
+	CreateActivitiesForSynola3(sql);
 	CreateActivitiesForIndependentLessons(sql);
 	CreateActivitiesForAggl3(sql);
 	CreateActivitiesFor2XGL(sql);

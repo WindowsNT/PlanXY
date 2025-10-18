@@ -24,6 +24,9 @@ namespace WuiFET
         Boolean IsTS{ get; };
         Boolean IsSS{ get; };
 
+        Microsoft.UI.Xaml.Controls.ListViewSelectionMode leftsm{ get; };
+
+
         Boolean IsLeftVisible{ get; };
         Boolean IsRightVisible{ get; };
         Boolean IsActiveVisible{ get; };

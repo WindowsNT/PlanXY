@@ -68,8 +68,23 @@
             <MenuBarItem Title="{x:Bind txt(52)}" >
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(32)}" >
-                <MenuFlyoutItem Text="{x:Bind txt(163)}" Click="TS_Activity_PreferredStartingTimes"/>
-                <MenuFlyoutItem Text="{x:Bind txt(168)}" Click="TS_Activity_PreferredTimeSlots"/>
+                <MenuFlyoutSubItem Text="{x:Bind txt(170);}">
+                    <MenuFlyoutItem Text="{x:Bind txt(163)}" Click="TS_Activity_PreferredStartingTimes"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(168)}" Click="TS_Activity_PreferredTimeSlots"/>
+                </MenuFlyoutSubItem>
+                <MenuFlyoutSubItem Text="{x:Bind txt(169);}">
+                    <MenuFlyoutItem Text="{x:Bind txt(171)}" Click="TS_Activity_BeginsStudentsDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(172)}" Click="TS_Activity_EndsStudentsDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(173)}" Click="TS_Activity_BeginsEndsStudentsDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(174)}" Click="TS_Activity_BeginsTeacherDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(175)}" Click="TS_Activity_EndsTeacherDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(176)}" Click="TS_Activity_BeginsEndsTeacherDay"/>
+                </MenuFlyoutSubItem>
+            </MenuBarItem>
+            <MenuBarItem Title="{x:Bind txt(25)}" >
+                <MenuFlyoutSubItem Text="{x:Bind txt(57);}">
+                    <MenuFlyoutItem Text="{x:Bind txt(177)}" Click="TS_Activities_MinDaysBetween"/> 
+                </MenuFlyoutSubItem>
             </MenuBarItem>
         </MenuBar>
 
@@ -134,7 +149,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <AutoSuggestBox x:Name="fb11" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}"  Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnLeftFilter" />
-                <ListView  x:Name="Left_ListView" Grid.Row="1" ItemsSource="{x:Bind Left_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="LeftChanged" SelectionMode="Single">
+                <ListView  x:Name="Left_ListView" Grid.Row="1" ItemsSource="{x:Bind Left_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="LeftChanged" SelectionMode="{x:Bind leftsm,Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Item">
                             <StackPanel Orientation="Horizontal" Margin="10" >

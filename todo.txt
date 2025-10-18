@@ -2,7 +2,7 @@ todo
 ----------
 
 
-1. Time Constraints
+1. Time Constraints -> Set of Activities have preferred , 
 2. Space Constraints
 3. Export HTMLs 
 

@@ -262,23 +262,6 @@ std::vector<K> AllKidLoaded;
 			// Needs "PARAM" set in TEACHERSINCLASSES to 1 FOR SOLFEGE because we can't deduct from hours (its both 2)
 */
 
-/*
-	Server Side Requires
-		"MAIN" set in CLASSES
-		// Skarimba Kwtidou Haristou 6 hours kat
-
-		Students AB set in A/B Superadmin
-		Saltou - Bourakidou remove fake anath
-		ANATH set A and B in PE79 
-
-	This side changes
-		Set English splits
-
-
-
-*/
-
-
 #include <regex>
 void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std::string teachers, [[maybe_unused]] std::string activities1)
 {
@@ -560,7 +543,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet)
 	// Statics
 	CreateDays(x);
 	CreateBuildings(x, sql);
-	CreateClasses(x, sql);
+	CreateClasses3(x, sql);
 	CreateLessons(x,sql);
 	CreateTeachers(x, sql);
 	CreateKids(x, sql);

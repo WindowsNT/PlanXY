@@ -166,9 +166,18 @@ L"PC sleep",
 L"PC shutdown",
 L"Generation completed. Shutting down in 1 minute.",
 L"Preferred time slots",
+L"Day Begin/End",
+L"Time",
+L"Begin Class Day",
+L"End Class Day",
+L"Begin/End Class Day",
+L"Begin Teacher Day",
+L"End Teacher Day",
+L"Begin/End Teacher Day",
+L"Min Days between",
 };
 
-#define MAX_LANG 168
+#define MAX_LANG 177
 
 
 

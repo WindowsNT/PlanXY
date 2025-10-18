@@ -64,6 +64,17 @@ namespace winrt::WuiFET::implementation
         }
         winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
         int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms, 5 Activities
+        int MultiLeft = 0; // Multiple Pick left
+
+        // getter for leftsm
+        Microsoft::UI::Xaml::Controls::ListViewSelectionMode leftsm()
+        {
+            if (MultiLeft)
+                return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Multiple;
+            return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Single;
+		}
+
+
         XML3::XMLElement* SelectedLeft = 0;
         XML3::XMLElement* SelectedLeft2 = 0;
         ystring LeftFilter;
@@ -71,6 +82,7 @@ namespace winrt::WuiFET::implementation
         {
             LeftFilter = fb11().Text().c_str();
             Refresh(L"Left_List");
+            Refresh(L"leftsm");
         }
 
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Left_List()
@@ -1272,6 +1284,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(77));
             LeftMode = 1; // Teachers
+            MultiLeft = 0;
             _LeftVisible = 1;
             _Percentage = 100;
             _IsActiveVisible = false;
@@ -1288,6 +1301,7 @@ namespace winrt::WuiFET::implementation
         {
             SpecialView = 0;
             LeftMode = 1; // Teachers
+            MultiLeft = 0;
             _LeftVisible = 1;
             _IsActiveVisible = true;
             _IsMultiple = false;
@@ -1380,6 +1394,7 @@ namespace winrt::WuiFET::implementation
         {
             SpecialView = 0;
             LeftMode = 0; // None
+            MultiLeft = 0;
             _LeftVisible = 0;
             _IsActiveVisible = true;
             _IsMultiple = false;
@@ -1471,6 +1486,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(77));
             LeftMode = 2; // Class
+            MultiLeft = 0;
             _LeftVisible = 1;
             _Percentage = 100;
             _IsActiveVisible = false;
@@ -1489,6 +1505,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(77));
             LeftMode = 4; // Room
+            MultiLeft = 0;
             _LeftVisible = 1;
             _Percentage = 100;
             _IsActiveVisible = false;
@@ -1502,10 +1519,86 @@ namespace winrt::WuiFET::implementation
         }
 
         // Time + Activity
+        void TS_Activity_Single(std::wstring d0, std::string x0, std::string x1, int perfrom,int perto,bool mult,int from, int to, int def, bool multil = 0,bool R = 1)
+        {
+            SpecialView = 0;
+            LeftMode = 5; // Activities
+            MultiLeft = multil;
+            _LeftVisible = 1;
+            _IsActiveVisible = true;
+            _IsMultiple = false;
+            _IsPercentageVisible = (perfrom < 100 || perto < 100) ? true : false;
+            _RightVisible = false;
+            _IsGridRightVisible = true;
+            _IsListRightVisible = false;
+
+            ViewingConstraint = std::make_shared<A_CONSTRAINT>();
+            ViewingConstraint->d0 = d0;
+            ViewingConstraint->x0 = x0;
+            ViewingConstraint->Type = 0;
+            ViewingConstraint->SubType = 0;
+            ViewingConstraint->w_from = perfrom;
+            ViewingConstraint->w_to = perto;
+            ViewingConstraint->SupportsMultiple = mult;
+
+
+            if (x1.length())
+            {
+                CONSTRAINT_PARAM p1;
+                p1.d1 = d0;
+                p1.type = 0;
+                p1.x1 = x1;
+                p1.from = from;
+                p1.to = to;
+                p1.def = def;
+                ViewingConstraint->params.push_back(p1);
+            }
+            if (R)
+                Refresh();
+        }
+
+        void TS_Activity_BeginsStudentsDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(171), "ConstraintActivityBeginsStudentsDay", "",0,100,false, 0, 0, 0);
+
+        }
+        void TS_Activity_EndsStudentsDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(172), "ConstraintActivityEndsStudentsDay", "", 0, 100, false, 0, 0, 0);
+
+        }
+        void TS_Activity_BeginsEndsStudentsDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(173), "ConstraintActivityBeginsOrEndsStudentsDay", "", 0, 100, false, 0, 0, 0);
+
+        }
+        void TS_Activity_BeginsTeacherDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(174), "ConstraintActivityBeginsTeachersDay", "", 0, 100, false, 0, 0, 0);
+
+        }
+        void TS_Activity_EndsTeacherDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(175), "ConstraintActivityEndsTeachersDay", "", 0, 100, false, 0, 0, 0);
+
+        }
+        void TS_Activity_BeginsEndsTeacherDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(176), "ConstraintActivityBeginsOrEndsTeachersDay", "", 0, 100, false, 0, 0, 0);
+
+        }
+
+        void TS_Activities_MinDaysBetween(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            TS_Activity_Single(s(177), "ConstraintMinDaysBetweenActivities", "", 0, 100, true, 0, 0, 0,true);
+
+        }
+
         void TS_Activity_PreferredStartingTimes(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
         {
             str2(s(163));
             LeftMode = 5; // Activities
+            MultiLeft = 0;
             _LeftVisible = 1;
             _Percentage = 100;
             _IsActiveVisible = false;
@@ -1521,6 +1614,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(163));
             LeftMode = 5; // Activities
+            MultiLeft = 0;
             _LeftVisible = 1;
             _Percentage = 100;
             _IsActiveVisible = false;
@@ -1538,6 +1632,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(146));
             LeftMode = 1; // Teachers
+            MultiLeft = 0;
             SpecialView = 2;
             SpecialSubView = 0;
             ViewingConstraint = nullptr;
@@ -1554,6 +1649,7 @@ namespace winrt::WuiFET::implementation
         {
             SpecialView = 0;
             LeftMode = 1; // Teachers
+            MultiLeft = 0;
             _LeftVisible = 1;
             _IsActiveVisible = true;
             _IsMultiple = false;
@@ -1670,6 +1766,7 @@ namespace winrt::WuiFET::implementation
         {
             SpecialView = 0;
             LeftMode = 0; // None
+            MultiLeft = 0;
             _LeftVisible = 0;
             _IsActiveVisible = true;
             _IsMultiple = false;
@@ -1721,6 +1818,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(146));
             LeftMode = 2; // Class
+            MultiLeft = 0;
             SpecialView = 2;
             SpecialSubView = 0;
             ViewingConstraint = nullptr;
@@ -1737,6 +1835,7 @@ namespace winrt::WuiFET::implementation
         {
             SpecialView = 0;
             LeftMode = 2; // Class
+            MultiLeft = 0;
             _LeftVisible = 1;
             _IsActiveVisible = true;
             _IsMultiple = false;
@@ -1786,6 +1885,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(146));
             LeftMode = 3; // Lesson
+            MultiLeft = 0;
             SpecialView = 2;
             SpecialSubView = 0;
             ViewingConstraint = nullptr;
@@ -1805,6 +1905,7 @@ namespace winrt::WuiFET::implementation
         {
             str2(s(146));
             LeftMode = 5; // Activities
+            MultiLeft = 0;
             SpecialView = 2;
             SpecialSubView = 0;
             ViewingConstraint = nullptr;

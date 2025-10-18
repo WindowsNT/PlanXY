@@ -103,13 +103,23 @@
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Teacher_MaxRoomChangesWeek"/>
                     <MenuFlyoutItem Text="{x:Bind txt(143)}" Click="SS_Teacher_MaxBuildingChangesWeek"/>
                 </MenuFlyoutSubItem>
+                <MenuFlyoutSubItem Text="{x:Bind txt(178);}">
+                    <MenuFlyoutItem Text="{x:Bind txt(179)}" Click="SS_Teacher_MinGapsBetweenRoomChanges"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(180)}" Click="SS_Teacher_MinGapsBetweenBuildingChanges"/>
+                </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(24)}" > <!-- Teachers -->
                 <MenuFlyoutSubItem Text="{x:Bind txt(100);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Teachers_MaxRoomChangesDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(140)}" Click="SS_Teachers_MaxRoomChangesDayInterval"/>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSubItem Text="{x:Bind txt(101);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Teachers_MaxRoomChangesWeek"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(143)}" Click="SS_Teachers_MaxBuildingChangesWeek"/>
+                </MenuFlyoutSubItem>
+                <MenuFlyoutSubItem Text="{x:Bind txt(178);}">
+                    <MenuFlyoutItem Text="{x:Bind txt(179)}" Click="SS_Teachers_MinGapsBetweenRoomChanges"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(180)}" Click="SS_Teachers_MinGapsBetweenBuildingChanges"/>
                 </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(92)}" > <!-- Class -->
@@ -117,9 +127,11 @@
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutSubItem Text="{x:Bind txt(100);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Class_MaxRoomChangesDay"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(143)}" Click="SS_Class_MaxBuildingChangesDay"/>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSubItem Text="{x:Bind txt(101);}">
                     <MenuFlyoutItem Text="{x:Bind txt(139)}" Click="SS_Class_MaxRoomChangesWeek"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(143)}" Click="SS_Class_MaxBuildingChangesWeek"/>
                 </MenuFlyoutSubItem>
             </MenuBarItem>
             <MenuBarItem Title="{x:Bind txt(33)}" > <!-- Lesson -->
@@ -131,6 +143,10 @@
             <MenuBarItem Title="{x:Bind txt(32)}" >
                 <!-- Activity -->
                 <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Activity_PreferredRooms"/>
+            </MenuBarItem>
+            <MenuBarItem Title="{x:Bind txt(36)}" >
+                <!-- Tag -->
+                <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Tag_PreferredRooms"/>
             </MenuBarItem>
         </MenuBar>
         

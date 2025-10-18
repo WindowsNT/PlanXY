@@ -101,7 +101,7 @@ namespace winrt::WuiFET::implementation
             }
 
 
-            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 5 || _whatx == 6 || _whatx == 7) && _ptr2 && _ptr3)
+            if ((_whatx == 1 || _whatx == 2 || _whatx == 3 || _whatx == 4 || _whatx == 5 || _whatx == 6 || _whatx == 7 || _whatx == 8) && _ptr2 && _ptr3)
             {
                 // pi1 = DGDataGrid
                 // pi2 = MainWindow
@@ -157,6 +157,8 @@ namespace winrt::WuiFET::implementation
 							whatadd = "ConstraintActivityPreferredTimeSlots";
                         if (_whatx == 7)
 							whatadd = "ConstraintRoomNotAvailableTimes";
+						if (_whatx == 8)
+							whatadd = "ConstraintTagNotAvailableTimes";
                         auto& t0 = Time_Constraints_List->AddElement(whatadd);
 						Ptr4((long long)&t0);
 
@@ -187,6 +189,8 @@ namespace winrt::WuiFET::implementation
                             t0.AddElement("Activity_Id").SetContent(trim(Teacher->FindElementZ("Id", true)->GetContent()).a_str());
                         if (_whatx == 7)
 							t0.AddElement("Room").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
+						if (_whatx == 8)
+                            t0.AddElement("Tag").SetContent(trim(Teacher->FindElementZ("Name", true)->GetContent()).a_str());
 
                         t0.AddElement("Weight_Percentage").SetContent(std::to_string(_NewPutGlobalPercNext).c_str());
                     }

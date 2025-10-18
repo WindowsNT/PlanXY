@@ -175,9 +175,12 @@ L"Begin Teacher Day",
 L"End Teacher Day",
 L"Begin/End Teacher Day",
 L"Min Days between",
+L"Other limits",
+L"Min gaps between room changes",
+L"Min gaps between building changes",
 };
 
-#define MAX_LANG 177
+#define MAX_LANG 180
 
 
 

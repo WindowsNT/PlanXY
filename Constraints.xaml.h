@@ -63,7 +63,7 @@ namespace winrt::WuiFET::implementation
             return s(jx);
         }
         winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
-        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms, 5 Activities
+        int LeftMode = 0; // 1 Teachers, 2 Classes, 3 Lessons, 4 Rooms, 5 Activities, 6 Tags
         int MultiLeft = 0; // Multiple Pick left
 
         // getter for leftsm
@@ -96,6 +96,10 @@ namespace winrt::WuiFET::implementation
             if (LeftMode == 3) // Subjects
             {
                 return GetList(x->GetRootElement()["Subjects_List"], LeftFilter.c_str(), 0);
+            }
+            if (LeftMode == 6) // tags
+            {
+                return GetList(x->GetRootElement()["Activity_Tags_List"], LeftFilter.c_str(), 0);
             }
             if (LeftMode == 5) // Activities
             {
@@ -497,6 +501,11 @@ namespace winrt::WuiFET::implementation
 							search_for = "ConstraintActivityPreferredTimeSlots";
 						search_for2 = "Activity_Id";
                     }
+                    if (LeftMode == 6)
+                    {
+						search_for = "ConstraintTagNotAvailableTimes";
+						search_for2 = "Tag";
+                    }
                     if (LeftMode == 4)
                     {
 						search_for = "ConstraintRoomNotAvailableTimes";
@@ -550,6 +559,11 @@ namespace winrt::WuiFET::implementation
                     {
                         search_for = "ConstraintActivityPreferredRooms";
                         search_for2 = "Activity_Id";
+                    }
+                    if (LeftMode == 6)
+                    {
+						search_for = "ConstraintTagPreferredRooms";
+						search_for2 = "Tag";
                     }
                     const char* s1 = "Space_Constraints_List";
                     auto x = project->x;
@@ -661,6 +675,8 @@ namespace winrt::WuiFET::implementation
 							search_for = "ConstraintRoomNotAvailableTimes";
 						if (LeftMode == 5)
 							search_for = "ConstraintActivityNotAvailableTimes";
+						if (LeftMode == 6)
+							search_for = "ConstraintTagNotAvailableTimes";
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
@@ -674,6 +690,8 @@ namespace winrt::WuiFET::implementation
 							search_for = "ConstraintStudentsSetPreferredRooms";
 						if (LeftMode == 5)
 							search_for = "ConstraintActivityPreferredRooms";
+						if (LeftMode == 6)
+							search_for = "ConstraintTagPreferredRooms";
                         if (c0.GetElementName() != search_for)
                             continue;
                     }
@@ -715,6 +733,10 @@ namespace winrt::WuiFET::implementation
                     {
                         SearchElement1 = "Activity_Id";
 					}
+                    if (LeftMode == 6)
+                    {
+                        SearchElement1 = "Tag";
+                    }
 
                     if (SearchElement1.length() == 0 && SearchElement2.length() == 0)
 						continue;
@@ -821,6 +843,8 @@ namespace winrt::WuiFET::implementation
 						search_for = "ConstraintStudentsSetPreferredRooms";
 					if (LeftMode == 5)
 						search_for = "ConstraintActivityPreferredRooms";
+					if (LeftMode == 6)
+						search_for = "ConstraintTagPreferredRooms";
 
 					auto& l2 = r0->AddElement(search_for.c_str());
 					SelectedLeft2 = &l2;
@@ -847,6 +871,8 @@ namespace winrt::WuiFET::implementation
 						s2 = "Students";
 					if (LeftMode == 5)
 						s2 = "Activity_Id";
+					if (LeftMode == 6)
+						s2 = "Tag";
                     SelectedLeft2->AddElement(s2).SetContent(trim(SelectedLeft->FindElementZ("Name", true)->GetContent()));
                     if (LeftMode == 5)
                         SelectedLeft2->AddElement(s2).SetContent(trim(SelectedLeft->FindElementZ("Id", true)->GetContent()));
@@ -906,6 +932,11 @@ namespace winrt::WuiFET::implementation
                     search_for1 = "ConstraintRoomNotAvailableTimes";
                     search_for2 = "Room";
                 }
+                if (LeftMode == 6)
+                {
+                    search_for1 = "ConstraintTagNotAvailableTimes";
+                    search_for2 = "Tag";
+				}
                 if (LeftMode == 5)
                 {
                     search_for1 = "ConstraintActivityPreferredStartingTimes";
@@ -933,7 +964,11 @@ namespace winrt::WuiFET::implementation
 					search_for1 = "ConstraintActivityPreferredRooms";
 					search_for2 = "Activity_Id";
                 }
-
+                if (LeftMode == 6)
+                {
+                    search_for1 = "ConstraintTagPreferredRooms";
+                    search_for2 = "Tag";
+                }
             }
             if (SpecialView == 3 || SpecialView == 4)
             {
@@ -946,6 +981,11 @@ namespace winrt::WuiFET::implementation
 					if (SpecialView == 4)
 						search_for1 = "ConstraintActivityPreferredTimeSlots";
                     search_for2 = "Activity_Id";
+                }
+                if (LeftMode == 6)
+                {
+                    search_for1 = "ConstraintTagPreferredRooms";
+					search_for2 = "Tag";
                 }
 
             }
@@ -1093,6 +1133,8 @@ namespace winrt::WuiFET::implementation
 							else
                                 c1.WhatX(5);
                         }
+						if (LeftMode == 6)
+							c1.WhatX(8);
 
                         c1.pi1(zz1_gr());
                         c1.pi2(WindowFromPage(*this));
@@ -1759,7 +1801,16 @@ namespace winrt::WuiFET::implementation
             SS_Teacher_Single(s(139), "ConstraintTeacherMaxBuildingChangesPerWeek", "Max_Building_Changes_Per_Week", 1, HowManyHours(), HowManyHours());
 
         }
+        void SS_Teacher_MinGapsBetweenRoomChanges(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teacher_Single(s(179), "ConstraintTeacherMinGapsBetweenRoomChanges", "Min_Gaps_Between_Room_Changes", 1, HowManyHours(), HowManyHours());
 
+        }
+        void SS_Teacher_MinGapsBetweenBuildingChanges(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teacher_Single(s(180), "ConstraintTeacherMinGapsBetweenBuildingChanges", "Min_Gaps_Between_Building_Changes", 1, HowManyHours(), HowManyHours());
+
+        }
 
 		// Space + Teachers
         void SS_Teachers_Single(std::wstring d0, std::string x0, std::string x1, int from, int to, int def, bool R = 1)
@@ -1810,6 +1861,52 @@ namespace winrt::WuiFET::implementation
         void SS_Teachers_MaxRoomChangesWeek(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
         {
             SS_Teachers_Single(s(139), "ConstraintTeachersMaxRoomChangesPerWeek", "Max_Room_Changes_Per_Week", 1, HowManyHours(), HowManyHours());
+
+        }
+
+        void SS_Teachers_MinGapsBetweenRoomChanges(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teachers_Single(s(179), "ConstraintTeachersMinGapsBetweenRoomChanges", "Min_Gaps_Between_Room_Changes", 1, HowManyHours(), HowManyHours());
+
+        }
+        void SS_Teachers_MinGapsBetweenBuildingChanges(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teachers_Single(s(180), "ConstraintTeachersMinGapsBetweenBuildingChanges", "Min_Gaps_Between_Building_Changes", 1, HowManyHours(), HowManyHours());
+
+        }
+
+        void SS_Teachers_MaxRoomChangesDayInterval(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teachers_Single(s(140), "ConstraintTeachersMaxRoomChangesPerDayInInterval", "Max_Room_Changes_Per_Day", 1, HowManyHours(), HowManyHours(), 0);
+            if (1)
+            {
+                CONSTRAINT_PARAM p1;
+                p1.d1 = s(141);
+                p1.type = 0;
+                p1.x1 = "Interval_Start_Hour";
+                p1.from = 0;
+                p1.to = HowManyHours();
+                p1.def = 0;
+                ViewingConstraint->params.push_back(p1);
+            }
+
+            if (1)
+            {
+                CONSTRAINT_PARAM p1;
+                p1.d1 = s(142);
+                p1.type = 0;
+                p1.x1 = "Interval_End_Hour";
+                p1.from = 0;
+                p1.to = HowManyHours();
+                p1.def = p1.to;
+                ViewingConstraint->params.push_back(p1);
+            }
+            Refresh();
+        }
+
+        void SS_Teachers_MaxBuildingChangesWeek(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Teachers_Single(s(139), "ConstraintTeachersMaxBuildingChangesPerWeek", "Max_Building_Changes_Per_Week", 1, HowManyHours(), HowManyHours());
 
         }
 
@@ -1878,6 +1975,14 @@ namespace winrt::WuiFET::implementation
         {
             SS_Class_Single(s(139), "ConstraintStudentSetMaxRoomChangesPerWeek", "Max_Room_Changes_Per_Week", 1, HowManyHours(), HowManyHours());
         }
+        void SS_Class_MaxBuildingChangesDay(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Class_Single(s(143), "ConstraintStudentSetMaxBuildingChangesPerDay", "Max_Building_Changes_Per_Day", 1, HowManyHours(), HowManyHours());
+        }
+        void SS_Class_MaxBuildingChangesWeek(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            SS_Class_Single(s(143), "ConstraintStudentSetMaxBuildingChangesPerWeek", "Max_Building_Changes_Per_Week", 1, HowManyHours(), HowManyHours());
+        }
 
 
 		// Space + Subject
@@ -1917,6 +2022,27 @@ namespace winrt::WuiFET::implementation
             _IsListRightVisible = true;
             Refresh();
         }
+
+        // Space + Tag
+        void SS_Tag_PreferredRooms(IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs)
+        {
+            str2(s(146));
+            LeftMode = 6; // Tag
+            MultiLeft = 0;
+            SpecialView = 2;
+            SpecialSubView = 0;
+            ViewingConstraint = nullptr;
+            _LeftVisible = 1;
+            _IsMultiple = true;
+            _IsPercentageVisible = true;
+            _RightVisible = false;
+            _IsGridRightVisible = false;
+            _IsListRightVisible = true;
+
+            Refresh();
+
+        }
+
 
     };
 }

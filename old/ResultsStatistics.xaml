@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="WuiFET.ResultsStatistics"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WuiFET"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <InfoBar x:Name="infoBar" Grid.Row="0" IsOpen="True" Message="" Severity="Success"  IsClosable="False">
+            <Grid VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind txt(121);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+            </Grid>
+        </InfoBar>
+
+        <MenuBar HorizontalAlignment="Left" x:Name="menu" Grid.Row="1">
+            <MenuBarItem Title="{x:Bind txt(24)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(102)}" Click="MaxSpan" />
+                <MenuFlyoutItem Text="{x:Bind txt(199)}" Click="TotalGaps" />
+            </MenuBarItem>
+        </MenuBar>
+
+        <WebView2 x:Name="webView" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+
+    </Grid>
+
+</Page>

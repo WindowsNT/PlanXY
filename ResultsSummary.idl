@@ -1,0 +1,16 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass ResultsSummary : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        ResultsSummary();
+        static String txt(Int32 sidx);
+        void Refresh();
+        Int64 ResultX;
+        Int64 ResultP;
+
+        String str1{ get; };
+        String str2{ get; };
+        String str3{ get; };
+    }
+}

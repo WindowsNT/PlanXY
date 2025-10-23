@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="WuiFET.ViewResult"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WuiFET"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="ViewResult">
+
+    <NavigationView x:Name="xMain" PaneDisplayMode="Auto" CompactPaneLength="60" OpenPaneLength="200" Loaded="OnLoad" ItemInvoked="ItemInvoked" IsSettingsVisible="False"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <NavigationView.MenuItems>
+            <NavigationViewItem  Icon="Directions" Content="{x:Bind txt(73);}" x:Name="Summary" />
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(24);}" x:Name="Teachers" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="T" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(55);}" x:Name="Classes" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="C" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(27);}" x:Name="Kids" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="U" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(149);}" x:Name="Parents" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="P" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(51);}" x:Name="Rooms" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="R" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="FourBars" Content="{x:Bind txt(121);}" x:Name="Statistics" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="S" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+
+        </NavigationView.MenuItems>
+        <Frame x:Name="contentFrame"/>
+
+<!--
+        <NavigationView.PaneFooter>
+            <StackPanel Orientation="Vertical">
+                <NavigationViewItem Content="{x:Bind txt(6);}" x:Name="NVI_ChangeLight" Tapped="NVI_ChangeLightTapped">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE706;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </StackPanel>
+        </NavigationView.PaneFooter>
+-->
+
+    </NavigationView>
+
+    
+</Window>

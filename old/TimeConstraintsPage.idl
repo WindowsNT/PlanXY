@@ -1,0 +1,54 @@
+import "Item.idl";
+import "DGRowModel.idl";
+import "DGCellModel.idl";
+import "DGHeaderModel.idl";
+
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass TimeConstraintsPage : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        TimeConstraintsPage();
+        static String txt(Int32 sidx);
+        Microsoft.UI.Xaml.Visibility WhatX(Int32 w);
+        Microsoft.UI.Xaml.Visibility WhatFX(Int32 w);
+        Microsoft.UI.Xaml.Visibility WhatY(Int32 w);
+        void Refresh();
+
+        Double Resizer_V1;
+        Microsoft.UI.Xaml.GridLength Resizer_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Teachers_List{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Classes_List{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Rooms_List{ get; };
+
+		// Teacher Not Available Times
+        String gr1_n1;
+        Int32 gr1_p;
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> gr1_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> gr1_is{ get; };
+
+        // Generic
+        Boolean zz21_A;
+        String zz21_n1;
+        String zz21_n2;
+        Int32 zz21_p;
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> zz21_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> zz21_is{ get; };
+        Boolean zz21_HasP;
+        Boolean zz21_HasM;
+
+
+		// Class Not Available Times
+        String gr2_n1;
+        Int32 gr2_p;
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> gr2_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> gr2_is{ get; };
+
+        // Room Not Available Times
+        String gr3_n1;
+        Int32 gr3_p;
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> gr3_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> gr3_is{ get; };
+
+    }
+}

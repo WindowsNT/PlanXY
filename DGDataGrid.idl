@@ -1,0 +1,18 @@
+import "DGRowModel.idl";
+import "Item.idl";
+import "DGHeaderModel.idl";
+
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass DGDataGrid : Microsoft.UI.Xaml.Controls.UserControl, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        DGDataGrid();
+        void Refresh();
+        void Refresh2(String str);
+		void AutoMeasure(Int32 mw,Int32 mh);
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> ColumnHeaders;
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> ItemsSource;
+
+    }
+}

@@ -1,0 +1,44 @@
+namespace WuiFET
+{
+	 enum DGCellType
+	{
+		Text = 0,
+		Button = 1,
+		Block = 2,
+		Check = 3,
+		Number = 4,
+	};
+
+	runtimeclass DGCellModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		DGCellModel(Int32 row,Int32 col,DGCellType type, String v);
+		void Refresh();
+		void Refresh2(String str);
+		Int64 Ptr;
+		Int64 Ptr2;
+		Int64 Ptr3;
+		Int64 Ptr4;
+		Int64 Ptr5;
+		IInspectable pi1;
+		IInspectable pi2;
+		IInspectable pi3;
+		Int32 WhatX;
+		Int32 MinimumWidth;
+		Int32 MinimumHeight;
+
+
+		DGCellType Type;
+		String Value;
+		Int32 ValueN;
+		Int32 ValueNMin;
+		Int32 ValueNMax;
+		Boolean ValueB;
+		Boolean ValueBB;
+		Boolean VisText{ get; };
+		Boolean VisButton{ get; };
+		Boolean VisBlock{ get; };
+		Boolean VisCheck{ get; };
+		Boolean VisNumber{ get; };
+	};
+
+}

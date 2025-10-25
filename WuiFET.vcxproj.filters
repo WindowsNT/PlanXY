@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Page Include="MainPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="Settings.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="Themes\ButtonStyles.xaml">
+      <Filter>Themes</Filter>
+    </Page>
+    <Page Include="Themes\generic.xaml">
+      <Filter>Themes</Filter>
+    </Page>
+    <Page Include="Themes\TabViewColors.xaml">
+      <Filter>Themes</Filter>
+    </Page>
+    <Page Include="DataPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="GeneratorPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="ResultList.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="DGDataGrid.xaml">
+      <Filter>DataGrid</Filter>
+    </Page>
+    <Page Include="ResultRooms.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsKids.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsClasses.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsParents.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsTeachers.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ResultsSummary.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="ViewResult.xaml">
+      <Filter>Pages\Results</Filter>
+    </Page>
+    <Page Include="Constraints.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="Statistics.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="MainWindow.idl" />
+    <Midl Include="Item.idl">
+      <Filter>Code</Filter>
+    </Midl>
+    <Midl Include="Resizer.idl">
+      <Filter>Code</Filter>
+    </Midl>
+    <Midl Include="DGCellModel.idl">
+      <Filter>DataGrid</Filter>
+    </Midl>
+    <Midl Include="DGDataGrid.idl">
+      <Filter>DataGrid</Filter>
+    </Midl>
+    <Midl Include="DGRowModel.idl">
+      <Filter>DataGrid</Filter>
+    </Midl>
+    <Midl Include="DGHeaderModel.idl">
+      <Filter>DataGrid</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="linker.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="func.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Resizer.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="DGCellModel.cpp">
+      <Filter>DataGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="DGRowModel.cpp">
+      <Filter>DataGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="DGHeaderModel.cpp">
+      <Filter>DataGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="msa2fet\msa2fet.cpp">
+      <Filter>msa2fet</Filter>
+    </ClCompile>
+    <ClCompile Include="rdp.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="project.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="english.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="xml3all.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Resizer.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="DGCellModel.h">
+      <Filter>DataGrid</Filter>
+    </ClInclude>
+    <ClInclude Include="DGRowModel.h">
+      <Filter>DataGrid</Filter>
+    </ClInclude>
+    <ClInclude Include="DGHeaderModel.h">
+      <Filter>DataGrid</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\activities.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\buildingsandrooms.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\classes.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\config.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\days.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\lessons.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\pch.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\spaceconstraints.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\tag.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\teachers.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\timeconstraints.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\ttgapgen.hpp">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\kids.h">
+      <Filter>msa2fet</Filter>
+    </ClInclude>
+    <ClInclude Include="msa2fet\parents.h" />
+    <ClInclude Include="msa2fet\old.h" />
+    <ClInclude Include="greek.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="spanish.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="german.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="romanian.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="russian.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="arabic.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="chinese.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="hindi.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="french.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="app.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="1.jpg">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{940b1990-57e9-4fbb-a9a9-f7503ed66c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{6d7441d2-035c-4dd5-9295-0927a46e03b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{d43df3ed-01aa-4b2b-83a0-d2ac8ae696ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Languages">
+      <UniqueIdentifier>{7c3fd619-4d21-4a60-ab69-186b2072f066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages">
+      <UniqueIdentifier>{e54b6651-0b0b-4be2-b440-14a4936379b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Themes">
+      <UniqueIdentifier>{f5169d37-697f-4e32-976b-1254cc1fb3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FET">
+      <UniqueIdentifier>{a61a8946-30aa-41c0-8f6e-645c4333d1d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataGrid">
+      <UniqueIdentifier>{8c98f89d-d4df-445f-be20-2175791ab577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="msa2fet">
+      <UniqueIdentifier>{cf6ef264-6149-4b1f-bc3b-67a99bb4f3b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charts">
+      <UniqueIdentifier>{4747ad2c-a093-4c2f-8dfe-a2adbb04b416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages\Results">
+      <UniqueIdentifier>{53c7c5f9-0f91-4b83-b52b-bd56cff81a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Examples">
+      <UniqueIdentifier>{def640ab-2896-4b47-84dc-d7d2d0e0a91f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Examples\Country_Demos">
+      <UniqueIdentifier>{43e9f978-3afa-4964-8a4b-a04e65401480}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="inst.bat">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="packages.config">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="default.fet">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include=".gitattributes">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include=".gitignore">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="Examples.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest">
+      <Filter>Resources</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt">
+      <Filter>Resources</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Filter>Pages</Filter>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="fet\fet-cl.exe">
+      <Filter>FET</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fet\libgcc_s_seh-1.dll">
+      <Filter>FET</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fet\libstdc++-6.dll">
+      <Filter>FET</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fet\libwinpthread-1.dll">
+      <Filter>FET</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fet\Qt6Core.dll">
+      <Filter>FET</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="charts\Chart.js">
+      <Filter>Charts</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="main.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="fail.wav">
+      <Filter>Resources</Filter>
+    </Media>
+    <Media Include="success.wav">
+      <Filter>Resources</Filter>
+    </Media>
+  </ItemGroup>
+</Project>

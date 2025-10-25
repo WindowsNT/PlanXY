@@ -1,0 +1,13 @@
+import "dgcellmodel.idl";
+
+namespace WuiFET
+{
+     runtimeclass DGRowModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        DGRowModel(Int32 row,Windows.Foundation.Collections.IObservableVector<DGCellModel> cells);
+        void Refresh();
+        void Refresh2(String str);
+        
+        Windows.Foundation.Collections.IObservableVector<DGCellModel> Cells{ get; };
+    };
+}

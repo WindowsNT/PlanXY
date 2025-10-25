@@ -1,0 +1,68 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="paperGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+  
+  <!-- Calendar/Schedule paper -->
+  <g filter="url(#shadow)">
+    <!-- Main paper -->
+    <rect x="120" y="100" width="272" height="312" rx="12" fill="url(#paperGrad)"/>
+    
+    <!-- Top binding holes -->
+    <circle cx="170" cy="100" r="8" fill="#667eea"/>
+    <circle cx="256" cy="100" r="8" fill="#667eea"/>
+    <circle cx="342" cy="100" r="8" fill="#667eea"/>
+    
+    <!-- Header section -->
+    <rect x="120" y="100" width="272" height="60" rx="12" fill="#667eea" opacity="0.15"/>
+    
+    <!-- Grid lines (horizontal) -->
+    <line x1="140" y1="180" x2="372" y2="180" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="140" y1="220" x2="372" y2="220" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="140" y1="260" x2="372" y2="260" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="140" y1="300" x2="372" y2="300" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="140" y1="340" x2="372" y2="340" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="140" y1="380" x2="372" y2="380" stroke="#e5e7eb" stroke-width="2"/>
+    
+    <!-- Grid lines (vertical) -->
+    <line x1="200" y1="170" x2="200" y2="392" stroke="#e5e7eb" stroke-width="2"/>
+    <line x1="280" y1="170" x2="280" y2="392" stroke="#e5e7eb" stroke-width="2"/>
+    
+    <!-- Time blocks (colored) -->
+    <rect x="145" y="185" width="50" height="30" rx="4" fill="#10b981" opacity="0.8"/>
+    <rect x="225" y="225" width="50" height="30" rx="4" fill="#3b82f6" opacity="0.8"/>
+    <rect x="305" y="185" width="50" height="30" rx="4" fill="#f59e0b" opacity="0.8"/>
+    <rect x="145" y="265" width="50" height="30" rx="4" fill="#ef4444" opacity="0.8"/>
+    <rect x="285" y="305" width="70" height="30" rx="4" fill="#8b5cf6" opacity="0.8"/>
+    <rect x="145" y="345" width="50" height="30" rx="4" fill="#ec4899" opacity="0.8"/>
+    <rect x="225" y="345" width="50" height="30" rx="4" fill="#06b6d4" opacity="0.8"/>
+  </g>
+  
+  <!-- Clock overlay -->
+  <g filter="url(#shadow)">
+    <circle cx="380" cy="380" r="70" fill="white"/>
+    <circle cx="380" cy="380" r="65" fill="#667eea" opacity="0.1"/>
+    <circle cx="380" cy="380" r="60" fill="none" stroke="#667eea" stroke-width="4"/>
+    
+    <!-- Clock hands -->
+    <line x1="380" y1="380" x2="380" y2="340" stroke="#667eea" stroke-width="5" stroke-linecap="round"/>
+    <line x1="380" y1="380" x2="405" y2="395" stroke="#764ba2" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Center dot -->
+    <circle cx="380" cy="380" r="6" fill="#667eea"/>
+  </g>
+</svg>

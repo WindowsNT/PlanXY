@@ -1,0 +1,15 @@
+namespace WuiFET
+{
+	[default_interface]
+	runtimeclass DGHeaderModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+			DGHeaderModel();
+			String Name;
+			Int64 ptr;
+			Boolean Sel{ get; set; };
+			Microsoft.UI.Xaml.Media.Brush ColorX{ get; };
+			void Refresh(String what);
+			static String txt(Int32 sidx);
+			Int32 MinimumWidth;
+	}
+}

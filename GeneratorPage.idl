@@ -1,0 +1,28 @@
+import "Item.idl";
+
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass GeneratorPage : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        GeneratorPage();
+        static String txt(Int32 sidx);
+        void Refresh();
+        String Loaded_File{ get; };
+        Int32 Num_Threads;
+        Int32 Wait_Results;
+        Int32 Wait_Minutes;
+        Boolean FinishSleep;
+        Boolean FinishShutdown;
+        Boolean Running{ get; };
+        String td_msg;
+        String td_time1;
+        String td_time2;
+        Boolean HasWarnings{ get; };
+        Boolean VisibleWarnings;
+        Boolean ProjectSaved{ get; };
+        Boolean IsPaused;
+        Boolean HasDetachingData{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Progress_List{ get; };
+    }
+}

@@ -1,0 +1,64 @@
+import "Item.idl";
+import "DGRowModel.idl";
+import "DGCellModel.idl";
+import "DGHeaderModel.idl";
+
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass Constraints : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        Constraints();
+        static String txt(Int32 sidx);
+        void Refresh();
+
+
+        Boolean IsMode0{ get; };
+		Boolean IsMode1{ get; };
+		Boolean IsMode2{ get; };
+		Boolean IsMode3{ get; };
+
+        Boolean IsLeftVisible{ get; };
+        Boolean IsRightVisible{ get; };
+
+        // Resizer
+        Double Resizer_V1;
+        Microsoft.UI.Xaml.GridLength Resizer_VV1{ get; };
+
+        // Left data
+        Windows.Foundation.Collections.IObservableVector<Item> Left_List{ get; };
+        Microsoft.UI.Xaml.Controls.ListViewSelectionMode leftsm{ get; };
+        Microsoft.UI.Xaml.Controls.ListViewSelectionMode rightsm{ get; };
+
+        String str1; // InfoBar Text
+        String str2;
+        String str3;
+        String str4;
+        Boolean OnlyShowEntries;
+        Int32 ConstraintsMode{ get; };
+        Boolean IsTS{ get; };
+        Boolean IsSS{ get; };
+        Boolean IsES{ get; };
+
+        // Right Stuff
+        Boolean IsGridRightVisible{ get; };
+        Boolean IsListRightVisible{ get; };
+        Boolean IsRawRightVisible{ get; };
+        Boolean IsLeftSBVisible{ get; };
+        Boolean IsRightSBVisible{ get; };
+        Boolean IsActiveVisible{ get; };
+        Boolean IsActiveChecked;
+        Boolean IsMultiple{ get; };
+		Boolean IsExistingExtriesVisible{ get; };
+        Boolean IsPercentageVisible{ get; };
+        Int32 Percentage;
+        Boolean IsParam1Visible{ get; };
+        Int32 Param1;
+        String Param1Text{ get; };
+        String RawText;
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> zz1_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> zz1_is{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Right_List{ get; };
+
+    }
+}

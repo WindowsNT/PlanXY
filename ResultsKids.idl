@@ -1,0 +1,26 @@
+import "Item.idl";
+import "DGRowModel.idl";
+import "DGCellModel.idl";
+import "DGHeaderModel.idl";
+
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass ResultsKids : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        ResultsKids();
+        static String txt(Int32 sidx);
+        void Refresh();
+        Int64 ResultX;
+        Int64 ResultP;
+
+
+        Double Resizer_V1;
+        Microsoft.UI.Xaml.GridLength Resizer_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Kids_List{ get; };
+
+        Windows.Foundation.Collections.IObservableVector<DGHeaderModel> gr1_ch{ get; };
+        Windows.Foundation.Collections.IObservableVector<DGRowModel> gr1_is{ get; };
+
+     }
+}

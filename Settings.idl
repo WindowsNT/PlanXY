@@ -1,0 +1,11 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass Settings : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        Settings();
+        static String txt(Int32 sidx);
+        void Refresh();
+        Int32 WhatLanguage;
+    }
+}

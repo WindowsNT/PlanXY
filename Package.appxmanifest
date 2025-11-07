@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap rescap">
+	<Identity Name="32536Turbo-Play.COM.PlanXY" Publisher="CN=EDD191C1-439D-4D37-B608-9E521142451D" Version="1.176.0.0"/>
+	<Properties>
+		<DisplayName>Plan XY</DisplayName>
+		<PublisherDisplayName>Turbo-Play.COM</PublisherDisplayName>
+		<Logo>Assets\StoreLogo.png</Logo>
+	</Properties>
+	<Resources>
+		<Resource Language="en"/>
+		<Resource Language="hi"/>
+		<Resource Language="el"/>
+		<Resource Language="de"/>
+		<Resource Language="fr"/>
+		<Resource Language="es"/>
+		<Resource Language="zh-Hans"/>
+		<Resource Language="ar"/>
+		<Resource Language="ru"/>
+		<Resource Language="ro"/>
+	</Resources>
+	<Applications>
+		<Application Id="PlanXY" Executable="WuiFET.exe" EntryPoint="Windows.FullTrustApplication">
+			<uap:VisualElements DisplayName="Plan XY" Description="Plan XY" BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.scale-200.png" Square44x44Logo="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+				<uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.scale-200.png"/>
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+	<Capabilities>
+		<rescap:Capability Name="runFullTrust"/>
+	</Capabilities>
+</Package>

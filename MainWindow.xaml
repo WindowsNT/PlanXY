@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="WuiFET.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WuiFET"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="WuiFET">
+
+
+   
+    <NavigationView x:Name="xMain" PaneDisplayMode="Auto" CompactPaneLength="60" OpenPaneLength="250" Loaded="OnLoad" ItemInvoked="ItemInvoked" IsSettingsVisible="True"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <NavigationView.MenuItems>
+            <NavigationViewItem  Icon="Link" Content="{x:Bind txt(17);,Mode=OneWay}" x:Name="ViewMain" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="M" Modifiers="Menu"/>
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Document" Content="{x:Bind txt(18);,Mode=OneWay}" x:Name="ViewData" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="D" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Clock" Content="MySchool.sch.gr" x:Name="MySchool" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Clock" Content="{x:Bind txt(19);,Mode=OneWay}" x:Name="ViewTime" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="T" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Manage" Content="{x:Bind txt(20);,Mode=OneWay}" x:Name="ViewSpace" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="S" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="ViewAll" Content="{x:Bind txt(187);,Mode=OneWay}" x:Name="ViewExtra" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="O" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="FourBars" Content="{x:Bind txt(121);,Mode=OneWay}" x:Name="ViewStatistics" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="C" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Calendar" Content="{x:Bind txt(125);,Mode=OneWay}" x:Name="ViewGenerate" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="G" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Directions" Content="{x:Bind txt(75);,Mode=OneWay}" x:Name="ResultList" >
+                <NavigationViewItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="R" Modifiers="Menu" />
+                </NavigationViewItem.KeyboardAccelerators>
+            </NavigationViewItem>
+
+
+        </NavigationView.MenuItems>
+        <Frame x:Name="contentFrame"/>
+
+
+        <NavigationView.PaneFooter>
+            <StackPanel Orientation="Vertical">
+<!--                <NavigationViewItem Icon="Help" Content="{x:Bind txt(16);}" />-->
+                <NavigationViewItem Content="{x:Bind txt(6);,Mode=OneWay}" x:Name="NVI_ChangeLight" Tapped="NVI_ChangeLightTapped">
+					<NavigationViewItem.Icon>
+						<FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE706;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+            </StackPanel>
+        </NavigationView.PaneFooter>
+    
+        
+    </NavigationView>
+
+
+</Window>

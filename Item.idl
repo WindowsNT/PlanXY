@@ -1,0 +1,26 @@
+namespace WuiFET
+{
+	[default_interface]
+	runtimeclass Item : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+			Item();
+			String Name1;
+			String Name2;
+			String Source;
+			Int32 WhatX;
+			Int64 ptr;
+			Int64 ptr2;
+			Int64 ptr3;
+			Int64 Ptr4;
+			Int64 Ptr5;
+			IInspectable pi1;
+			IInspectable pi2;
+			IInspectable pi3;
+			Boolean Sel{ get; set; };
+			Microsoft.UI.Xaml.Media.Brush ColorX;
+			void Refresh(String what);
+			static String txt(Int32 sidx);
+			Int32 MinimumWidth;
+
+	}
+}

@@ -1,0 +1,12 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        MainPage();
+        static String txt(Int32 sidx);
+        void Refresh();
+        String Loaded_File{ get; };
+        Boolean IsGreek{ get; };
+    }
+}

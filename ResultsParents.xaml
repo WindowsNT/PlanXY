@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="WuiFET.ResultsParents"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WuiFET"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+
+        <InfoBar x:Name="infoBar" Grid.Row="0" IsOpen="True" Message="" Severity="Success"  IsClosable="False">
+            <Grid VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind txt(149);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+            </Grid>
+        </InfoBar>
+
+        <Line Stroke="SteelBlue" Grid.Row="2" X1="0" Y1="0" HorizontalAlignment="Stretch"  X2="{Binding ActualWidth, ElementName=MainGrid}" Y2="0"    StrokeThickness="2"/>
+
+        <Grid x:Name="TC_SingleParent" Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{x:Bind Resizer_VV1,Mode=OneWay}" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <ListView x:Name="Parents_ListView" Grid.Row="0" Grid.Column="0" ItemsSource="{x:Bind Parents_List,Mode=OneWay}" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" SelectionChanged="ParentChanged" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Item">
+                        <StackPanel Orientation="Horizontal" Margin="10" >
+                            <SymbolIcon Symbol="Page2" />
+                            <TextBlock Text="{x:Bind Name1,Mode=OneWay}" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <local:Resizer Grid.Column="1" Margin="10" Grid.RowSpan="2"  Width="1" Minimum="-1000"   Maximum="1000" Orientation="Vertical"   Value="{x:Bind Resizer_V1,Mode=TwoWay}"/>
+
+            <Grid Grid.Column="2" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <local:DGDataGrid x:Name="gr1" Grid.Row="1" Grid.Column="0" ItemsSource="{x:Bind gr1_is,Mode=OneWay}" ColumnHeaders="{x:Bind gr1_ch,Mode=OneWay}" />
+
+            </Grid>
+
+        </Grid>
+
+
+    </Grid>
+</Page>

@@ -1,0 +1,23 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass MySchool : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        MySchool();
+        static String txt(Int32 sidx);
+        void Refresh();
+
+        String str1;
+        String str2;
+        String str3;
+
+
+        Boolean IsMode1;
+        Boolean IsMode2;
+        Int32 sidx;
+        Boolean IsMode1Or2{ get; };
+        Boolean CanSendOrGenerate{ get; };
+
+
+    }
+}

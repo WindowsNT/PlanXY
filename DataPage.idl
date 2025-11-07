@@ -1,0 +1,144 @@
+import "Item.idl";
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass DataPage : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        DataPage();
+        static String txt(Int32 sidx);
+        Boolean rdo();
+        void Refresh();
+        String Loaded_File{ get; };
+        Microsoft.UI.Xaml.Visibility DataVisibleWhat(Int32 widx);
+        Microsoft.UI.Xaml.Visibility PropertyVisibleWhat(Int32 widx);
+        String str1;
+        String str2;
+        String str3;
+        Int32 int1;
+        Int32 int2;
+        Int32 int3;
+        Microsoft.UI.Xaml.Controls.ListViewSelectionMode lvsm(Int32 what);
+
+        Windows.UI.Color Color1;
+
+        Boolean IsGreek{ get; };
+
+        String Institution_Name;
+        String Days_Work;
+        String Hours_Work;
+        Int32 SelectedMode;
+
+        Double Teachers_V1;
+        Microsoft.UI.Xaml.GridLength Teachers_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Teachers_List{ get; };
+        String Teacher_Name{ get; };
+        String Teacher_LongName;
+        String Teacher_Comment;
+        Int32 Teacher_NumHours;
+
+        Double Subjects_V1;
+        Microsoft.UI.Xaml.GridLength Subjects_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Subjects_List{ get; };
+        String Subject_Name{ get; };
+        String Subject_LongName;
+        String Subject_Comment;
+        Int32 Subject_Code;
+
+        Double Buildings_V1;
+        Microsoft.UI.Xaml.GridLength Buildings_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Buildings_List{ get; };
+        String Building_Name{ get; };
+        String Building_LongName;
+        String Building_Comment;
+        String Building_Coordinates;
+        Int32 Building_Code;
+
+        Double Rooms_V1;
+        Microsoft.UI.Xaml.GridLength Rooms_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Rooms_List{ get; };
+        String Room_Name{ get; };
+        String Room_LongName;
+        String Room_Comment;
+        Int32 Room_Code;
+        Int32 Room_Capacity;
+        Boolean Room_Virtual;
+
+        Double Years_V1;
+        Microsoft.UI.Xaml.GridLength Years_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Years_List{ get; };
+        String Year_Name{ get; };
+        String Year_LongName;
+        String Year_Comment;
+        Int32 Year_NumberOfStudents;
+
+        Double Groups_V1;
+        Microsoft.UI.Xaml.GridLength Groups_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Groups_List{ get; };
+        String Group_Name{ get; };
+        String Group_LongName;
+        String Group_Comment;
+        Int32 Group_NumberOfStudents;
+
+        Double Subgroups_V1;
+        Microsoft.UI.Xaml.GridLength Subgroups_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Subgroups_List{ get; };
+        String Subgroup_Name{ get; };
+        String Subgroup_LongName;
+        String Subgroup_Comment;
+        Int32 Subgroup_NumberOfStudents;
+
+        Double Tags_V1;
+        Microsoft.UI.Xaml.GridLength Tags_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Tags_List{ get; };
+        String Tag_Name;
+        String Tag_Comment;
+        Boolean Tag_Printable;
+
+        Double Activities_V1;
+        Microsoft.UI.Xaml.GridLength Activities_VV1{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Activities_List{ get; };
+        Double Activities_V2;
+        Microsoft.UI.Xaml.GridLength Activities_VV2{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> TeachersForActivity_List{ get; };
+        Double Activities_V3;
+        Microsoft.UI.Xaml.GridLength Activities_VV3{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> ClassesForActivity_List{ get; };
+        Double Activities_V4;
+        Microsoft.UI.Xaml.GridLength Activities_VV4{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> SubjectsForActivity_List{ get; };
+        Double Activities_V5;
+        Microsoft.UI.Xaml.GridLength Activities_VV5{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> TagsForActivity_List{ get; };
+        String Activity_Comment;
+        Int32 Activity_Duration;
+        Int32 Activity_GroupID;
+        Boolean Activity_Active;
+
+
+        Double Kids_V1;
+        Microsoft.UI.Xaml.GridLength Kids_VV1{ get; };
+        Double Kids_V2;
+        Microsoft.UI.Xaml.GridLength Kids_VV2{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Kids_List{ get; };
+        String Kid_Name{ get; };
+        String Kid_LongName;
+        Int32 Kid_Code;
+
+        Double Parents_V1;
+        Microsoft.UI.Xaml.GridLength Parents_VV1{ get; };
+        Double Parents_V2;
+        Microsoft.UI.Xaml.GridLength Parents_VV2{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Parents_List{ get; };
+        String Parent_Name{ get; };
+        String Parent_LongName;
+        Int32 Parent_Code;
+
+
+        Double Assi_V1;
+        Microsoft.UI.Xaml.GridLength Assi_VV1{ get; };
+        Double Assi_V2;
+        Microsoft.UI.Xaml.GridLength Assi_VV2{ get; };
+        Windows.Foundation.Collections.IObservableVector<Item> Classes2_List{ get; };
+
+    }
+}

@@ -1,0 +1,12 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass Statistics : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        Statistics();
+        static String txt(Int32 sidx);
+        void Refresh();
+        Int64 ResultX;
+        Int64 ResultP;
+    }
+}

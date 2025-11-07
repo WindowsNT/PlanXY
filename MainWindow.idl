@@ -1,0 +1,20 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass MainWindow : Microsoft.UI.Xaml.Window, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        MainWindow();
+        static String txt(Int32 sidx);
+        Int64 wnd;
+        Int64 ptrx{ get; };
+        String file;
+        Boolean Closing();
+        void PushUndo();
+        void PushRedo();
+        void Undo();
+        void Redo();
+        void Dirty();
+        void Refresh();
+        Boolean IsGreek{ get; };
+    }
+}

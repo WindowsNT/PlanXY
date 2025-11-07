@@ -47,13 +47,13 @@
             <InfoBar.Content>
                 <StackPanel Orientation="Vertical" Margin="10">
                     <TextBlock FontWeight="Bold">Για την εισαγωγή εκπαιδευτικών</TextBlock>
-                    <TextBlock>MySchool -> Προσωπικό -> Εργαζόμενοι στο Φορέα μου -> Εξαγωγή -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
+                    <TextBlock>MySchool -> Προσωπικό -> Εργαζόμενοι στο Φορέα μου -> Βγάλτε το 'Όσοι Απουσιάζουν' -> Αναζήτηση -> Εξαγωγή -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
                     <TextBlock> </TextBlock>
                     <TextBlock FontWeight="Bold">Για την εισαγωγή τάξεων, μαθημάτων, μαθητών και γονέων</TextBlock>
                     <TextBlock>Μαθητές -> Άλλες λειτουργίες -> Μαζική εξαγωγή στοιχείων σχολείου σε XML -> Επιλογή όλων των τάξεων -> Αποθήκευση XML.</TextBlock>
                     <TextBlock></TextBlock>
                     <TextBlock FontWeight="Bold">Για την εισαγωγή αναθέσεων</TextBlock>
-                    <TextBlock>Αναφορές -> Αναφορές Εργαζομένων -> Στατιστικά Στοιχεία -> Αναθέσεις Εκπαιδευτικών Μονάδας -> Προεπισκόπηση -> Αποθήκευση ως XLS -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
+                    <TextBlock>Αναφορές -> Αναφορές Εργαζομένων -> Στατιστικά Στοιχεία -> Αναθέσεις Εκπαιδευτικών Μονάδας -> Προεπισκόπηση -> Αποθήκευση ως XLS (όχι XLSX) -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
                     <TextBlock></TextBlock>
                 </StackPanel>
             </InfoBar.Content>

@@ -66,14 +66,14 @@
 <!--            <Button Margin="5" Click="OnYears_ImportMySchool" Content="Εισαγωγή Τμημάτων"  />
             <Button Margin="5" Click="OnKids_ImportMySchool" Content="Εισαγωγή Μαθητών και Γονέων"  />
             -->
-            <Button Margin="5" Click="OnAssignments_ImportMySchool" Content="Εισαγωγή Αναθέσεων" Visibility="{x:Bind IsMode2,Mode=OneWay}" />
+            <Button Margin="5" Click="OnAssignments_ImportMySchool" Content="Εισαγωγή Αναθέσεων" Visibility="{x:Bind IsMode1Or2,Mode=OneWay}" />
         </StackPanel>
 
         <InfoBar  Grid.Row="4" IsOpen="True"  Severity="Error"  IsClosable="False" Message="Το χαρακτηριστικό ακόμα είναι υπό κατασκευη. Τα activities που φτιάχνονται είναι τα γενικής παιδείας Γυμνασίου, Λυκείου, και οι Προσανατολισμοί Β και Γ λυκείου." Visibility="{x:Bind IsMode2,Mode=OneWay}">
         </InfoBar>
 
         <StackPanel Grid.Row="5" Margin="15" Orientation="Horizontal" Visibility="{x:Bind CanSendOrGenerate,Mode=OneWay}">
-            <Button Style="{StaticResource SuccessButtonStyle}" VerticalAlignment="Top" Margin="15" Content="Εισαγωγή Δεδομένων" Visibility="{x:Bind IsMode1Or2,Mode=OneWay}" Click="ImportDB"></Button>
+            <Button Style="{StaticResource SuccessButtonStyle}" VerticalAlignment="Top" Margin="15" Content="Εισαγωγή Δεδομένων" Visibility="{x:Bind IsMode2,Mode=OneWay}" Click="ImportDB"></Button>
             <Button Style="{StaticResource PrimaryButtonStyle}" VerticalAlignment="Top" Margin="15" Content="Αποστολή Ανωνυμοποιημένων Δεδομένων" Visibility="{x:Bind IsMode1Or2,Mode=OneWay}" Click="SendADB"></Button>
         </StackPanel>
  

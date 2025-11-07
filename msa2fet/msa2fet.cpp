@@ -601,6 +601,10 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 	{
 		DbClean(ystring(dbname));
 	}
+	else
+	{
+		TotalHours = 7;
+	}
 	dbimportfile = dbname;
 	sqlite::sqlite sql(ystring(dbname).a_str());
 	DeleteFile(targetfet);

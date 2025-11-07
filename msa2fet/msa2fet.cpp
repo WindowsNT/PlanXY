@@ -184,7 +184,7 @@ std::map<std::string, std::wstring> SMainClassRowFromStudent(sqlite::sqlite& sql
 	while (q1.NextRow(r))
 	{
 		auto clr = ClassRowFromID(sql, _wtoi(r["CID"].c_str()));
-		if (clr["MSSECTION"] == L"ΓΠ-ΓΥΜΝ" || clr["MSSECTION"] == L"ΓΠ-ΛΥΚ")
+		if (clr["MSSECTION"] == L"ΓΠ-ΓΥΜΝ" || clr["MSSECTION"] == L"ΓΠ-ΛΥΚ" || clr["MSSECTION"] == L"ΓΠ-ΕΠΑΛ")
 			return clr;
 	}
 	return {};

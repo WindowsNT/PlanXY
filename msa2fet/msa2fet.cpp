@@ -535,12 +535,13 @@ void LoadParametersMSA()
 		active_years[i] = y.vv(s).GetValueInt(1);
 	}
 
-	for (int i = 0; i < 3; i++)
+/*	for (int i = 0; i < 3; i++)
 	{
 		auto& y = root["cidx"];
 		s.Format(L"n%i", i + 1);
 		active_cidx[i] = y.vv(s).GetValueInt(1);
 	}
+	*/
 
 	if (1)
 	{
@@ -625,8 +626,9 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 	// Statics
 	CreateDays(x,stype);
 	CreateBuildings(x, sql);
+	CreateMainClasses(sql);
 	CreateClasses3(x, sql,stype);
-	CreateLessons(x,sql);
+	CreateLessons(x,sql,stype);
 	CreateTeachers(x, sql);
 	CreateKids(x, sql);
 	CreateParents(x, sql,stype);

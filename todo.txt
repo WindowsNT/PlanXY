@@ -3,3 +3,9 @@ todo
 
 
 Constraints
+
+Greek imports
+-----------> Classes that split to X parts, say A1 splits to A1A A1B same hour
+-----------> Class zones, simply put same hour starting activity
+
+count activities

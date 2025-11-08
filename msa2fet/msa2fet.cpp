@@ -124,6 +124,27 @@ int ClassIndexFromName(const wchar_t* n)
 	return 0;
 }
 
+std::vector<int> ComboIndexFromName(const wchar_t* n)
+{
+	// Can be 1+3, be sure to check +
+	std::vector<int> r;
+	if (!n)
+		return r;
+	auto chr = wcschr(n, '+');
+	if (!chr)
+		return r;
+	wchar_t t[100] = {};
+	wcsncpy_s(t, 100, n, chr - n);
+	int v = ClassIndexFromName(t);
+	if (v != 0)
+		r.push_back(v);
+	chr++;
+	v = ClassIndexFromName(chr);
+	if (v != 0)
+		r.push_back(v);
+	return r;
+}
+
 std::map<std::string, std::wstring> ClassRowFromID(sqlite::sqlite& sql, int cid)
 {
 	char t[1000] = {};
@@ -665,6 +686,10 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 	{
 		// Other Schools
 		CreateActivitiesForIndependentLessons(sql,stype);
+#ifdef _DEBUG
+//		CreateActivitiesForXLGeneral(sql, 0); // aggl
+		CreateActivitiesForXLGeneral(sql,1); // gal germ
+#endif
 		CreateActivitiesForKat(sql, 5);
 		CreateActivitiesForKat(sql, 6);
 		CreateActivitiesForCGP(sql);

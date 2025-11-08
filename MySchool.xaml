@@ -46,13 +46,13 @@
         <InfoBar Grid.Row="2" IsOpen="True" Severity="Warning" Visibility="{x:Bind IsMode1Or2,Mode=OneWay}">
             <InfoBar.Content>
                 <StackPanel Orientation="Vertical" Margin="10">
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή εκπαιδευτικών</TextBlock>
-                    <TextBlock TextWrapping="Wrap" >MySchool -> Προσωπικό -> Εργαζόμενοι στο Φορέα μου -> Βγάλτε το 'Όσοι Απουσιάζουν' -> Αναζήτηση -> Εξαγωγή -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
+                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή εκπαιδευτικών από MySchool</TextBlock>
+                    <TextBlock TextWrapping="Wrap" >Προσωπικό -> Εργαζόμενοι στο Φορέα μου -> Βγάλτε το 'Όσοι Απουσιάζουν' -> Αναζήτηση -> Εξαγωγή -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
                     <TextBlock> </TextBlock>
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή τάξεων, μαθημάτων, μαθητών και γονέων</TextBlock>
+                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή τάξεων, μαθημάτων, μαθητών και γονέων από MySchool</TextBlock>
                     <TextBlock TextWrapping="Wrap" >Μαθητές -> Άλλες λειτουργίες -> Μαζική εξαγωγή στοιχείων σχολείου σε XML -> Επιλογή όλων των τάξεων -> Αποθήκευση XML.</TextBlock>
                     <TextBlock></TextBlock>
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή αναθέσεων</TextBlock>
+                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" >Για την εισαγωγή αναθέσεων από MySchool</TextBlock>
                     <TextBlock TextWrapping="Wrap" >Αναφορές -> Αναφορές Εργαζομένων -> Στατιστικά Στοιχεία -> Αναθέσεις Εκπαιδευτικών Μονάδας -> Προεπισκόπηση -> Αποθήκευση ως XLS (όχι XLSX) -> Άνοιγμα με Excel -> Αποθήκευση ως UTF-8 CSV.</TextBlock>
                     <TextBlock></TextBlock>
                 </StackPanel>

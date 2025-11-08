@@ -688,7 +688,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 		CreateActivitiesForIndependentLessons(sql,stype);
 #ifdef _DEBUG
 //		CreateActivitiesForXLGeneral(sql, 0); // aggl
-		CreateActivitiesForXLGeneral(sql,1); // gal germ
+//		CreateActivitiesForXLGeneral(sql,1); // gal germ
 #endif
 		CreateActivitiesForKat(sql, 5);
 		CreateActivitiesForKat(sql, 6);

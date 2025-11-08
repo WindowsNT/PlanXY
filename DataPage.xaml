@@ -1259,7 +1259,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{x:Bind txt(27);}" Margin="4" Grid.Column="0" VerticalAlignment="Center"/>
-                    <AutoSuggestBox x:Name="fb13a" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}" Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnClass_Filter" />
+                    <AutoSuggestBox x:Name="fb13a" QueryIcon="Find" PlaceholderText="{x:Bind txt(130)}" Margin="4" Grid.Column="2" VerticalAlignment="Center" MinWidth="150" TextChanged="OnKids_Filter" />
                 </Grid>
             </InfoBar>
 

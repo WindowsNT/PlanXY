@@ -157,7 +157,8 @@ namespace winrt::WuiFET::implementation
 				if (!project->x)
 				{
 					std::vector<char> ee;
-					ExtractResource(GetModuleHandle(0), L"DEFAULTFET", L"DATA", ee);
+					if (lang != LANG_GREEK)
+						ExtractResource(GetModuleHandle(0), L"DEFAULTFET", L"DATA", ee);
 					project->x = std::make_shared<XML3::XML>();
 					project->x->Parse(ee.data(), ee.size());
 

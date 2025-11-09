@@ -232,6 +232,13 @@ namespace winrt::WuiFET::implementation
 				else
 					fr.Navigate(winrt::xaml_typename<winrt::WuiFET::MySchool>(), winrt::box_value<long long>((long long)project.get()));
 			}
+			if (n == L"MsaApps")
+			{
+				if (project && project->HasActiveDetachData())
+					MessageBox((HWND)wnd(), s(236), ttitle, MB_ICONWARNING);
+				else
+					fr.Navigate(winrt::xaml_typename<winrt::WuiFET::MsaApps>(), winrt::box_value<long long>((long long)project.get()));
+			}
 			_ConstraintsMode = 0;
 			if (n == L"ViewTime")
 			{

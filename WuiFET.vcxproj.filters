@@ -61,6 +61,9 @@
     <Page Include="MySchool.xaml">
       <Filter>Pages</Filter>
     </Page>
+    <Page Include="MsaApps.xaml">
+      <Filter>Pages</Filter>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
@@ -338,10 +341,6 @@
     <ResourceCompile Include="main.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="fail.wav">

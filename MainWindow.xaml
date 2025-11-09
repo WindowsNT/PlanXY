@@ -23,7 +23,9 @@
                     <KeyboardAccelerator Key="D" Modifiers="Menu" />
                 </NavigationViewItem.KeyboardAccelerators>
             </NavigationViewItem>
-            <NavigationViewItem  Icon="Favorite" Content="MySchool.sch.gr" x:Name="MySchool" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
+            <NavigationViewItem  Icon="Favorite" Content="MySchool.SCH.GR" x:Name="MySchool" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
+            </NavigationViewItem>
+            <NavigationViewItem  Icon="Favorite" Content="MSA-APPS.COM" x:Name="MsaApps" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
             </NavigationViewItem>
             <NavigationViewItem  Icon="Clock" Content="{x:Bind txt(19);,Mode=OneWay}" x:Name="ViewTime" >
                 <NavigationViewItem.KeyboardAccelerators>

@@ -8,5 +8,7 @@ namespace WuiFET
         void Refresh();
         String Loaded_File{ get; };
         Boolean IsGreek{ get; };
+		String CurrentVersion{ get; };
+        String TheTitle{ get; };
     }
 }

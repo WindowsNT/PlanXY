@@ -171,6 +171,10 @@
     <ClInclude Include="msa2fet\teachers.h" />
     <ClInclude Include="msa2fet\timeconstraints.h" />
     <ClInclude Include="msa2fet\ttgapgen.hpp" />
+    <ClInclude Include="MsaApps.xaml.h">
+      <DependentUpon>MsaApps.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="MySchool.xaml.h">
       <DependentUpon>MySchool.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -245,6 +249,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml" />
+    <Page Include="MsaApps.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MySchool.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -309,6 +316,10 @@
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="msa2fet\msa2fet.cpp" />
+    <ClCompile Include="MsaApps.xaml.cpp">
+      <DependentUpon>MsaApps.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="MySchool.xaml.cpp">
       <DependentUpon>MySchool.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -392,6 +403,10 @@
     <Midl Include="MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="MsaApps.idl">
+      <DependentUpon>MsaApps.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Midl>
     <Midl Include="MySchool.idl">
       <DependentUpon>MySchool.xaml</DependentUpon>

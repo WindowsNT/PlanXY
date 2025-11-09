@@ -1,0 +1,16 @@
+namespace WuiFET
+{
+    [default_interface]
+    runtimeclass MsaApps : Microsoft.UI.Xaml.Controls.Page, Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        MsaApps();
+        static String txt(Int32 sidx);
+        void Refresh();
+
+        String str1;
+        String str2;
+        String str3;
+
+
+    }
+}

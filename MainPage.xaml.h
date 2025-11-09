@@ -9,6 +9,7 @@ std::wstring TempFile();
 std::vector<char> Fetch(const char* TheLink);
 namespace fs = std::filesystem;
 int msa2fetmain(const wchar_t* dbname, const wchar_t* targetfet,int stype);
+#include "version.h"
 namespace winrt::WuiFET::implementation
 {
     using namespace winrt;
@@ -33,6 +34,16 @@ namespace winrt::WuiFET::implementation
             }
         }
 
+        winrt::hstring TheTitle()
+        {
+            ystring y;
+			y.Format(L"%s - %s", s(1),ystring(VERSION).c_str());
+			return winrt::hstring(y.c_str());
+        }
+        winrt::hstring CurrentVersion()
+        {
+			return winrt::hstring(ystring(VERSION).c_str());
+        }
 
         bool IsGreek()
         {
@@ -72,63 +83,6 @@ namespace winrt::WuiFET::implementation
         }
 
 
-        void OnMSAOpen(IInspectable const&, IInspectable const&)
-        {
-            int what = 2025;
-            bool local = 0;
-            ystring d1;
-#ifdef _DEBUG
-            local = 1;
-            d1.Format(L"r:\\msa%i.db",what);
-            if (local)
-            {
-                if (GetFileAttributes(d1) != INVALID_FILE_ATTRIBUTES)
-                {
-                    ystring tempfet;
-                    tempfet.Format(L"r:\\msa%i.pxy",what);
-                    DeleteFile(tempfet.c_str());
-                    msa2fetmain(d1, tempfet.c_str(),99);
-                    fil = tempfet.c_str();
-                    winrt::WuiFET::MainWindow CreateWi();
-                    CreateWi();
-                    return;
-                }
-            }
-#endif
-            auto f1 = Fetch("https://www.msa-apps.com/fetrequest.php");
-            bool AskText(HWND hh, const TCHAR * ti, const TCHAR * as, TCHAR * re, std::wstring * re2 = 0, int mxt = 1000);
-            std::wstring res;
-            if (AskText((HWND)0, L"MSA-Apps Key", L"MSA-Apps Key", 0, &res, 0))
-            {
-                ystring y;
-                y.Format(L"https://www.msa-apps.com/fetrequest.php?what=%i&key=%s", what,res.c_str());
-                f1 = Fetch(y.a_str());
-                if (f1.size() > 10)
-                {
-                    auto dbx = TempFile();
-                    dbx += L".db";
-                    if (local)
-                        dbx = d1;
-                    PutFile(dbx.c_str(), f1, true);
-                    ystring tempfet = TempFile();
-                    tempfet += L".pxy";
-                    if (local)
-                    {
-                        tempfet.Format(L"r:\\msa%i.pxy", what);
-                    }
-                    DeleteFile(tempfet.c_str());
-                    msa2fetmain(dbx.c_str(), tempfet.c_str(),99);
-
-                    // Open tempfet
-//                    if (local == 0)
-//                       DeleteFile(dbx.c_str());
-                    fil = tempfet.c_str();
-                    winrt::WuiFET::MainWindow CreateWi();
-                    CreateWi();
-
-                }
-            }
-        }
 
 
         void OnOpen(IInspectable const&, IInspectable const&)

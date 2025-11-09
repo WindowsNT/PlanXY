@@ -23,7 +23,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind txt(1);}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind TheTitle;}" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="{x:Bind Loaded_File,Mode=OneWay}" Margin="10,0,0,0" Grid.Column="1" VerticalAlignment="Center"/>
             </Grid>
         </InfoBar>
@@ -46,11 +46,6 @@
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Key="O" Modifiers="Control"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem Text="MSA-APPS" Click="OnMSAOpen" Visibility="{x:Bind IsGreek,Mode=OneWay}">
-                <MenuFlyoutItem.Icon>
-                    <FontIcon Glyph="&#xE8E5;"/>
-                </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutItem Text="{x:Bind txt(9)}" Click="OnSave" >

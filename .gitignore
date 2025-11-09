@@ -21,6 +21,7 @@ msa2024.fet
 mono_crash.*
 
 html/
+mys/
 
 # Build results
 [Dd]ebug/

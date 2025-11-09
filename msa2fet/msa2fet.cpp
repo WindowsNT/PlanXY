@@ -611,6 +611,19 @@ void LoadParametersMSA()
 
 }
 
+int LevelFromName(ystring LevelName, bool OnlyLyk = 0)
+{
+	int Level = 0;
+	if (LevelName == L"Α") Level = 1;
+	if (LevelName == L"Β") Level = 2;
+	if (LevelName == L"Γ") Level = 3;
+	if (LevelName == L"Α-ΛΥΚ") Level = 4;
+	if (LevelName == L"Β-ΛΥΚ") Level = 5;
+	if (LevelName == L"Γ-ΛΥΚ") Level = 6;
+	if (OnlyLyk && Level < 4)
+		Level += 3;
+	return Level;
+}
 
 
 
@@ -688,7 +701,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 		CreateActivitiesForIndependentLessons(sql,stype);
 #ifdef _DEBUG
 		CreateActivitiesForXLGeneral(sql, 0); // aggl
-//		CreateActivitiesForXLGeneral(sql,1); // gal germ
+		CreateActivitiesForXLGeneral(sql,1); // gal germ
 #endif
 		CreateActivitiesForKat(sql, 5);
 		CreateActivitiesForKat(sql, 6);

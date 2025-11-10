@@ -308,7 +308,7 @@ int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
     CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 #ifdef _DEBUG
 //    ChangeAssets(L"f:\\wuitools\\WuiFET\\app.png", L"f:\\wuitools\\WuiFET\\assets");
-   // int trsmain2();        trsmain2();
+    //int trsmain2();        trsmain2();
 #endif
     hIcon1 = LoadIcon(h, L"ICON_1");
     {

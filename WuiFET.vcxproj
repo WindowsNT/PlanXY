@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arabic.hpp" />
+    <ClInclude Include="bengali.hpp" />
     <ClInclude Include="chinese.hpp" />
     <ClInclude Include="Constraints.xaml.h">
       <DependentUpon>Constraints.xaml</DependentUpon>
@@ -152,6 +153,8 @@
     <ClInclude Include="greek.hpp" />
     <ClInclude Include="hindi.hpp" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="japanese.hpp" />
+    <ClInclude Include="korean.hpp" />
     <ClInclude Include="MainPage.xaml.h">
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -179,6 +182,7 @@
       <DependentUpon>MySchool.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="portuguese.hpp" />
     <ClInclude Include="Resizer.h" />
     <ClInclude Include="ResultList.xaml.h">
       <DependentUpon>ResultList.xaml</DependentUpon>
@@ -215,6 +219,8 @@
       <DependentUpon>Statistics.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="turkish.hpp" />
+    <ClInclude Include="vietnamese.hpp" />
     <ClInclude Include="ViewResult.xaml.h">
       <DependentUpon>ViewResult.xaml</DependentUpon>
       <SubType>Code</SubType>

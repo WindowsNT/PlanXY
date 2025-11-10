@@ -59,6 +59,7 @@ namespace WuiFET
         String Room_Name{ get; };
         String Room_LongName;
         String Room_Comment;
+        String Room_Features;
         Int32 Room_Code;
         Int32 Room_Capacity;
         Boolean Room_Virtual;

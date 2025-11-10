@@ -241,7 +241,9 @@ L"Terminate",
 L"Resume",
 L"Mutually exclusive time slots",
 L"Break",
+L"Feature",
+L"Features",
 };
 
-#define MAX_LANG 243
+#define MAX_LANG 245
 

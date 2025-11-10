@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Constraints.g.h"
+#include "fetfile.hpp"
 winrt::Windows::Foundation::IInspectable WindowFromPage(winrt::Windows::Foundation::IInspectable pg);
 
 namespace winrt::WuiFET::implementation
@@ -32,6 +33,12 @@ namespace winrt::WuiFET::implementation
                     str1(s(20));
                 if (_ConstraintsMode == 2)
                     str1(s(187));
+
+
+                // Remove all elements from Room Features
+                auto x = project->x;
+                project->ReloadRoomFeaturesElement();
+
             }
             ScanConstraintsForButton();
         }
@@ -138,6 +145,7 @@ namespace winrt::WuiFET::implementation
             {s(52),"ConstraintRoomNotAvailableTimes",0,77,[this]() { Constraints::SS_Room_NotAvailableTimes({},{}); },0 },
 
             {s(33),"ConstraintSubjectPreferredRooms",0,146,[this]() { Constraints::SS_Lesson_PreferredRooms({},{}); },0 },
+            {s(33),"ConstraintSubjectRoomFeatures",0,245,[this]() { Constraints::SS_Lesson_Features({},{}); },0 },
 
             {s(32),"ConstraintActivityPreferredRooms",0,146,[this]() { Constraints::SS_Activity_PreferredRooms({},{}); },0 },
 
@@ -549,6 +557,12 @@ namespace winrt::WuiFET::implementation
             if (WhatRightVisible == WHATVISIBLE::ROOMS)
             {
                 if (ViewingConstraint->RightRooms == 2)
+                    return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Multiple;
+                return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Single;
+            }
+            if (WhatRightVisible == WHATVISIBLE::ROOMFEATURES)
+            {
+                if (ViewingConstraint->RightRoomFeatures == 2)
                     return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Multiple;
                 return Microsoft::UI::Xaml::Controls::ListViewSelectionMode::Single;
             }
@@ -990,6 +1004,11 @@ namespace winrt::WuiFET::implementation
                 LookFor = "Preferred_Room";
 				LookFor2 = "Number_of_Preferred_Rooms";
             }
+            if (WhatRightVisible == WHATVISIBLE::ROOMFEATURES)
+            {
+                LookFor = "Preferred_RoomFeature";
+                LookFor2 = "Number_of_Preferred_RoomFeatures";
+            }
 
             // Remove all
             for (int i = (int)Current_Right_Entry->GetChildrenNum() - 1; i >= 0; i--)
@@ -1028,7 +1047,7 @@ namespace winrt::WuiFET::implementation
                 for (auto el : rights)
                 {
                     auto name = trim(el->FindElementZ("Name", true)->GetContent());
-                    auto& e2 = Current_Right_Entry->AddElement("Preferred_Room");
+                    auto& e2 = Current_Right_Entry->AddElement(LookFor.c_str());
                     e2.SetContent(name);
                 }
                 Current_Right_Entry->FindElementZ(LookFor2.c_str(), true)->SetContent(std::to_string(rights.size()).c_str());
@@ -1090,6 +1109,7 @@ namespace winrt::WuiFET::implementation
             }
         }
 
+
         winrt::Windows::Foundation::Collections::IObservableVector<winrt::WuiFET::Item> Right_List()
         {
             auto items = winrt::single_threaded_observable_vector<winrt::WuiFET::Item>();
@@ -1111,6 +1131,23 @@ namespace winrt::WuiFET::implementation
 				}
                 return GetList(x->GetRootElement()["Rooms_List"], RightFilter.c_str(), &sel);
             }
+            if (WhatRightVisible == WHATVISIBLE::ROOMFEATURES)
+            {
+                auto& RoomFeaturesLoaded = x->GetRootElement()["Room_Features"];
+                std::vector<std::wstring> sel;
+                if (Current_Right_Entry)
+                {
+                    for (auto& el : *Current_Right_Entry)
+                    {
+                        if (el.GetElementName() != "Preferred_RoomFeature")
+                            continue;
+                        sel.push_back(trim(el.GetContent()).c_str());
+                    }
+                }				
+                return GetList(RoomFeaturesLoaded, RightFilter.c_str(),&sel);
+
+
+			}
             return items;
         }
 
@@ -1740,6 +1777,11 @@ namespace winrt::WuiFET::implementation
                     SelectedEntryInLeft(&e, "Rooms_List",Clear, (int)WHATVISIBLE::ROOMS);
 					Clear = false;
                 }
+                if (e.GetElementName() == "RoomFeature")
+                {
+                    SelectedEntryInLeft(&e, "RoomFeatures_List", Clear, (int)WHATVISIBLE::ROOMFEATURES);
+                    Clear = false;
+                }
                 if (e.GetElementName() == "Students")
                 {
                     SelectedEntryInLeft(&e, "Students_List",Clear, (int)WHATVISIBLE::CLASSES);
@@ -1899,6 +1941,7 @@ namespace winrt::WuiFET::implementation
             if (wh == WHATVISIBLE::TEACHERS)  SearchElement = "Teacher";
             if (wh == WHATVISIBLE::LESSONS)  SearchElement = "Subject";
             if (wh == WHATVISIBLE::ROOMS)  SearchElement = "Room";
+            if (wh == WHATVISIBLE::ROOMFEATURES)  SearchElement = "RoomFeature";
             if (wh == WHATVISIBLE::CLASSES)  SearchElement = "Students";
             if (wh == WHATVISIBLE::ACTIVITIES)  SearchElement = "Activity_Id";
             if (wh == WHATVISIBLE::TAGS)  SearchElement = "Activity_Tag";
@@ -1948,6 +1991,7 @@ namespace winrt::WuiFET::implementation
             ystring Param1Component;
 
             int RightRooms = 0; // 0 none, 1 yes, 2 multiple
+			int RightRoomFeatures = 0; // 0 none, 1 yes, 2 multiple (room features)
             int RightClasses = 0; // 0 none, 1 yes, 2 multiple
             std::vector<CONSTRAINT_PARAM> Params;
 
@@ -2047,7 +2091,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(L"XML");
-                it.Tag(winrt::box_value<int>(9));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::UNKNOWNS));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::UNKNOWNS;
             }
@@ -2055,7 +2099,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(29));
-                it.Tag(winrt::box_value<int>(5));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::TAGS));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::TAGS;
             }
@@ -2063,7 +2107,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(25));
-                it.Tag(winrt::box_value<int>(4));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::ACTIVITIES));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::ACTIVITIES;
             }
@@ -2071,7 +2115,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(55));
-                it.Tag(winrt::box_value<int>(3));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::CLASSES));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::CLASSES;
             }
@@ -2079,7 +2123,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(51));
-                it.Tag(winrt::box_value<int>(2));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::ROOMS));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::ROOMS;
             }
@@ -2087,7 +2131,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(26));
-                it.Tag(winrt::box_value<int>(1));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::LESSONS));
                 sbl.Items().InsertAt(0, it);
                 WhatLeftVisible = WHATVISIBLE::LESSONS;
             }
@@ -2095,7 +2139,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
 				it.Text(s(24));
-				it.Tag(winrt::box_value<int>(0));
+				it.Tag(winrt::box_value<int>((int)WHATVISIBLE::TEACHERS));
 				sbl.Items().InsertAt(0,it);
 				WhatLeftVisible = WHATVISIBLE::TEACHERS;
             }
@@ -2117,7 +2161,7 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(55));
-                it.Tag(winrt::box_value<int>(3));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::CLASSES));
                 sbl.Items().InsertAt(0, it);
                 WhatRightVisible = WHATVISIBLE::CLASSES;
             }
@@ -2125,9 +2169,17 @@ namespace winrt::WuiFET::implementation
             {
                 SelectorBarItem it;
                 it.Text(s(51));
-                it.Tag(winrt::box_value<int>(2));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::ROOMS));
                 sbl.Items().InsertAt(0, it);
                 WhatRightVisible = WHATVISIBLE::ROOMS;
+            }
+            if (c.RightRoomFeatures)
+            {
+                SelectorBarItem it;
+                it.Text(s(245));
+                it.Tag(winrt::box_value<int>((int)WHATVISIBLE::ROOMFEATURES));
+                sbl.Items().InsertAt(0, it);
+                WhatRightVisible = WHATVISIBLE::ROOMFEATURES;
             }
             if (sbr.Items().Size() > 1)
             {
@@ -3289,6 +3341,21 @@ namespace winrt::WuiFET::implementation
             ViewingConstraint->FETXMLEntry = "ConstraintSubjectPreferredRooms";
             ViewingConstraint->SpecialView = 2;
             ViewingConstraint->RightRooms = 2;
+            ViewingConstraint->CanMultiple = true;
+            ViewingConstraint->Percentage_From = 0;
+            ViewingConstraint->Percentage_To = 100;
+            LoadConstraint(*ViewingConstraint);
+
+        }
+        void SS_Lesson_Features(IInspectable, IInspectable)
+        {
+            ViewingConstraint = std::make_shared<CONSTRAINT>();
+            ViewingConstraint->TimeOrSpace = 1;
+            ViewingConstraint->Description = s(245);
+            ViewingConstraint->LeftLessons = 1;
+            ViewingConstraint->FETXMLEntry = "ConstraintSubjectRoomFeatures";
+            ViewingConstraint->SpecialView = 2;
+            ViewingConstraint->RightRoomFeatures = 2;
             ViewingConstraint->CanMultiple = true;
             ViewingConstraint->Percentage_From = 0;
             ViewingConstraint->Percentage_To = 100;

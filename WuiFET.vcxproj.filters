@@ -215,6 +215,24 @@
     <ClInclude Include="french.hpp">
       <Filter>Languages</Filter>
     </ClInclude>
+    <ClInclude Include="japanese.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="portuguese.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="turkish.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="vietnamese.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="bengali.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
+    <ClInclude Include="korean.hpp">
+      <Filter>Languages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

@@ -34,14 +34,20 @@
         <ComboBox Margin="10" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" SelectedIndex="{x:Bind WhatLanguage,Mode=TwoWay}" x:Name="LangCB">
             <ComboBoxItem Tag="9">English</ComboBoxItem>
             <ComboBoxItem Tag="1">Arabic - العربية</ComboBoxItem>
+            <ComboBoxItem Tag="69">Bengali - বাংলা</ComboBoxItem>
             <ComboBoxItem Tag="4">Chinese - 中文</ComboBoxItem>
             <ComboBoxItem Tag="12">French - Français</ComboBoxItem>
             <ComboBoxItem Tag="8">Greek - Ελληνικά</ComboBoxItem>
             <ComboBoxItem Tag="7">German - Deutsch</ComboBoxItem>
             <ComboBoxItem Tag="57">Hindi - हिन्दी</ComboBoxItem>
+            <ComboBoxItem Tag="17">Japanese - 日本語</ComboBoxItem>
+            <ComboBoxItem Tag="18">Korean - 한국어</ComboBoxItem>
+            <ComboBoxItem Tag="22">Portuguese - Português</ComboBoxItem>
             <ComboBoxItem Tag="24">Romanian - Română</ComboBoxItem>
             <ComboBoxItem Tag="25">Russian - русский</ComboBoxItem>
             <ComboBoxItem Tag="10">Spanish - Espagnol</ComboBoxItem>
+            <ComboBoxItem Tag="31">Turkish - Türkçe</ComboBoxItem>
+            <ComboBoxItem Tag="42">Vietnamese - Tiếng Việt</ComboBoxItem>
         </ComboBox>
 
 

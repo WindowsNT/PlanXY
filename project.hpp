@@ -12,6 +12,7 @@ enum class WHATVISIBLE
 	BUILDINGS,
 	KIDS,
 	PARENTS,
+	ROOMFEATURES,
 	UNKNOWNS,
 	ERR,
 };
@@ -46,6 +47,8 @@ struct PROJECT
 	HRESULT RemoveElement(const char* n, WHATVISIBLE type);
 	void RemoveFrom(XML3::XMLElement* sroot, std::string SearchKey, std::string Search2, std::string n, WHATVISIBLE whatlook,std::string numbered = "");
 
+
+	std::shared_ptr<XML3::XMLElement> ReloadRoomFeaturesElement();
 
 	XML3::XMLElement* FindSubElementByName(XML3::XMLElement* root, const wchar_t* name,const char* src = "Name")
 	{

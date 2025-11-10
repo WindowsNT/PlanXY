@@ -256,6 +256,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -269,8 +270,10 @@
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Room_Code,Mode=TwoWay}"></TextBox>
                 <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(54);}" VerticalAlignment="Center"></TextBlock>
                 <TextBox Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Room_Capacity,Mode=TwoWay}"></TextBox>
-                <TextBlock Margin="5" Grid.Column="0" Grid.Row="4" Text="{x:Bind txt(43);}" VerticalAlignment="Center"></TextBlock>
-                <TextBox Margin="5" Grid.Column="1" Grid.Row="4" Text="{x:Bind Room_Comment,Mode=TwoWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="4" Text="{x:Bind txt(245);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="4" Text="{x:Bind Room_Features,Mode=TwoWay}"></TextBox>
+                <TextBlock Margin="5" Grid.Column="0" Grid.Row="5" Text="{x:Bind txt(43);}" VerticalAlignment="Center"></TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Grid.Row="5" Text="{x:Bind Room_Comment,Mode=TwoWay}"></TextBox>
             </Grid>
             
         </Grid>

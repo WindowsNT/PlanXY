@@ -213,6 +213,7 @@
                 <MenuBarItem Title="{x:Bind txt(33)}" >
                     <!-- Lesson -->
                     <MenuFlyoutItem Text="{x:Bind txt(146)}" Click="SS_Lesson_PreferredRooms"/>
+                    <MenuFlyoutItem Text="{x:Bind txt(245)}" Click="SS_Lesson_Features"/>
                 </MenuBarItem>
                 <MenuBarItem Title="{x:Bind txt(32)}" >
                     <!-- Activity -->

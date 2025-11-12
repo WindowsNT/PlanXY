@@ -102,7 +102,7 @@
       <p class="text-base">
         Powered by the powerful 
         <a href="https://lalescu.ro/liviu/fet/" target="_blank" class="underline hover:text-blue-200">FET</a>, 
-        Plan XY is your perfect timetable generator. FREE. 
+        Plan XY is your perfect timetable generator. FREE. Available in 16 languages.
       </p>
       <div class="space-x-4 pt-4">
         <a href="#features" class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition">Features</a>

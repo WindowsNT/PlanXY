@@ -648,7 +648,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 
 	auto& root = x.GetRootElement();
 	root.SetElementName("fet");
-	root.vv("version").SetValue("7.5.6");
+	root.vv("version").SetValue("7.5.7");
 	if (stype == 99)
 	{
 		LoadParametersMSA();

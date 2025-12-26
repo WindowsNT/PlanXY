@@ -162,7 +162,7 @@
     <p class="max-w-2xl mx-auto text-gray-600 mb-8">
       Download the auto-updating single executable for Windows 10/11 x64 below.
     </p>
-    <a href="https://www.turbo-play.com/update2/tu.php?p=f3cf159b-de75-4427-8fe0-81a7ae61d3fa&f=29410c69-7a2b-4a2b-9893-9de712a5cd77"
+    <a href="https://www.turbo-play.com/update4/29410c69-7a2b-4a2b-9893-9de712a5cd77/planxy.exe"
        class="inline-block bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
       Download for Windows 10/11
     </a>

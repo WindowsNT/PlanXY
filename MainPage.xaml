@@ -89,13 +89,9 @@
             <MenuBarItem Title="{x:Bind txt(183)}" x:Name="ExampleMenuRoot">
             </MenuBarItem>
 
-
-            <MenuBarItem Title="{x:Bind txt(152)}" >
-                <MenuFlyoutItem Text="{x:Bind txt(153)}" Click="OnShare" />
-                <MenuFlyoutItem Text="{x:Bind txt(154)}" Click="OnJoin" />
-            </MenuBarItem>
             
             <MenuBarItem Title="{x:Bind txt(16)}" >
+                <MenuFlyoutItem Text="{x:Bind txt(153)}" Click="OnShare" />
                 <MenuFlyoutItem Text="{x:Bind txt(145)}" Click="OnAbout" >
                 </MenuFlyoutItem>
 

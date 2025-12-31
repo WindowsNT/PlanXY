@@ -145,16 +145,17 @@ namespace winrt::WuiFET::implementation
 
         void OnShare(IInspectable const&, IInspectable const&)
         {
-            void ShareScreen(int f);
-			std::thread thr(ShareScreen, 1);
-			thr.detach();
+//            void ShareScreen(int f);
+//			std::thread thr(ShareScreen, 1);
+//			thr.detach();
+            std::wstring hmnexe = MainDirectory;
+            hmnexe += L"\\hmn.exe";
+            if (GetFileAttributes(hmnexe.c_str()) != INVALID_FILE_ATTRIBUTES)
+            {
+                ShellExecute(0, L"open", hmnexe.c_str(), L"-q -s 7001 --upnp", 0, SW_SHOWNORMAL);
+                return;
+            }
 		}
-        void OnJoin(IInspectable const&, IInspectable const&)
-        {
-            void JoinScreen();
-            std::thread thr(JoinScreen);
-            thr.detach();
-        }
 
         void OnAbout(IInspectable const&, IInspectable const&)
         {

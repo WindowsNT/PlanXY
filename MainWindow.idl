@@ -16,5 +16,6 @@ namespace WuiFET
         void Dirty();
         void Refresh();
         Boolean IsGreek{ get; };
+        Boolean IsMSAApps{ get; };
     }
 }

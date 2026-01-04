@@ -25,7 +25,7 @@
             </NavigationViewItem>
             <NavigationViewItem  Icon="Favorite" Content="MySchool.SCH.GR" x:Name="MySchool" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
             </NavigationViewItem>
-            <NavigationViewItem  Icon="Favorite" Content="MSA-APPS.COM" x:Name="MsaApps" Visibility="{x:Bind IsGreek,Mode=OneWay}" >
+            <NavigationViewItem  Icon="Favorite" Content="MSA-APPS.COM" x:Name="MsaApps" Visibility="{x:Bind IsMSAApps,Mode=OneWay}" >
             </NavigationViewItem>
             <NavigationViewItem  Icon="Clock" Content="{x:Bind txt(19);,Mode=OneWay}" x:Name="ViewTime" >
                 <NavigationViewItem.KeyboardAccelerators>

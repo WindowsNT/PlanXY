@@ -522,3 +522,5 @@ HWND HWNDFromPage(winrt::Windows::Foundation::IInspectable pg);
 #pragma warning(default:4267)
 #pragma warning(default:4127)
 extern int lang;
+
+#include "resizer.h"

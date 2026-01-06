@@ -9,6 +9,7 @@ namespace WuiFET
         void Refresh();
         Windows.Foundation.Collections.IObservableVector<Item> Results_List{ get; };
         String Loaded_File{ get; };
+		Boolean IsMSAApps{ get; };
 
     }
 }

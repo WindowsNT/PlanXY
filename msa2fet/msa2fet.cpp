@@ -10,6 +10,7 @@ struct DAYANDHOUR
 
 
 
+bool AskText(HWND hh, const TCHAR* ti, const TCHAR* as, TCHAR* re, std::wstring* re2 = 0, int mxt = 1000);
 
 void DbClean(const char* xy)
 {
@@ -283,6 +284,8 @@ std::vector<K> AllKidLoaded;
 			// Needs "PARAM" set in TEACHERSINCLASSES to 1 FOR SOLFEGE because we can't deduct from hours (its both 2)
 */
 
+std::wstring Decode2(const wchar_t* src);
+
 #include <regex>
 void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std::string teachers, [[maybe_unused]] std::string activities1)
 {
@@ -416,6 +419,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 
 				}
 				int aid = 0, cid = 0, lid = 0, kid = 0;
+				int syn = 0;
 				for (int pass = 0; pass < 2; pass++)
 				{
 					for (auto& sub : hour)
@@ -433,6 +437,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 						if (sub.GetElementName() == "Subject" && lid == 0)
 						{
 							auto whatl = sub.vv("name").GetWideValue();
+							whatl = Decode2(whatl.c_str());
 							lid = lesson_to_lid[whatl];
 							if (lid == 0)
 							{
@@ -443,6 +448,13 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 								{
 									lid = _wtoi(r["LID"].c_str());
 								}
+							}
+							if (lid == 0)
+							{
+								if (whatl == L"L0|ΜΣΟ")
+									syn = 1;
+								if (whatl == L"L0|ΜΣΕ")
+									syn = 2;
 
 							}
 						}
@@ -483,8 +495,19 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 					aid = 82;
 				}
 
-				if (tid == 0 || lid == 0 || cid == 0)
-					continue;
+				ystring ulesson;
+				if (tid && syn)
+				{
+					if (syn == 1)
+						ulesson = L"ΜΣΟ";
+					if (syn == 2)
+						ulesson = L"ΜΣΕ";
+				}
+				else
+				{
+					if (tid == 0 || lid == 0 || cid == 0)
+						continue;
+				}
 
 
 				if (aid == 0)
@@ -494,9 +517,9 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 				{
 					has_teacher[tid][hh][dd] = 1;
 					if (kid == 0)
-						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,LID,CID,AID,DD,HH) VALUES (%i,%i,%i,%i,%i,%i,%i)", 1, tid, lid, cid, aid, dd, hh);
+						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,LID,CID,AID,DD,HH,ULESSON) VALUES (%i,%i,%i,%i,%i,%i,%i,'%s')", 1, tid, lid, cid, aid, dd, hh,ulesson.a_str());
 					else
-						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,KID,LID,CID,AID,DD,HH) VALUES (%i,%i,%i,%i,%i,%i,%i,%i)", 1, tid, kid, lid, cid, aid, dd, hh);
+						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,KID,LID,CID,AID,DD,HH,ULESSON) VALUES (%i,%i,%i,%i,%i,%i,%i,%i,'%s')", 1, tid, kid, lid, cid, aid, dd, hh, ulesson.a_str());
 					sql_statements.push_back(t);
 				}
 
@@ -523,18 +546,23 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 	if (d0.size() > 10000)
 	{
 		std::vector<char> Fetch(const char* TheLink);
-
-		auto f1 = Fetch("https://www.msa-apps.com/fetresults.php");
-		bool AskText(HWND hh, const TCHAR* ti, const TCHAR* as, TCHAR* re, std::wstring* re2 = 0, int mxt = 1000);
 		std::wstring res;
-		if (AskText((HWND)0, L"MSA-Apps Key", L"MSA-Apps Key", 0, &res, 0))
+		if (!EnsureAFM())
+			return;
+		ystring y2;
+		y2.Format(L"https://www.msa-apps.com/planxy.php?request3=2&afm=%s", msaappsafm.c_str());
+		auto f1 = Fetch(y2.a_str());
+		res.clear();
+		if (AskText((HWND)0, L"MSA-Apps Key", L"Δώστε το κλειδί ανεβάσματος που σας εστάλει με SMS:", 0, &res, 0))
 		{
 			RESTAPI::REST r;
 			r.Connect(L"www.msa-apps.com", true);
 			std::wstring k = L"X-key: ";
 			k += res;
-			auto i3 = r.RequestWithBuffer(L"fetresults.php", L"POST", { k }, d0.data(), d0.size());
-			ShellExecute(0, L"open", L"https://www.msa-apps.com/fet/?real=1", 0, 0, SW_SHOWNORMAL);
+			std::wstring afm = L"X-afm: ";
+			afm += msaappsafm;
+			auto i3 = r.RequestWithBuffer(L"planxy.php", L"POST", { k,afm }, d0.data(), d0.size());
+			ShellExecute(0, L"open", L"https://www.msa-apps.com/planxy.php", 0, 0, SW_SHOWNORMAL);
 		}
 	}
 
@@ -648,7 +676,7 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 
 	auto& root = x.GetRootElement();
 	root.SetElementName("fet");
-	root.vv("version").SetValue("7.6.2");
+	root.vv("version").SetValue("7.6.4");
 	if (stype == 99)
 	{
 		LoadParametersMSA();

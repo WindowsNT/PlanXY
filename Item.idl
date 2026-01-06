@@ -21,6 +21,7 @@ namespace WuiFET
 			void Refresh(String what);
 			static String txt(Int32 sidx);
 			Int32 MinimumWidth;
+			Boolean IsMSAApps{ get; };
 
 	}
 }

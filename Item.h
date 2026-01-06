@@ -10,6 +10,11 @@ namespace winrt::WuiFET::implementation
             return s(jx);
         }
 
+        bool IsMSAApps()
+        {
+            return IsMSAApps2();
+		}
+
         Item()
         {
 

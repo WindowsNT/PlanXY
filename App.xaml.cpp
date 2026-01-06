@@ -6,7 +6,7 @@
 
 
 bool is_light_theme();
-
+extern ystring dbimportfile;
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -346,6 +346,8 @@ int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
         });
 
     SettingsX->Save();
+    if (!dbimportfile.empty())
+        DeleteFile(dbimportfile.c_str());
     ExitProcess(0);
     return 0;
 }

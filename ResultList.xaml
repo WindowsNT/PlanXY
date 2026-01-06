@@ -36,7 +36,7 @@
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="{x:Bind txt(81);}" Click="OnResultSelected_View" />
                                     <MenuFlyoutSeparator/>
-                                    <MenuFlyoutItem Text="MSA-APPS" Click="OnResultSelected_PostMSAAPPS" />
+                                    <MenuFlyoutItem Text="MSA-APPS" Click="OnResultSelected_PostMSAAPPS" Visibility="{x:Bind IsMSAApps,Mode=OneWay}" />
                                     <MenuFlyoutItem Text="{x:Bind txt(185);}" Click="OnResultSelected_ExportFET" />
                                     <MenuFlyoutSeparator/>
                                     <MenuFlyoutItem Text="{x:Bind txt(46);}" Click="OnResultSelected_Delete" />

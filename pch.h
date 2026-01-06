@@ -80,6 +80,7 @@
 #include "resizer.h"
 #include "xml3all.h"
 #include "CLI11.hpp"
+#include "resizer.h"
 
 extern const wchar_t* ttitle;
 extern std::shared_ptr<XML3::XML> SettingsX;
@@ -522,5 +523,8 @@ HWND HWNDFromPage(winrt::Windows::Foundation::IInspectable pg);
 #pragma warning(default:4267)
 #pragma warning(default:4127)
 extern int lang;
+bool IsGreek2();
+bool IsMSAApps2();
 
-#include "resizer.h"
+inline std::wstring msaappsafm;
+bool EnsureAFM();

@@ -13,6 +13,8 @@
 *.msix
 *.db
 msa2024.fet
+msa.pxy
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

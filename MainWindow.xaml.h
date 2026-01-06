@@ -25,20 +25,13 @@ namespace winrt::WuiFET::implementation
 
 		bool IsGreek()
 		{
-			if (lang == -1)
-				s(1);
-			return lang == LANG_GREEK;
+			return IsGreek2();
 		}
 
 		bool IsMSAApps()
 		{
-			if (!IsGreek())
-				return false;
-
-			if (GetFileAttributes(L"f:\\tp2\\final2\\tp64.exe") != INVALID_FILE_ATTRIBUTES)
-				return TRUE;
-			return false;
-		}	
+			return IsMSAApps2();
+		}
 
 		void Dirty()
 		{

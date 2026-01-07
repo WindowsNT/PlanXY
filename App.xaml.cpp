@@ -346,8 +346,10 @@ int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
         });
 
     SettingsX->Save();
+#ifndef _DEBUG
     if (!dbimportfile.empty())
         DeleteFile(dbimportfile.c_str());
+#endif
     ExitProcess(0);
     return 0;
 }

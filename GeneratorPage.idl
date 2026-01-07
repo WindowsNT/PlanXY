@@ -12,6 +12,7 @@ namespace WuiFET
         Int32 Num_Threads;
         Int32 Wait_Results;
         Int32 Wait_Minutes;
+        Int32 CPUS_Per_Thread;
         Boolean FinishSleep;
         Boolean FinishShutdown;
         Boolean Running{ get; };

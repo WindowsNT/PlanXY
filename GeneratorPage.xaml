@@ -16,6 +16,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -42,6 +43,7 @@
                                 <MenuFlyoutItem  Text="{x:Bind txt(234);}" Click="OnDetach" IsEnabled="{x:Bind ProjectSaved,Mode=OneWay}" />
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem  Text="+ 00:10:00" Click="Add10Minutes" />
+                                <MenuFlyoutItem  Text="{x:Bind txt(247);}" Click="TerminateSlowest" />
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutSubItem Text="{x:Bind txt(164);}">
                                     <ToggleMenuFlyoutItem Text="{x:Bind txt(165);}" IsChecked="{x:Bind FinishSleep,Mode=TwoWay}"/>
@@ -69,15 +71,17 @@
         <NumberBox VerticalAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="2" Text="{x:Bind Num_Threads,Mode=TwoWay}" Minimum="1" Maximum="64"></NumberBox>
         <TextBlock Margin="5" Grid.Column="0" Grid.Row="3" Text="{x:Bind txt(108);}" VerticalAlignment="Center"></TextBlock>
         <NumberBox VerticalAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="3" Text="{x:Bind Wait_Minutes,Mode=TwoWay}" Minimum="1" ></NumberBox>
+        <TextBlock Margin="5" Grid.Column="0" Grid.Row="4" Text="{x:Bind txt(246);}" VerticalAlignment="Center"></TextBlock>
+        <NumberBox VerticalAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="4" Text="{x:Bind CPUS_Per_Thread,Mode=TwoWay}" Minimum="1" ></NumberBox>
 
-        <ListView x:Name="Restrictions_List" Grid.Row="4" Grid.Column="1" SelectionMode="Multiple" SelectionChanged="RestChanged">
+        <ListView x:Name="Restrictions_List" Grid.Row="5" Grid.Column="1" SelectionMode="Multiple" SelectionChanged="RestChanged">
             <ListView.Items>
                 <TextBlock Text="{x:Bind txt(119);}"></TextBlock>
                 <TextBlock Text="{x:Bind txt(120);}"></TextBlock>
             </ListView.Items>
         </ListView>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5">
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="6">
             <Button VerticalAlignment="Center" Margin="5"  Content="{x:Bind txt(60);}" Click="GenerateNow"  Style="{StaticResource PrimaryButtonStyle}">
                 <Button.KeyboardAccelerators>
                     <KeyboardAccelerator Key="F5"  />

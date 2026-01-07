@@ -243,7 +243,9 @@ L"Mutually exclusive time slots",
 L"Break",
 L"Feature",
 L"Features",
+L"Number of CPUs per thread",
+L"Terminate the slowest thread",
 };
 
-#define MAX_LANG 245
+#define MAX_LANG 247
 

@@ -719,8 +719,10 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 			CreateActivitiesForCGP(sql);
 		if (CreateA_EAE)
 		{
-			CombineActivitesForEae(sql);
-			CombineActivitesForEae3(sql);
+//			CombineActivitesForEae1(sql);
+//			CombineActivitesForEae3(sql);
+			CombineActivitesForEae4(sql);
+			//* Create for Atomiko EAE if exists
 		}
 	}
 	else
@@ -728,8 +730,8 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 		// Other Schools
 		CreateActivitiesForIndependentLessons(sql,stype);
 #ifdef _DEBUG
-		CreateActivitiesForXLGeneral(sql, 0); // aggl
-		CreateActivitiesForXLGeneral(sql,1); // gal germ
+//		CreateActivitiesForXLGeneral(sql, 0); // aggl
+//		CreateActivitiesForXLGeneral(sql,1); // gal germ
 #endif
 		CreateActivitiesForKat(sql, 5);
 		CreateActivitiesForKat(sql, 6);

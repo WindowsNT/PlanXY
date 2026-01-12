@@ -527,4 +527,6 @@ bool IsGreek2();
 bool IsMSAApps2();
 
 inline std::wstring msaappsafm;
+int msa2fetmain(const wchar_t* dbname, const wchar_t* targetfet, int stype,int Validate);
 bool EnsureAFM();
+

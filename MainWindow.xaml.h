@@ -8,7 +8,6 @@ std::vector<char> Fetch(const char* TheLink);
 extern std::wstring fil;
 std::wstring TempFile();
 extern int _ConstraintsMode;
-int msa2fetmain(const wchar_t* dbname, const wchar_t* targetfet,int stype);
 
 namespace winrt::WuiFET::implementation
 {
@@ -178,7 +177,7 @@ namespace winrt::WuiFET::implementation
 					ystring tempfet;
 					tempfet.Format(L"r:\\msa2025.pxy");
 					DeleteFile(tempfet.c_str());
-					msa2fetmain(project->file.c_str(), tempfet.c_str(),99);
+					msa2fetmain(project->file.c_str(), tempfet.c_str(),99,0);
 					fil = tempfet.c_str();
 					project->file = fil;
 				}

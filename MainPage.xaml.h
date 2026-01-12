@@ -8,7 +8,6 @@ winrt::Windows::Foundation::IInspectable WindowFromPage(winrt::Windows::Foundati
 std::wstring TempFile();
 std::vector<char> Fetch(const char* TheLink);
 namespace fs = std::filesystem;
-int msa2fetmain(const wchar_t* dbname, const wchar_t* targetfet,int stype);
 #include "version.h"
 namespace winrt::WuiFET::implementation
 {
@@ -108,7 +107,7 @@ namespace winrt::WuiFET::implementation
                 auto tempfet = TempFile();
 				tempfet += L".pxy";
 				DeleteFile(tempfet.c_str());
-				msa2fetmain(fnx.data(), tempfet.c_str(),99);
+				msa2fetmain(fnx.data(), tempfet.c_str(),99,0);
 				wcscpy_s(fnx.data(), 10000, tempfet.c_str());
 			}
 

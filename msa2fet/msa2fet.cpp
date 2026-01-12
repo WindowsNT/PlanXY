@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #pragma execution_character_set("utf-8")
 #include "rest.h"
+#include "pseudoconsole.hpp"
 struct DAYANDHOUR
 {
 	int d = 0; // 1 based
@@ -8,6 +9,7 @@ struct DAYANDHOUR
 };
 
 
+std::wstring TempFile();
 
 
 bool AskText(HWND hh, const TCHAR* ti, const TCHAR* as, TCHAR* re, std::wstring* re2 = 0, int mxt = 1000);
@@ -572,7 +574,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 ystring dbimportfile;
 
 
-void LoadParametersMSA()
+void LoadParametersMSA(int ValidateLevel)
 {
 	XML3::XML x("f:\\wuitools\\wuifet\\msa.xml");
 	auto& root = x.GetRootElement();
@@ -584,13 +586,12 @@ void LoadParametersMSA()
 		active_years[i] = y.vv(s).GetValueInt(1);
 	}
 
-/*	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		auto& y = root["cidx"];
 		s.Format(L"n%i", i + 1);
-		active_cidx[i] = y.vv(s).GetValueInt(1);
+		inactive_cidxs[i + 1] = !y.vv(s).GetValueInt(1);
 	}
-	*/
 
 	if (1)
 	{
@@ -603,18 +604,27 @@ void LoadParametersMSA()
 	{
 		auto& y = root["time"];
 		Teacher_Time_Constraints = y.vv("Teacher_Time_Constraints").GetValueInt(1);
+		if (ValidateLevel >= 1)
+			Teacher_Time_Constraints = 0;
 		MaxHoursPerDay = y.vv("MaxHoursPerDay").GetValueInt(5);
 		MaxSpanHours = y.vv("MaxSpanHours").GetValueInt(7);
 		MaxContinuousHoursGen = y.vv("MaxContinuousHoursGen").GetValueInt(5);
 		MaxContinuousHoursAt = y.vv("MaxContinuousHoursAt").GetValueInt(6);
 		G_MaxGapsWeek = y.vv("G_MaxGapsWeek").GetValueInt(4);
 		A_MaxGapsWeek = y.vv("A_MaxGapsWeek").GetValueInt(6);
+		if (ValidateLevel >= 1)
+		{
+			MaxContinuousHoursGen = 0;
+			MaxContinuousHoursAt = 0;
+		}
 	}
 
 	if (1)
 	{
 		auto& y = root["space"];
 		SpaceConstraints = y.vv("SpaceConstraints").GetValueInt(1);
+		if (ValidateLevel >= 2)
+			SpaceConstraints = 0;
 	}
 
 	if (1)
@@ -624,8 +634,8 @@ void LoadParametersMSA()
 		CreateA_Ind = y.vv("Independent").GetValueInt(1);
 		CreateA_Aggl = y.vv("Aggl").GetValueInt(1);
 		CreateA_2XGL = y.vv("XGL").GetValueInt(1);
-		CreateA_Combo1 = y.vv("Combo1").GetValueInt(1);
-		CreateA_Combo2 = y.vv("Combo2").GetValueInt(1);
+		CreateA_ComboPiano = y.vv("ComboPiano").GetValueInt(1);
+		CreateA_ComboTamb = y.vv("ComboTamb").GetValueInt(1);
 		CreateA_Combo3 = y.vv("Combo3").GetValueInt(1);
 		CreateA_Combo4 = y.vv("Combo4").GetValueInt(1);
 		CreateA_MousEp4 = y.vv("MousEp4").GetValueInt(1);
@@ -655,7 +665,7 @@ int LevelFromName(ystring LevelName, bool OnlyLyk = 0)
 
 
 
-int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
+int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype,int Validate)
 {
 //	ttgapgen(argc, argv);
 //	if (1)
@@ -676,10 +686,10 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 
 	auto& root = x.GetRootElement();
 	root.SetElementName("fet");
-	root.vv("version").SetValue("7.6.4");
+	root.vv("version").SetValue("7.7.0");
 	if (stype == 99)
 	{
-		LoadParametersMSA();
+		LoadParametersMSA(Validate);
 		root["Institution_Name"].SetContent(XML3::XMLU(L"Μουσικό Σχολείο Αλίμου"));
 	}
 	else
@@ -748,6 +758,30 @@ int msa2fetmain(const wchar_t* dbname,const wchar_t* targetfet,int stype)
 	CheckActivitiesWithoutStudents(x);
 
 	x.Save(targetfet);
+
+	if (Validate > 0)
+	{
+		// Test run with FET, should generate quickly
+
+		auto odir = TempFile();
+		SHCreateDirectory(0, odir.c_str());
+		wchar_t cmd[1000] = {};
+		swprintf_s(cmd, L"fet-cl.exe --timelimitseconds=120 --htmllevel=7 --inputfile=\"%s\" --outputdir=\"%s\"",
+			targetfet, odir.c_str());
+		PC pc;
+		pc.SetUpPseudoConsole({ 80, 25 });
+		pc.PrepareStartupInformation();
+
+		pc.Run(odir, cmd,nullptr);
+		auto wi = WaitForSingleObject(pc.hProcess, 1000*60);
+		bool F = 0;
+		if (wi == WAIT_TIMEOUT)
+		{
+			TerminateProcess(pc.hProcess, 0);
+			F = 1;
+		}
+
+	}
 
 
 	return 0;

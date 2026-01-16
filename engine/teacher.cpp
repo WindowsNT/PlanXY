@@ -10,8 +10,7 @@
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -27,11 +26,7 @@ QDataStream& operator<<(QDataStream& stream, const Teacher& tch)
 	stream<<tch.code;
 	stream<<tch.morningsAfternoonsBehavior;
 	stream<<tch.targetNumberOfHours;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 	stream<<QList<QString>(tch.qualifiedSubjectsList.cbegin(), tch.qualifiedSubjectsList.cend());
-#else
-	stream<<QList<QString>::fromStdList(tch.qualifiedSubjectsList);
-#endif
 	stream<<tch.comments;
 
 	return stream;
@@ -47,11 +42,7 @@ QDataStream& operator>>(QDataStream& stream, Teacher& tch)
 
 	QList<QString> tl;
 	stream>>tl;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 	tch.qualifiedSubjectsList=std::list<QString>(tl.constBegin(), tl.constEnd());
-#else
-	tch.qualifiedSubjectsList=tl.toStdList();
-#endif
 
 	stream>>tch.comments;
 
@@ -269,7 +260,7 @@ QString Teacher::getDetailedDescriptionWithConstraints(Rules& r)
 	s+="\n";
 	for(int i=0; i<r.timeConstraintsList.size(); i++){
 		TimeConstraint* c=r.timeConstraintsList[i];
-		if(c->isRelatedToTeacher(this)){
+		if(c->isRelatedToTeacher(this->name)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}
@@ -280,7 +271,7 @@ QString Teacher::getDetailedDescriptionWithConstraints(Rules& r)
 	s+="\n";
 	for(int i=0; i<r.spaceConstraintsList.size(); i++){
 		SpaceConstraint* c=r.spaceConstraintsList[i];
-		if(c->isRelatedToTeacher(this)){
+		if(c->isRelatedToTeacher(this->name)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}
@@ -299,7 +290,7 @@ QString Teacher::getDetailedDescriptionWithConstraintsAndNumberOfActiveHours(Rul
 	s+="\n";
 	for(int i=0; i<r.timeConstraintsList.size(); i++){
 		TimeConstraint* c=r.timeConstraintsList[i];
-		if(c->isRelatedToTeacher(this)){
+		if(c->isRelatedToTeacher(this->name)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}
@@ -310,7 +301,7 @@ QString Teacher::getDetailedDescriptionWithConstraintsAndNumberOfActiveHours(Rul
 	s+="\n";
 	for(int i=0; i<r.spaceConstraintsList.size(); i++){
 		SpaceConstraint* c=r.spaceConstraintsList[i];
-		if(c->isRelatedToTeacher(this)){
+		if(c->isRelatedToTeacher(this->name)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}

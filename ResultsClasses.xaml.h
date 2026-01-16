@@ -646,8 +646,18 @@ namespace winrt::WuiFET::implementation
                                 //                        html += "Test";
                                 for (auto& t : rr.teachers)
                                 {
-                                    y.Format(LR"(<b>%s</b><br>)", t.dispname.c_str());
-                                    html += y;
+                                    // Is Tamb? if so, so the kid instead 
+                                    if (_wcsnicmp(t.name.c_str(), L"TAMB", 4) != 0)
+                                    {
+                                        y.Format(LR"(<b>%s</b><br>)", t.dispname.c_str());
+                                        html += y;
+                                    }
+                                    else
+                                    {
+                                        y.Format(LR"(<b>%s</b><br>)",rm.second.name.c_str());
+                                        html += y;
+
+                                    }
                                 }
                                 for (auto& s : rr.subjects)
                                 {

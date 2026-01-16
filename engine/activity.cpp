@@ -14,8 +14,7 @@ File activity.cpp
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -109,11 +108,7 @@ void GroupActivitiesInInitialOrderItem::removeUseless(Rules& r)
 }
 
 void GroupActivitiesInInitialOrderItem::recomputeActivitiesSet(){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 	idsSet=QSet<int>(ids.constBegin(), ids.constEnd());
-#else
-	idsSet=ids.toSet();
-#endif
 }
 
 QString GroupActivitiesInInitialOrderItem::getXmlDescription(Rules& r)
@@ -767,7 +762,7 @@ QString Activity::getDetailedDescriptionWithConstraints(Rules& r)
 	s+="\n";
 	for(int i=0; i<r.timeConstraintsList.size(); i++){
 		TimeConstraint* c=r.timeConstraintsList[i];
-		if(c->isRelatedToActivity(r, this)){
+		if(c->isRelatedToActivity(r, this->id)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}
@@ -778,7 +773,7 @@ QString Activity::getDetailedDescriptionWithConstraints(Rules& r)
 	s+="\n";
 	for(int i=0; i<r.spaceConstraintsList.size(); i++){
 		SpaceConstraint* c=r.spaceConstraintsList[i];
-		if(c->isRelatedToActivity(this)){
+		if(c->isRelatedToActivity(r, this->id)){
 			s+="\n";
 			s+=c->getDetailedDescription(r);
 		}

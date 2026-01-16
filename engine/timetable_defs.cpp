@@ -14,8 +14,7 @@ File timetable_defs.cpp
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -62,14 +61,14 @@ int STUDENTS_COMBO_BOXES_STYLE=STUDENTS_COMBO_BOXES_STYLE_SIMPLE;
 /**
 The FET version
 */
-const QString FET_VERSION="7.5.1";
+const QString FET_VERSION="7.7.0";
 
 /**
 The version number of the data format, useful when saving/restoring the history to/from the disk.
 On any change of the data format, no matter how small or large, this number must be updated;
 older or newer data history versions are not compatible.
 */
-const QString FET_DATA_FORMAT_VERSION="7.5.1"; //started from "6.15.1", since FET-6.15.1.
+const QString FET_DATA_FORMAT_VERSION="7.5.4"; //started from "6.15.1", since FET-6.15.1.
 
 /**
 The FET language
@@ -190,14 +189,14 @@ QString protect2vert(const QString& str) //used for HTML
 	p.replace("<", "&lt;");
 	//p.replace("'", "&#39;"); (note that "&apos;" does not work for HTML 4)
 
-	QString returnstring;
+	QString returnString;
 	for(int i=0; i<p.size();i++){
 		QString a=p.at(i);
 		QString b="<br />";
-		returnstring.append(a);
-		returnstring.append(b);
+		returnString.append(a);
+		returnString.append(b);
 	}
-	return returnstring;
+	return returnString;
 }
 
 QString protect3(const QString& str) //used for CSS
@@ -317,7 +316,7 @@ double customFETStrToDouble(const QString& str, bool* ok)
 
 	//tricks to convert numbers like 97.123456789 to 97.123457, to CUSTOM_DOUBLE_PRECISION (6) decimal digits after the decimal point
 	double tmpd=c.toDouble(str, ok);
-	if(ok!=0)
+	if(ok!=nullptr)
 		if((*ok)==false)
 			return tmpd;
 	QString tmps=CustomFETString::number(tmpd);

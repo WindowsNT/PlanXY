@@ -14,8 +14,7 @@ File timeconstraint.h
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -418,10 +417,12 @@ const int CONSTRAINT_ACTIVITIES_OVERLAP_COMPLETELY_OR_DO_NOT_OVERLAP											=
 
 const int CONSTRAINT_ACTIVITIES_OCCUPY_MAX_SETS_OF_TIME_SLOTS_FROM_SELECTION									=248;
 
-const int CONSTRAINT_ACTIVITY_BEGINS_OR_ENDS_STUDENTS_DAY									=249;
-const int CONSTRAINT_ACTIVITIES_BEGIN_OR_END_STUDENTS_DAY									=250;
-const int CONSTRAINT_ACTIVITY_BEGINS_OR_ENDS_TEACHERS_DAY									=251;
-const int CONSTRAINT_ACTIVITIES_BEGIN_OR_END_TEACHERS_DAY									=252;
+const int CONSTRAINT_ACTIVITY_BEGINS_OR_ENDS_STUDENTS_DAY														=249;
+const int CONSTRAINT_ACTIVITIES_BEGIN_OR_END_STUDENTS_DAY														=250;
+const int CONSTRAINT_ACTIVITY_BEGINS_OR_ENDS_TEACHERS_DAY														=251;
+const int CONSTRAINT_ACTIVITIES_BEGIN_OR_END_TEACHERS_DAY														=252;
+
+const int CONSTRAINT_ACTIVITIES_MAX_TOTAL_NUMBER_OF_STUDENTS_IN_SELECTED_TIME_SLOTS								=253;
 
 class QDataStream;
 
@@ -514,29 +515,29 @@ public:
 	virtual QString getDetailedDescription(Rules& r)=0;
 	
 	/**
-	Returns true if this constraint is related to this activity
+	Returns true if this constraint is related to this activity id
 	*/
-	virtual bool isRelatedToActivity(Rules& r, Activity* a)=0;
+	virtual bool isRelatedToActivity(Rules& r, int aid)=0;
 
 	/**
 	Returns true if this constraint is related to this teacher
 	*/
-	virtual bool isRelatedToTeacher(Teacher* t)=0;
+	virtual bool isRelatedToTeacher(const QString& t)=0;
 
 	/**
 	Returns true if this constraint is related to this subject
 	*/
-	virtual bool isRelatedToSubject(Subject* s)=0;
+	virtual bool isRelatedToSubject(const QString& s)=0;
 
 	/**
 	Returns true if this constraint is related to this activity tag
 	*/
-	virtual bool isRelatedToActivityTag(ActivityTag* s)=0;
+	virtual bool isRelatedToActivityTag(const QString& s)=0;
 
 	/**
 	Returns true if this constraint is related to this students set
 	*/
-	virtual bool isRelatedToStudentsSet(Rules& r, StudentsSet* s)=0;
+	virtual bool isRelatedToStudentsSet(Rules& r, const QString& s)=0;
 	
 	virtual bool hasWrongDayOrHour(Rules& r)=0;
 	virtual bool canRepairWrongDayOrHour(Rules& r)=0;
@@ -567,15 +568,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -615,15 +616,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -663,15 +664,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -731,15 +732,15 @@ public:
 	
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -804,15 +805,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -846,15 +847,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -932,15 +933,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1004,15 +1005,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1076,15 +1077,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1149,15 +1150,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1222,15 +1223,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1262,15 +1263,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1306,15 +1307,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1353,15 +1354,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1396,15 +1397,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1454,15 +1455,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1494,15 +1495,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1538,15 +1539,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1582,15 +1583,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1628,15 +1629,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1678,15 +1679,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1734,15 +1735,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1774,15 +1775,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1821,15 +1822,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1858,15 +1859,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1901,15 +1902,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -1944,15 +1945,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2003,15 +2004,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2040,15 +2041,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2081,15 +2082,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2118,15 +2119,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2159,15 +2160,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2196,15 +2197,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2237,15 +2238,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2283,15 +2284,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2336,15 +2337,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2373,15 +2374,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2428,15 +2429,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2465,15 +2466,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2520,15 +2521,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2563,15 +2564,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2624,15 +2625,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2663,15 +2664,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2720,15 +2721,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2790,15 +2791,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2859,15 +2860,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -2923,15 +2924,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3006,7 +3007,7 @@ public:
 	//ConstraintActivitiesPreferredTimeSlots(double wp, const QString& te,
 	//	const QString& st, const QString& su, const QString& sut, int nPT, int d[], int h[]);
 	ConstraintActivitiesPreferredTimeSlots(double wp, const QString& te,
-		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, QList<int> d_L, QList<int> h_L);
+		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, const QList<int>& d_L, const QList<int>& h_L);
 
 	bool computeInternalStructure(QWidget* parent, Rules& r);
 
@@ -3020,15 +3021,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3098,7 +3099,7 @@ public:
 	//ConstraintSubactivitiesPreferredTimeSlots(double wp, int compNo, const QString& te,
 	//	const QString& st, const QString& su, const QString& sut, int nPT, int d[], int h[]);
 	ConstraintSubactivitiesPreferredTimeSlots(double wp, int compNo, const QString& te,
-		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, QList<int> d_L, QList<int> h_L);
+		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, const QList<int>& d_L, const QList<int>& h_L);
 
 	bool computeInternalStructure(QWidget* parent, Rules& r);
 
@@ -3112,15 +3113,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3188,7 +3189,7 @@ public:
 	//ConstraintActivitiesPreferredStartingTimes(double wp, const QString& te,
 	//	const QString& st, const QString& su, const QString& sut, int nPT, int d[], int h[]);
 	ConstraintActivitiesPreferredStartingTimes(double wp, const QString& te,
-		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, QList<int> d_L, QList<int> h_L);
+		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, const QList<int>& d_L, const QList<int>& h_L);
 
 	bool computeInternalStructure(QWidget* parent, Rules& r);
 
@@ -3202,15 +3203,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3278,7 +3279,7 @@ public:
 	ConstraintSubactivitiesPreferredStartingTimes();
 
 	ConstraintSubactivitiesPreferredStartingTimes(double wp, int compNo, const QString& te,
-		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, QList<int> d_L, QList<int> h_L);
+		const QString& st, const QString& su, const QString& sut, int dur, int nPT_L, const QList<int>& d_L, const QList<int>& h_L);
 
 	bool computeInternalStructure(QWidget* parent, Rules& r);
 
@@ -3292,15 +3293,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3360,15 +3361,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3428,15 +3429,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3484,15 +3485,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3540,15 +3541,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3600,15 +3601,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3656,15 +3657,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3708,15 +3709,15 @@ public:
 
 	void recomputeActivitiesSets();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3764,15 +3765,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3810,15 +3811,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3852,15 +3853,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3898,15 +3899,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3952,15 +3953,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -3996,15 +3997,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4057,15 +4058,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4101,15 +4102,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4170,15 +4171,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4216,15 +4217,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4286,15 +4287,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4332,15 +4333,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4382,15 +4383,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4425,15 +4426,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4486,15 +4487,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4534,15 +4535,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4586,15 +4587,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4631,15 +4632,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4694,15 +4695,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4731,15 +4732,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4785,15 +4786,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4836,15 +4837,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4887,15 +4888,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4938,15 +4939,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -4991,15 +4992,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5042,15 +5043,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5090,15 +5091,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5138,15 +5139,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5195,15 +5196,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5235,15 +5236,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5281,15 +5282,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5323,15 +5324,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5366,15 +5367,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5405,15 +5406,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5459,15 +5460,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5496,15 +5497,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5552,15 +5553,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5591,15 +5592,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5640,15 +5641,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5687,15 +5688,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5736,15 +5737,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5783,15 +5784,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5830,15 +5831,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5875,15 +5876,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5922,15 +5923,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -5967,15 +5968,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6016,15 +6017,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6063,15 +6064,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6112,15 +6113,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6159,15 +6160,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6206,15 +6207,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6251,15 +6252,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6298,15 +6299,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6343,15 +6344,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6392,15 +6393,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6439,15 +6440,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6488,15 +6489,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6535,15 +6536,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6582,15 +6583,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6627,15 +6628,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6674,15 +6675,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6719,15 +6720,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6760,15 +6761,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6804,15 +6805,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6860,15 +6861,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6900,15 +6901,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6947,15 +6948,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -6984,15 +6985,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7023,15 +7024,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7066,15 +7067,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7103,15 +7104,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7158,15 +7159,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7200,15 +7201,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7246,15 +7247,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7288,15 +7289,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7334,15 +7335,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7389,15 +7390,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7433,15 +7434,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7488,15 +7489,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7532,15 +7533,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7578,15 +7579,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7628,15 +7629,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7671,15 +7672,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7732,15 +7733,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7769,15 +7770,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7823,15 +7824,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7880,15 +7881,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7920,15 +7921,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -7966,15 +7967,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8008,15 +8009,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8062,15 +8063,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8099,15 +8100,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8149,15 +8150,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8189,15 +8190,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8239,15 +8240,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8279,15 +8280,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8331,15 +8332,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8373,15 +8374,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8420,15 +8421,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8457,15 +8458,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8504,15 +8505,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8541,15 +8542,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8586,15 +8587,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8621,15 +8622,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8666,15 +8667,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8701,15 +8702,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8739,15 +8740,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8781,15 +8782,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8819,15 +8820,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8861,15 +8862,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8901,15 +8902,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8958,15 +8959,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -8997,15 +8998,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9032,15 +9033,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9070,15 +9071,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9111,15 +9112,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9148,15 +9149,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9189,15 +9190,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9227,15 +9228,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9268,15 +9269,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9305,15 +9306,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9346,15 +9347,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9408,15 +9409,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9453,15 +9454,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9514,15 +9515,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9559,15 +9560,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9601,15 +9602,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9638,15 +9639,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9680,15 +9681,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9717,15 +9718,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9758,15 +9759,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9795,15 +9796,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9849,15 +9850,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9886,15 +9887,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9924,15 +9925,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -9977,15 +9978,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10015,15 +10016,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10068,15 +10069,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10106,15 +10107,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10147,15 +10148,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10184,15 +10185,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10238,15 +10239,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10287,15 +10288,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10324,15 +10325,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10374,15 +10375,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10411,15 +10412,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10494,15 +10495,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10553,15 +10554,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10603,15 +10604,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10675,15 +10676,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10727,15 +10728,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10769,15 +10770,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10821,15 +10822,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10863,15 +10864,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10915,15 +10916,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -10957,15 +10958,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11029,15 +11030,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11075,15 +11076,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11144,15 +11145,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11190,15 +11191,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11260,15 +11261,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11303,15 +11304,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11349,15 +11350,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11388,15 +11389,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11445,15 +11446,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>&dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11491,15 +11492,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11526,15 +11527,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11570,15 +11571,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11610,15 +11611,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11654,15 +11655,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11694,15 +11695,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11747,15 +11748,15 @@ public:
 
 	void recomputeActivitiesSets();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11787,15 +11788,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11831,15 +11832,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11876,15 +11877,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11916,15 +11917,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -11963,15 +11964,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12000,15 +12001,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12051,15 +12052,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12098,15 +12099,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12149,15 +12150,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12196,15 +12197,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12253,15 +12254,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12303,15 +12304,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12351,15 +12352,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12395,15 +12396,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12443,15 +12444,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12487,15 +12488,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12532,15 +12533,15 @@ public:
 
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12586,15 +12587,15 @@ public:
 	
 	void recomputeActivitiesSet();
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12632,15 +12633,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12701,15 +12702,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12747,15 +12748,15 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -12817,15 +12818,66 @@ public:
 
 	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
 
-	bool isRelatedToActivity(Rules& r, Activity* a);
+	bool isRelatedToActivity(Rules& r, int aid);
 	
-	bool isRelatedToTeacher(Teacher* t);
+	bool isRelatedToTeacher(const QString& t);
 
-	bool isRelatedToSubject(Subject* s);
+	bool isRelatedToSubject(const QString& s);
 
-	bool isRelatedToActivityTag(ActivityTag* s);
+	bool isRelatedToActivityTag(const QString& s);
 	
-	bool isRelatedToStudentsSet(Rules& r, StudentsSet* s);
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
+
+	bool hasWrongDayOrHour(Rules& r);
+	bool canRepairWrongDayOrHour(Rules& r);
+	bool repairWrongDayOrHour(Rules& r);
+};
+
+class ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots: public TimeConstraint{
+	Q_DECLARE_TR_FUNCTIONS(ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots)
+
+public:
+	QList<int> activitiesIds;
+
+	QSet<int> activitiesIdsSet;
+	
+	QList<int> selectedDays;
+	QList<int> selectedHours;
+	
+	int maxNumberOfStudents;
+
+	//internal variables
+	QList<int> _activitiesIndices;
+
+	ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots();
+
+	ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots(double wp, const QList<int>& a_L, const QList<int>& d_L, const QList<int>& h_L, int max_n_st);
+
+	bool computeInternalStructure(QWidget* parent, Rules& r);
+
+	bool hasInactiveActivities(Rules& r);
+
+	QString getXmlDescription(Rules& r);
+
+	QString getDescription(Rules& r);
+
+	QString getDetailedDescription(Rules& r);
+
+	double fitness(Solution& c, Rules& r, QList<double>& cl, QList<QString>& dl, FakeString* conflictsString=nullptr);
+
+	void removeUseless(Rules& r);
+
+	void recomputeActivitiesSet();
+
+	bool isRelatedToActivity(Rules& r, int aid);
+	
+	bool isRelatedToTeacher(const QString& t);
+
+	bool isRelatedToSubject(const QString& s);
+
+	bool isRelatedToActivityTag(const QString& s);
+	
+	bool isRelatedToStudentsSet(Rules& r, const QString& s);
 
 	bool hasWrongDayOrHour(Rules& r);
 	bool canRepairWrongDayOrHour(Rules& r);
@@ -13336,6 +13388,8 @@ QDataStream& operator<<(QDataStream& stream, const ConstraintActivitiesBeginOrEn
 QDataStream& operator<<(QDataStream& stream, const ConstraintActivityBeginsOrEndsTeachersDay& tc);
 //252
 QDataStream& operator<<(QDataStream& stream, const ConstraintActivitiesBeginOrEndTeachersDay& tc);
+//253
+QDataStream& operator<<(QDataStream& stream, const ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots& tc);
 
 //1
 QDataStream& operator>>(QDataStream& stream, ConstraintBasicCompulsoryTime& tc);
@@ -13841,5 +13895,7 @@ QDataStream& operator>>(QDataStream& stream, ConstraintActivitiesBeginOrEndStude
 QDataStream& operator>>(QDataStream& stream, ConstraintActivityBeginsOrEndsTeachersDay& tc);
 //252
 QDataStream& operator>>(QDataStream& stream, ConstraintActivitiesBeginOrEndTeachersDay& tc);
+//253
+QDataStream& operator>>(QDataStream& stream, ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots& tc);
 
 #endif

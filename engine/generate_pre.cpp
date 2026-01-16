@@ -13,8 +13,7 @@
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -28,12 +27,11 @@
 
 #include "matrix.h"
 
+#include "messageboxes.h"
+
 #include <iostream>
 #include <algorithm>
 #include <cmath>
-using namespace std;
-
-#include "messageboxes.h"
 
 #include <QtGlobal>
 
@@ -51,18 +49,19 @@ using namespace std;
 extern Timetable gt;
 
 //#include <QApplication>
-#ifndef FET_COMMAND_LINE
+/*#ifndef FET_COM MAND_LINE
 #include <QProgressDialog>
 #include <QMessageBox>
-#endif
+#endif*/
 
 
-#ifndef FET_COMMAND_LINE
-extern QString initialOrderOfActivities;
-#else
+//#ifndef FET_COM MAND_LINE
+//extern QString initialOrderOfActivities;
+//#else
 QString initialOrderOfActivities;
-#endif
+//#endif
 
+bool generatePreMessage(QWidget* parent, const QString& s);
 
 Matrix1D<QSet<int>> tmpPreferredRealRooms;
 Matrix1D<bool> tmpFoundNonEmpty;
@@ -1210,6 +1209,16 @@ Matrix1D<QList<ActivitiesMinSimultaneousInSelectedTimeSlots_item*>> aminsistsLis
 
 //bool computeActivitiesMinSimultaneousInSelectedTimeSlots(QWidget* parent);
 
+
+//2025-10-18 - Constraint activities max total number of students in selected time slots
+
+//We need the references to the elements to be valid, so we need this to be a std::list
+std::list<ActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots_item> amtnosistsList;
+Matrix1D<QList<ActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots_item*>> amtnosistsListForActivity;
+
+//bool computeActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots(QWidget* parent);
+
+
 bool haveTwoSetsOfActivitiesSameSections;
 Matrix1D<bool> activityHasTwoSetsOfActivitiesSameSections;
 
@@ -1218,6 +1227,9 @@ Matrix1D<bool> activityHasOccupyMaxConstraints;
 
 bool haveActivitiesMaxSimultaneousConstraints;
 Matrix1D<bool> activityHasMaxSimultaneousConstraints;
+
+bool haveActivitiesMaxNumberOfStudentsConstraints;
+Matrix1D<bool> activityHasMaxNumberOfStudentsConstraints;
 
 //2020-05-01 - Constraint max total activities from set in selected time slots
 std::list<ActivitiesMaxTotalFromSetInSelectedTimeSlots_item> amtfsistsList;
@@ -1920,6 +1932,8 @@ bool processTimeSpaceConstraints(QWidget* parent, QTextStream* initialOrderStrea
 	//
 	activityHasOccupyMaxConstraints.resize(gt.rules.nInternalActivities);
 	activityHasMaxSimultaneousConstraints.resize(gt.rules.nInternalActivities);
+	//2025-10-18
+	activityHasMaxNumberOfStudentsConstraints.resize(gt.rules.nInternalActivities);
 	//
 	fixedTimeActivity.resize(gt.rules.nInternalActivities);
 	fixedSpaceActivity.resize(gt.rules.nInternalActivities);
@@ -2165,6 +2179,9 @@ bool processTimeSpaceConstraints(QWidget* parent, QTextStream* initialOrderStrea
 	amsistsListForActivity.resize(gt.rules.nInternalActivities);
 	//2019-11-16
 	aminsistsListForActivity.resize(gt.rules.nInternalActivities);
+
+	//2025-10-18
+	amtnosistsListForActivity.resize(gt.rules.nInternalActivities);
 
 	//2020-05-02
 	amtfsistsListForActivity.resize(gt.rules.nInternalActivities);
@@ -2760,6 +2777,13 @@ bool processTimeSpaceConstraints(QWidget* parent, QTextStream* initialOrderStrea
 		return false;
 	////////////////
 
+	////////////////
+	//2025-10-18
+	//no longer necessary: after computeNotAllowedTimesPercentages(parent)!
+	t=computeActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots(parent);
+	if(!t)
+		return false;
+
 	//2020-05-02
 	t=computeActivitiesMaxTotalFromSetInSelectedTimeSlots(parent);
 	if(!t)
@@ -3029,7 +3053,10 @@ bool processTimeSpaceConstraints(QWidget* parent, QTextStream* initialOrderStrea
 			s+="\n\n";
 			s+=GeneratePreTranslate::tr("Are you sure you want to continue?");
 
-#ifdef FET_COMMAND_LINE
+			bool res=generatePreMessage(parent, s);
+			if(!res)
+				return false;
+/*#ifdef FET_COM MAND_LINE
 			int b=GeneratePreReconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"), s, GeneratePreTranslate::tr("Yes"), GeneratePreTranslate::tr("No"), QString(), 0, 1);
 			if(b!=0)
 				return false;
@@ -3037,16 +3064,12 @@ bool processTimeSpaceConstraints(QWidget* parent, QTextStream* initialOrderStrea
 			QMessageBox::StandardButton b=QMessageBox::warning(parent, GeneratePreTranslate::tr("FET warning"), s, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 			if(b!=QMessageBox::Yes)
 				return false;
-#endif
+#endif*/
 		}
 	}
 
 	if(SHOW_WARNING_FOR_ACTIVITIES_FIXED_SPACE_VIRTUAL_REAL_ROOMS_BUT_NOT_FIXED_TIME && !fixedVirtualSpaceNonZeroButNotTimeActivities.isEmpty()){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-		QList<int> tl=QList<int>(fixedVirtualSpaceNonZeroButNotTimeActivities.constBegin(), fixedVirtualSpaceNonZeroButNotTimeActivities.constEnd());
-#else
-		QList<int> tl=fixedVirtualSpaceNonZeroButNotTimeActivities.toList();
-#endif
+		QList<int> tl(fixedVirtualSpaceNonZeroButNotTimeActivities.constBegin(), fixedVirtualSpaceNonZeroButNotTimeActivities.constEnd());
 		std::stable_sort(tl.begin(), tl.end());
 
 		QStringList tlids;
@@ -3222,7 +3245,7 @@ bool computeSubgroupsMaxHoursDaily(QWidget* parent)
 				for(int h=0; h<gt.rules.nHoursPerDay; h++)
 					if(!breakDayHour[d][h] && !subgroupNotAvailableDayHour[sb][d][h])
 						nAllowedSlotsPerDay[d]++;
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyMaxHours1[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyMaxHours1[sb]);
 			}
 			
 			for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -3283,7 +3306,7 @@ bool computeSubgroupsMaxHoursDaily(QWidget* parent)
 				for(int h=0; h<gt.rules.nHoursPerDay; h++)
 					if(!breakDayHour[d][h] && !subgroupNotAvailableDayHour[sb][d][h])
 						nAllowedSlotsPerDay[d]++;
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyMaxHours2[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyMaxHours2[sb]);
 			}
 			
 			for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -3479,7 +3502,7 @@ bool computeSubgroupsMaxHoursDailyRealDays(QWidget* parent)
 					if(!breakDayHour[2*d+1][h] && !subgroupNotAvailableDayHour[sb][2*d+1][h])
 						nAllowedSlotsPerDay[d]++;
 				}
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyRealDaysMaxHours1[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyRealDaysMaxHours1[sb]);
 			}
 
 			for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
@@ -3543,7 +3566,7 @@ bool computeSubgroupsMaxHoursDailyRealDays(QWidget* parent)
 					if(!breakDayHour[2*d+1][h] && !subgroupNotAvailableDayHour[sb][2*d+1][h])
 						nAllowedSlotsPerDay[d]++;
 				}
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyRealDaysMaxHours1[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxHoursDailyRealDaysMaxHours1[sb]);
 			}
 
 			for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
@@ -4646,7 +4669,7 @@ bool computeSubgroupsMaxSpanPerDay(QWidget* parent)
 				for(int h=0; h<gt.rules.nHoursPerDay; h++)
 					if(!breakDayHour[d][h] && !subgroupNotAvailableDayHour[sb][d][h])
 						nAllowedSlotsPerDay[d]++;
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxSpanPerDayMaxSpan[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxSpanPerDayMaxSpan[sb]);
 			}
 			
 			for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -4790,7 +4813,7 @@ bool computeSubgroupsMaxSpanPerRealDay(QWidget* parent)
 					if(!breakDayHour[2*d+1][h] && !subgroupNotAvailableDayHour[sb][2*d+1][h])
 						nAllowedSlotsPerDay[d]++;
 				}
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],subgroupsMaxSpanPerRealDayMaxSpan[sb]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],subgroupsMaxSpanPerRealDayMaxSpan[sb]);
 			}
 
 			for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
@@ -5209,7 +5232,7 @@ bool computeStudentsActivityTagMaxHoursDaily(QWidget* parent)
 						
 				int ava=0;
 				for(int d=0; d<gt.rules.nDaysPerWeek; d++)
-					ava+=min(navd[d], mh);
+					ava+=std::min(navd[d], mh);
 					
 				if(ava<totalAt){
 					ok=false;
@@ -5440,7 +5463,7 @@ bool computeStudentsActivityTagMaxHoursDailyRealDays(QWidget* parent)
 
 				int ava=0;
 				for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
-					ava+=min(navd[d], mh);
+					ava+=std::min(navd[d], mh);
 
 				if(ava<totalAt){
 					ok=false;
@@ -6834,7 +6857,7 @@ bool computeStudentsActivityTagMinHoursDaily(QWidget* parent)
 						//satmhdListForSubgroup[sbg].append(&satmhdList[satmhdList.count()-1]);
 						satmhdListForSubgroup[sbg].append(&satmhdList.back());
 						
-						if(item.durationOfActivitiesWithActivityTagForSubgroup<max(1,item.minDaysWithTag)*item.minHoursDaily){
+						if(item.durationOfActivitiesWithActivityTagForSubgroup<std::max(1,item.minDaysWithTag)*item.minHoursDaily){
 							ok=false;
 				
 							int t=GeneratePreIrreconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"),
@@ -6842,7 +6865,7 @@ bool computeStudentsActivityTagMinHoursDaily(QWidget* parent)
 							 " requires at least %4 hours of work per week, but the activities of this subgroup with this activity tag sum to only %5 hours"
 							 " per week (the constraint requires %6 nonempty days). Please correct and try again")
 							 .arg(smd->activityTagName).arg(smd->minHoursDaily).arg(gt.rules.internalSubgroupsList[sbg]->name)
-							 .arg(max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForSubgroup).arg(smd->minDaysWithTag),
+							 .arg(std::max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForSubgroup).arg(smd->minDaysWithTag),
 							 GeneratePreTranslate::tr("Skip rest"), GeneratePreTranslate::tr("See next"), QString(),
 							 1, 0 );
 							 	
@@ -6877,7 +6900,7 @@ bool computeStudentsActivityTagMinHoursDaily(QWidget* parent)
 						//satmhdListForSubgroup[sbg].append(&satmhdList[satmhdList.count()-1]);
 						satmhdListForSubgroup[sbg].append(&satmhdList.back());
 						
-						if(item.durationOfActivitiesWithActivityTagForSubgroup<max(1,item.minDaysWithTag)*item.minHoursDaily){
+						if(item.durationOfActivitiesWithActivityTagForSubgroup<std::max(1,item.minDaysWithTag)*item.minHoursDaily){
 							ok=false;
 				
 							int t=GeneratePreIrreconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"),
@@ -6885,7 +6908,7 @@ bool computeStudentsActivityTagMinHoursDaily(QWidget* parent)
 							 " requires at least %4 hours of work per week, but the activities of this subgroup with this activity tag sum to only %5 hours"
 							 " per week (the constraint requires %6 nonempty days). Please correct and try again")
 							 .arg(smd->activityTagName).arg(smd->minHoursDaily).arg(gt.rules.internalSubgroupsList[sbg]->name)
-							 .arg(max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForSubgroup).arg(smd->minDaysWithTag),
+							 .arg(std::max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForSubgroup).arg(smd->minDaysWithTag),
 							 GeneratePreTranslate::tr("Skip rest"), GeneratePreTranslate::tr("See next"), QString(),
 							 1, 0 );
 							
@@ -7066,7 +7089,7 @@ bool computeTeachersMaxHoursDaily(QWidget* parent)
 				for(int h=0; h<gt.rules.nHoursPerDay; h++)
 					if(!breakDayHour[d][h] && !teacherNotAvailableDayHour[tc][d][h])
 						nAllowedSlotsPerDay[d]++;
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours1[tc]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours1[tc]);
 			}
 			
 			for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -7127,7 +7150,7 @@ bool computeTeachersMaxHoursDaily(QWidget* parent)
 				for(int h=0; h<gt.rules.nHoursPerDay; h++)
 					if(!breakDayHour[d][h] && !teacherNotAvailableDayHour[tc][d][h])
 						nAllowedSlotsPerDay[d]++;
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours2[tc]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours2[tc]);
 			}
 			
 			for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -7189,7 +7212,7 @@ bool computeTeachersMaxHoursDaily(QWidget* parent)
 					for(int h=0; h<gt.rules.nHoursPerDay; h++)
 						if(!breakDayHour[d][h] && !teacherNotAvailableDayHour[tc][d][h])
 							nAllowedSlotsPerDay[d]++;
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours1[tc]);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours1[tc]);
 				}
 
 				for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -7255,7 +7278,7 @@ bool computeTeachersMaxHoursDaily(QWidget* parent)
 					for(int h=0; h<gt.rules.nHoursPerDay; h++)
 						if(!breakDayHour[d][h] && !teacherNotAvailableDayHour[tc][d][h])
 							nAllowedSlotsPerDay[d]++;
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours2[tc]);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyMaxHours2[tc]);
 				}
 
 				for(int d=0; d<gt.rules.nDaysPerWeek; d++)
@@ -7480,7 +7503,7 @@ bool computeTeachersMaxHoursDailyRealDays(QWidget* parent)
 					if(!breakDayHour[2*d+1][h] && !teacherNotAvailableDayHour[tc][2*d+1][h])
 						nAllowedSlotsPerDay[d]++;
 				}
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyRealDaysMaxHours1[tc]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyRealDaysMaxHours1[tc]);
 			}
 
 			for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
@@ -7544,7 +7567,7 @@ bool computeTeachersMaxHoursDailyRealDays(QWidget* parent)
 					if(!breakDayHour[2*d+1][h] && !teacherNotAvailableDayHour[tc][2*d+1][h])
 						nAllowedSlotsPerDay[d]++;
 				}
-				nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyRealDaysMaxHours1[tc]);
+				nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxHoursDailyRealDaysMaxHours1[tc]);
 			}
 
 			for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
@@ -7712,11 +7735,11 @@ bool computeTeachersMaxSpanPerDay(QWidget* parent)
 						nAllowedSlotsPerDay[d]++;
 				
 				if(exceptionUsed==false && nAllowedSlotsPerDay[d]>=teachersMaxSpanPerDayMaxSpan[tc]+1){
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxSpanPerDayMaxSpan[tc]+1);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxSpanPerDayMaxSpan[tc]+1);
 					exceptionUsed=true;
 				}
 				else{
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxSpanPerDayMaxSpan[tc]);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxSpanPerDayMaxSpan[tc]);
 				}
 			}
 			
@@ -7890,11 +7913,11 @@ bool computeTeachersMaxSpanPerRealDay(QWidget* parent)
 				}
 
 				if(exceptionUsed==false && nAllowedSlotsPerDay[d]>=teachersMaxSpanPerRealDayMaxSpan[tc]+1){
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxSpanPerRealDayMaxSpan[tc]+1);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxSpanPerRealDayMaxSpan[tc]+1);
 					exceptionUsed=true;
 				}
 				else{
-					nAllowedSlotsPerDay[d]=min(nAllowedSlotsPerDay[d],teachersMaxSpanPerRealDayMaxSpan[tc]);
+					nAllowedSlotsPerDay[d]=std::min(nAllowedSlotsPerDay[d],teachersMaxSpanPerRealDayMaxSpan[tc]);
 				}
 			}
 
@@ -8308,7 +8331,7 @@ bool computeTeachersActivityTagMaxHoursDaily(QWidget* parent)
 						
 				int ava=0;
 				for(int d=0; d<gt.rules.nDaysPerWeek; d++)
-					ava+=min(navd[d], mh);
+					ava+=std::min(navd[d], mh);
 					
 				if(ava<totalAt){
 					ok=false;
@@ -8536,7 +8559,7 @@ bool computeTeachersActivityTagMaxHoursDailyRealDays(QWidget* parent)
 
 				int ava=0;
 				for(int d=0; d<gt.rules.nDaysPerWeek/2; d++)
-					ava+=min(navd[d], mh);
+					ava+=std::min(navd[d], mh);
 
 				if(ava<totalAt){
 					ok=false;
@@ -9570,7 +9593,7 @@ bool computeTeachersActivityTagMinHoursDaily(QWidget* parent)
 						//tatmhdListForTeacher[tch].append(&tatmhdList[tatmhdList.count()-1]);
 						tatmhdListForTeacher[tch].append(&tatmhdList.back());
 						
-						if(item.durationOfActivitiesWithActivityTagForTeacher<max(1,item.minDaysWithTag)*item.minHoursDaily){
+						if(item.durationOfActivitiesWithActivityTagForTeacher<std::max(1,item.minDaysWithTag)*item.minHoursDaily){
 							ok=false;
 				
 							int t=GeneratePreIrreconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"),
@@ -9578,7 +9601,7 @@ bool computeTeachersActivityTagMinHoursDaily(QWidget* parent)
 							 " requires at least %4 hours of work per week, but the activities of this teacher with this activity tag sum to only %5 hours"
 							 " per week (the constraint requires %6 nonempty days). Please correct and try again")
 							 .arg(tmd->activityTagName).arg(tmd->minHoursDaily).arg(gt.rules.internalTeachersList[tch]->name)
-							 .arg(max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForTeacher).arg(tmd->minDaysWithTag),
+							 .arg(std::max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForTeacher).arg(tmd->minDaysWithTag),
 							 GeneratePreTranslate::tr("Skip rest"), GeneratePreTranslate::tr("See next"), QString(),
 							 1, 0 );
 							 	
@@ -9613,7 +9636,7 @@ bool computeTeachersActivityTagMinHoursDaily(QWidget* parent)
 						//tatmhdListForTeacher[tch].append(&tatmhdList[tatmhdList.count()-1]);
 						tatmhdListForTeacher[tch].append(&tatmhdList.back());
 						
-						if(item.durationOfActivitiesWithActivityTagForTeacher<max(1,item.minDaysWithTag)*item.minHoursDaily){
+						if(item.durationOfActivitiesWithActivityTagForTeacher<std::max(1,item.minDaysWithTag)*item.minHoursDaily){
 							ok=false;
 				
 							int t=GeneratePreIrreconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"),
@@ -9621,7 +9644,7 @@ bool computeTeachersActivityTagMinHoursDaily(QWidget* parent)
 							 " requires at least %4 hours of work per week, but the activities of this teacher with this activity tag sum to only %5 hours"
 							 " per week (the constraint requires %6 nonempty days). Please correct and try again")
 							 .arg(tmd->activityTagName).arg(tmd->minHoursDaily).arg(gt.rules.internalTeachersList[tch]->name)
-							 .arg(max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForTeacher).arg(tmd->minDaysWithTag),
+							 .arg(std::max(1,item.minDaysWithTag)*item.minHoursDaily).arg(item.durationOfActivitiesWithActivityTagForTeacher).arg(tmd->minDaysWithTag),
 							 GeneratePreTranslate::tr("Skip rest"), GeneratePreTranslate::tr("See next"), QString(),
 							 1, 0 );
 							 	
@@ -10925,7 +10948,7 @@ bool computeStudentsMinMorningsAfternoonsPerWeek(QWidget* parent)
 			}
 			//////////
 
-			for(int sbg : tmd->iSubgroupsList)
+			for(int sbg : std::as_const(tmd->iSubgroupsList))
 				if(subgroupsMinMorningsPerWeekMinMornings[sbg]==-1 || subgroupsMinMorningsPerWeekMinMornings[sbg]<tmd->minMorningsPerWeek){
 					subgroupsMinMorningsPerWeekMinMornings[sbg]=tmd->minMorningsPerWeek;
 					subgroupsMinMorningsPerWeekPercentages[sbg]=100;
@@ -11010,7 +11033,7 @@ bool computeStudentsMinMorningsAfternoonsPerWeek(QWidget* parent)
 			}
 			//////////
 
-			for(int sbg : tmd->iSubgroupsList)
+			for(int sbg : std::as_const(tmd->iSubgroupsList))
 				if(subgroupsMinAfternoonsPerWeekMinAfternoons[sbg]==-1 || subgroupsMinAfternoonsPerWeekMinAfternoons[sbg]<tmd->minAfternoonsPerWeek){
 					subgroupsMinAfternoonsPerWeekMinAfternoons[sbg]=tmd->minAfternoonsPerWeek;
 					subgroupsMinAfternoonsPerWeekPercentages[sbg]=100;
@@ -12453,7 +12476,7 @@ bool computeSubgroupsAfternoonsEarlyMaxBeginningsAtSecondHourPercentages(QWidget
 		else if(gt.rules.internalTimeConstraintsList[i]->type==CONSTRAINT_STUDENTS_SET_AFTERNOONS_EARLY_MAX_BEGINNINGS_AT_SECOND_HOUR){
 			haveStudentsAfternoonsEarly=true;
 			ConstraintStudentsSetAfternoonsEarlyMaxBeginningsAtSecondHour* se=(ConstraintStudentsSetAfternoonsEarlyMaxBeginningsAtSecondHour*) gt.rules.internalTimeConstraintsList[i];
-			for(int j : se->iSubgroupsList){
+			for(int j : std::as_const(se->iSubgroupsList)){
 				if(subgroupsAfternoonsEarlyMaxBeginningsAtSecondHourPercentage[j] < se->weightPercentage)
 					subgroupsAfternoonsEarlyMaxBeginningsAtSecondHourPercentage[j] = se->weightPercentage;
 				if(subgroupsAfternoonsEarlyMaxBeginningsAtSecondHourMaxBeginnings[j]==-1 || subgroupsAfternoonsEarlyMaxBeginningsAtSecondHourMaxBeginnings[j] > se->maxBeginningsAtSecondHour)
@@ -12550,7 +12573,7 @@ bool computeSubgroupsMorningsEarlyMaxBeginningsAtSecondHourPercentages(QWidget* 
 		else if(gt.rules.internalTimeConstraintsList[i]->type==CONSTRAINT_STUDENTS_SET_MORNINGS_EARLY_MAX_BEGINNINGS_AT_SECOND_HOUR){
 			haveStudentsMorningsEarly=true;
 			ConstraintStudentsSetMorningsEarlyMaxBeginningsAtSecondHour* se=(ConstraintStudentsSetMorningsEarlyMaxBeginningsAtSecondHour*) gt.rules.internalTimeConstraintsList[i];
-			for(int j : se->iSubgroupsList){
+			for(int j : std::as_const(se->iSubgroupsList)){
 				if(subgroupsMorningsEarlyMaxBeginningsAtSecondHourPercentage[j] < se->weightPercentage)
 					subgroupsMorningsEarlyMaxBeginningsAtSecondHourPercentage[j] = se->weightPercentage;
 				if(subgroupsMorningsEarlyMaxBeginningsAtSecondHourMaxBeginnings[j]==-1 || subgroupsMorningsEarlyMaxBeginningsAtSecondHourMaxBeginnings[j] > se->maxBeginningsAtSecondHour)
@@ -14351,7 +14374,7 @@ bool computeMaxAfternoonsPerWeekForStudents(QWidget* parent)
 					return false;
 			}
 
-			for(int sbg : tn->iSubgroupsList)
+			for(int sbg : std::as_const(tn->iSubgroupsList))
 				if(subgroupsMaxAfternoonsPerWeekMaxAfternoons[sbg]==-1 ||
 				 (subgroupsMaxAfternoonsPerWeekMaxAfternoons[sbg]>=0 && subgroupsMaxAfternoonsPerWeekMaxAfternoons[sbg] > tn->maxAfternoonsPerWeek)){
 					subgroupsMaxAfternoonsPerWeekMaxAfternoons[sbg]=tn->maxAfternoonsPerWeek;
@@ -14429,7 +14452,7 @@ bool computeMaxMorningsPerWeekForStudents(QWidget* parent)
 					return false;
 			}
 
-			for(int sbg : tn->iSubgroupsList)
+			for(int sbg : std::as_const(tn->iSubgroupsList))
 				if(subgroupsMaxMorningsPerWeekMaxMornings[sbg]==-1 ||
 				 (subgroupsMaxMorningsPerWeekMaxMornings[sbg]>=0 && subgroupsMaxMorningsPerWeekMaxMornings[sbg] > tn->maxMorningsPerWeek)){
 					subgroupsMaxMorningsPerWeekMaxMornings[sbg]=tn->maxMorningsPerWeek;
@@ -14935,7 +14958,7 @@ bool computeNotAllowedTimesPercentages(QWidget* parent)
 							int d=tn->days.at(kk);
 							int h=tn->hours.at(kk);
 							
-							for(int hh=max(0, h-act->duration+1); hh<=h; hh++)
+							for(int hh=std::max(0, h-act->duration+1); hh<=h; hh++)
 								if(notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]<tn->weightPercentage)
 									notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]=tn->weightPercentage;
 						}
@@ -14979,7 +15002,7 @@ bool computeNotAllowedTimesPercentages(QWidget* parent)
 								int d=sn->days.at(kk);
 								int h=sn->hours.at(kk);
 
-								for(int hh=max(0, h-act->duration+1); hh<=h; hh++)
+								for(int hh=std::max(0, h-act->duration+1); hh<=h; hh++)
 									if(notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]<sn->weightPercentage)
 										notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]=sn->weightPercentage;
 							}
@@ -15026,7 +15049,7 @@ bool computeNotAllowedTimesPercentages(QWidget* parent)
 					int d=br->days.at(kk);
 					int h=br->hours.at(kk);
 
-					for(int hh=max(0, h-act->duration+1); hh<=h; hh++)
+					for(int hh=std::max(0, h-act->duration+1); hh<=h; hh++)
 						if(notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]<br->weightPercentage)
 							notAllowedTimesPercentages[ai][d+hh*gt.rules.nDaysPerWeek]=br->weightPercentage;
 				}
@@ -15910,7 +15933,7 @@ bool computeActivitiesConflictingPercentage(QWidget* parent)
 	for(int i=0; i<gt.rules.nInternalActivities; i++)
 		activitiesConflictingPercentage[i].insert(i, 100);
 
-	QProgressDialog progress(parent);
+	EngineProgressDialog progress(parent);
 	progress.setWindowTitle(GeneratePreTranslate::tr("Precomputing", "Title of a progress dialog"));
 	progress.setLabelText(GeneratePreTranslate::tr("Precomputing ... please wait"));
 	progress.setRange(0, qMax(gt.rules.nInternalTeachers+gt.rules.nInternalSubgroups, 1));
@@ -16699,13 +16722,13 @@ bool checkMinDays100Percent(QWidget* parent)
 
 		if(teachersMaxDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 			assert(teachersMaxDaysPerWeekWeightPercentages[tc]==100);
-			daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
+			daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
 		}
 
 		if(gt.rules.mode==MORNINGS_AFTERNOONS){
 			if(teachersMaxRealDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 				assert(teachersMaxRealDaysPerWeekWeightPercentages[tc]==100);
-				daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxRealDaysPerWeekMaxDays[tc]);
+				daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxRealDaysPerWeekMaxDays[tc]);
 			}
 		}
 	}
@@ -16727,13 +16750,13 @@ bool checkMinDays100Percent(QWidget* parent)
 
 		if(subgroupsMaxDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 			assert(subgroupsMaxDaysPerWeekWeightPercentages[sb]==100);
-			daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
+			daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
 		}
 
 		if(gt.rules.mode==MORNINGS_AFTERNOONS){
 			if(subgroupsMaxRealDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 				assert(subgroupsMaxRealDaysPerWeekWeightPercentages[sb]==100);
-				daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxRealDaysPerWeekMaxDays[sb]);
+				daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxRealDaysPerWeekMaxDays[sb]);
 			}
 		}
 	}
@@ -16890,7 +16913,7 @@ bool checkMinDaysMaxTwoOnSameDay(QWidget* parent)
 
 			if(teachersMaxDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 				assert(teachersMaxDaysPerWeekWeightPercentages[tc]==100);
-				daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
+				daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
 			}
 
 			/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -16918,7 +16941,7 @@ bool checkMinDaysMaxTwoOnSameDay(QWidget* parent)
 
 			if(subgroupsMaxDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 				assert(subgroupsMaxDaysPerWeekWeightPercentages[sb]==100);
-				daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
+				daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
 			}
 
 			/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -17024,12 +17047,12 @@ bool checkMinDaysMaxTwoOnSameDay(QWidget* parent)
 			//Careful: here we cannot divide by 2.
 			if(teachersMaxDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 				assert(teachersMaxDaysPerWeekWeightPercentages[tc]==100);
-				daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
+				daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
 			}
 
 			if(teachersMaxRealDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 				assert(teachersMaxRealDaysPerWeekWeightPercentages[tc]==100);
-				daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxRealDaysPerWeekMaxDays[tc]);
+				daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxRealDaysPerWeekMaxDays[tc]);
 			}
 		}
 
@@ -17056,12 +17079,12 @@ bool checkMinDaysMaxTwoOnSameDay(QWidget* parent)
 			//Careful: here we cannot divide by 2.
 			if(subgroupsMaxDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 				assert(subgroupsMaxDaysPerWeekWeightPercentages[sb]==100);
-				daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
+				daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
 			}
 
 			if(subgroupsMaxRealDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 				assert(subgroupsMaxRealDaysPerWeekWeightPercentages[sb]==100);
-				daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxRealDaysPerWeekMaxDays[sb]);
+				daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxRealDaysPerWeekMaxDays[sb]);
 			}
 		}
 
@@ -17164,7 +17187,7 @@ bool checkMinHalfDays100Percent(QWidget* parent)
 
 		if(teachersMaxDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 			assert(teachersMaxDaysPerWeekWeightPercentages[tc]==100);
-			daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
+			daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
 		}
 
 		/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -17192,7 +17215,7 @@ bool checkMinHalfDays100Percent(QWidget* parent)
 
 		if(subgroupsMaxDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 			assert(subgroupsMaxDaysPerWeekWeightPercentages[sb]==100);
-			daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
+			daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
 		}
 
 		/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -17328,7 +17351,7 @@ bool checkMinHalfDaysMaxTwoOnSameDay(QWidget* parent)
 
 		if(teachersMaxDaysPerWeekMaxDays[tc]>=0){ //it has compulsory 100% weight
 			assert(teachersMaxDaysPerWeekWeightPercentages[tc]==100);
-			daysTeacherIsAvailable[tc]=min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
+			daysTeacherIsAvailable[tc]=std::min(daysTeacherIsAvailable[tc], teachersMaxDaysPerWeekMaxDays[tc]);
 		}
 
 		/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -17356,7 +17379,7 @@ bool checkMinHalfDaysMaxTwoOnSameDay(QWidget* parent)
 
 		if(subgroupsMaxDaysPerWeekMaxDays[sb]>=0){ //it has compulsory 100% weight
 			assert(subgroupsMaxDaysPerWeekWeightPercentages[sb]==100);
-			daysSubgroupIsAvailable[sb]=min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
+			daysSubgroupIsAvailable[sb]=std::min(daysSubgroupIsAvailable[sb], subgroupsMaxDaysPerWeekMaxDays[sb]);
 		}
 
 		/*if(gt.rules.mode==MORNINGS_AFTERNOONS){
@@ -18341,19 +18364,11 @@ bool computeActivitiesOccupyMaxTimeSlotsFromSelection(QWidget* parent)
 			
 			ActivitiesOccupyMaxTimeSlotsFromSelection_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			item.maxOccupiedTimeSlots=cn->maxOccupiedTimeSlots;
 			for(int t=0; t < cn->selectedDays.count(); t++)
 				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.constBegin(), item.selectedTimeSlotsList.constEnd());
-#else
-			item.selectedTimeSlotsSet=item.selectedTimeSlotsList.toSet();
-#endif
 			
 			aomtsList.push_back(item);
 			//ActivitiesOccupyMaxTimeSlotsFromSelection_item* p_item=&aomtsList[aomtsList.count()-1];
@@ -18438,19 +18453,11 @@ bool computeActivitiesOccupyMinTimeSlotsFromSelection(QWidget* parent)
 			
 			ActivitiesOccupyMinTimeSlotsFromSelection_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			item.minOccupiedTimeSlots=cn->minOccupiedTimeSlots;
 			for(int t=0; t < cn->selectedDays.count(); t++)
 				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.constBegin(), item.selectedTimeSlotsList.constEnd());
-#else
-			item.selectedTimeSlotsSet=item.selectedTimeSlotsList.toSet();
-#endif
 			
 			aomintsList.push_back(item);
 			//ActivitiesOccupyMinTimeSlotsFromSelection_item* p_item=&aomintsList[aomintsList.count()-1];
@@ -18499,19 +18506,11 @@ bool computeActivitiesMaxSimultaneousInSelectedTimeSlots(QWidget* parent)
 			
 			ActivitiesMaxSimultaneousInSelectedTimeSlots_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			item.maxSimultaneous=cn->maxSimultaneous;
 			for(int t=0; t < cn->selectedDays.count(); t++)
 				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.constBegin(), item.selectedTimeSlotsList.constEnd());
-#else
-			item.selectedTimeSlotsSet=item.selectedTimeSlotsList.toSet();
-#endif
 			
 			amsistsList.push_back(item);
 			//ActivitiesMaxSimultaneousInSelectedTimeSlots_item* p_item=&amsistsList[amsistsList.count()-1];
@@ -18583,19 +18582,11 @@ bool computeActivitiesMinSimultaneousInSelectedTimeSlots(QWidget* parent)
 			
 			ActivitiesMinSimultaneousInSelectedTimeSlots_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			item.minSimultaneous=cn->minSimultaneous;
 			for(int t=0; t < cn->selectedDays.count(); t++)
 				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.constBegin(), item.selectedTimeSlotsList.constEnd());
-#else
-			item.selectedTimeSlotsSet=item.selectedTimeSlotsList.toSet();
-#endif
 			item.allowEmptySlots=cn->allowEmptySlots;
 			
 			aminsistsList.push_back(item);
@@ -18603,6 +18594,78 @@ bool computeActivitiesMinSimultaneousInSelectedTimeSlots(QWidget* parent)
 			ActivitiesMinSimultaneousInSelectedTimeSlots_item* p_item=&aminsistsList.back();
 			for(int ai : std::as_const(cn->_activitiesIndices))
 				aminsistsListForActivity[ai].append(p_item);
+		}
+	}
+	
+	return ok;
+}
+
+//2025-10-18
+bool computeActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots(QWidget* parent)
+{
+	haveActivitiesMaxNumberOfStudentsConstraints=false;
+
+	bool ok=true;
+	
+	amtnosistsList.clear();
+	for(int i=0; i<gt.rules.nInternalActivities; i++){
+		amtnosistsListForActivity[i].clear();
+		activityHasMaxNumberOfStudentsConstraints[i]=false;
+	}
+
+	for(int i=0; i<gt.rules.nInternalTimeConstraints; i++){
+		if(gt.rules.internalTimeConstraintsList[i]->type==CONSTRAINT_ACTIVITIES_MAX_TOTAL_NUMBER_OF_STUDENTS_IN_SELECTED_TIME_SLOTS){
+			if(!haveActivitiesMaxNumberOfStudentsConstraints)
+				haveActivitiesMaxNumberOfStudentsConstraints=true;
+
+			ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots* cn=(ConstraintActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots*)gt.rules.internalTimeConstraintsList[i];
+
+			if(cn->weightPercentage!=100.0){
+				ok=false;
+
+				int t=GeneratePreIrreconcilableMessage::mediumConfirmation(parent, GeneratePreTranslate::tr("FET warning"),
+				 GeneratePreTranslate::tr("Cannot optimize, because you have constraint(s) of type 'activities max total number of students in selected time slots'"
+				 " with weight (percentage) below 100.0%. Please make the weight 100.0% and try again")
+				 ,
+				 GeneratePreTranslate::tr("Skip rest"), GeneratePreTranslate::tr("See next"), QString(),
+				 1, 0 );
+			 	
+				if(t==0)
+					return false;
+			}
+			
+			ActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots_item item;
+			item.activitiesList=cn->_activitiesIndices;
+			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
+			item.maxNumberOfStudents=cn->maxNumberOfStudents;
+			for(int t=0; t < cn->selectedDays.count(); t++)
+				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
+			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.constBegin(), item.selectedTimeSlotsList.constEnd());
+			
+			amtnosistsList.push_back(item);
+			//ActivitiesOccupyMaxTimeSlotsFromSelection_item* p_item=&aomtsList[aomtsList.count()-1];
+			ActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots_item* p_item=&amtnosistsList.back();
+			for(int ai : std::as_const(cn->_activitiesIndices)){
+				assert(gt.rules.internalActivitiesList[ai].nTotalStudents>=1); //taken care of in computeInternalStructure in timeconstraint.cpp.
+				
+				/*if(gt.rules.internalActivitiesList[ai].nTotalStudents > cn->maxNumberOfStudents){
+					for(int t=0; t < cn->selectedDays.count(); t++)
+						notAllowedTimesPercentages[ai][cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek]=100.0;
+
+					assert(p_item->activitiesList.contains(ai));
+					int t=p_item->activitiesList.removeAll(ai);
+					assert(t==1);
+
+					assert(p_item->activitiesSet.contains(ai));
+					p_item->activitiesSet.remove(ai);
+				}
+				else{*/
+				amtnosistsListForActivity[ai].append(p_item);
+				
+				if(activityHasMaxNumberOfStudentsConstraints[ai]==false)
+					activityHasMaxNumberOfStudentsConstraints[ai]=true;
+				//}
+			}
 		}
 	}
 	
@@ -18638,20 +18701,16 @@ bool computeActivitiesMaxTotalFromSetInSelectedTimeSlots(QWidget* parent)
 
 			ActivitiesMaxTotalFromSetInSelectedTimeSlots_item item;
 			item.activitiesList=cn->_activitiesIndices;
-/*#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+/*
 			item.activitiesSet=QSet<int>(item.activitiesList.begin(), item.activitiesList.end());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif*/
+*/
 			item.maxActivities=cn->maxActivities;
 			for(int t=0; t < cn->selectedDays.count(); t++)
 //				item.selectedTimeSlotsList.append(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
 				item.selectedTimeSlotsSet.insert(cn->selectedDays.at(t)+cn->selectedHours.at(t)*gt.rules.nDaysPerWeek);
-/*#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+/*
 			item.selectedTimeSlotsSet=QSet<int>(item.selectedTimeSlotsList.begin(), item.selectedTimeSlotsList.end());
-#else
-			item.selectedTimeSlotsSet=item.selectedTimeSlotsList.toSet();
-#endif*/
+*/
 //			item.allowEmptySlots=cn->allowEmptySlots;
 
 			amtfsistsList.push_back(item);
@@ -18864,11 +18923,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 				continue;
 			
 			StudentsMinGapsBetweenOrderedPairOfActivityTags_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -18880,11 +18935,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -18944,11 +18995,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 				continue;
 
 			StudentsMinGapsBetweenOrderedPairOfActivityTags_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -18960,11 +19007,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19039,11 +19082,7 @@ bool computeStudentsMinGapsBetweenActivityTag(QWidget* parent)
 				continue;
 			
 			StudentsMinGapsBetweenActivityTag_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19053,11 +19092,7 @@ bool computeStudentsMinGapsBetweenActivityTag(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19098,11 +19133,7 @@ bool computeStudentsMinGapsBetweenActivityTag(QWidget* parent)
 				continue;
 
 			StudentsMinGapsBetweenActivityTag_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19112,11 +19143,7 @@ bool computeStudentsMinGapsBetweenActivityTag(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19173,11 +19200,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenOrderedPairOfActivityTags_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19247,11 +19270,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 				continue;
 
 			TeachersMinGapsBetweenOrderedPairOfActivityTags_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19263,11 +19282,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTags(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -19343,11 +19358,7 @@ bool computeTeachersMinGapsBetweenActivityTag(QWidget* parent)
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenActivityTag_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19396,11 +19407,7 @@ bool computeTeachersMinGapsBetweenActivityTag(QWidget* parent)
 				continue;
 
 			TeachersMinGapsBetweenActivityTag_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19410,11 +19417,7 @@ bool computeTeachersMinGapsBetweenActivityTag(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -19470,11 +19473,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 				continue;
 			
 			StudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19486,11 +19485,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19550,11 +19545,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 				continue;
 
 			StudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19566,11 +19557,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19645,11 +19632,7 @@ bool computeStudentsMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 				continue;
 			
 			StudentsMinGapsBetweenActivityTagPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19659,11 +19642,7 @@ bool computeStudentsMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19704,11 +19683,7 @@ bool computeStudentsMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 				continue;
 
 			StudentsMinGapsBetweenActivityTagPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -19718,11 +19693,7 @@ bool computeStudentsMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -19779,11 +19750,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenOrderedPairOfActivityTagsPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19853,11 +19820,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 				continue;
 
 			TeachersMinGapsBetweenOrderedPairOfActivityTagsPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -19869,11 +19832,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsPerRealDay(QWidget* p
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -19949,11 +19908,7 @@ bool computeTeachersMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenActivityTagPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20002,11 +19957,7 @@ bool computeTeachersMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 				continue;
 
 			TeachersMinGapsBetweenActivityTagPerRealDay_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20016,11 +19967,7 @@ bool computeTeachersMinGapsBetweenActivityTagPerRealDay(QWidget* parent)
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -20076,11 +20023,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 				continue;
 			
 			StudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -20092,11 +20035,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -20156,11 +20095,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 				continue;
 
 			StudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -20172,11 +20107,7 @@ bool computeStudentsMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -20251,11 +20182,7 @@ bool computeStudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 				continue;
 			
 			StudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20265,11 +20192,7 @@ bool computeStudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -20310,11 +20233,7 @@ bool computeStudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 				continue;
 
 			StudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfSubgroups=QSet<int>(cn->canonicalSubgroupsList.constBegin(), cn->canonicalSubgroupsList.constEnd());
-#else
-			item.canonicalSetOfSubgroups=cn->canonicalSubgroupsList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20324,11 +20243,7 @@ bool computeStudentsMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> studentsSet(act->iSubgroupsList.constBegin(), act->iSubgroupsList.constEnd());
-#else
-				QSet<int> studentsSet=act->iSubgroupsList.toSet();
-#endif
 				studentsSet.intersect(item.canonicalSetOfSubgroups);
 				if(studentsSet.isEmpty())
 					continue;
@@ -20385,11 +20300,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -20459,11 +20370,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 				continue;
 
 			TeachersMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.firstActivityTag=cn->_firstActivityTagIndex;
 			item.secondActivityTag=cn->_secondActivityTagIndex;
@@ -20475,11 +20382,7 @@ bool computeTeachersMinGapsBetweenOrderedPairOfActivityTagsBetweenMorningAndAfte
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -20555,11 +20458,7 @@ bool computeTeachersMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 			assert(cn->canonicalTeachersList.count()==1);
 			
 			TeachersMinGapsBetweenActivityTagBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20608,11 +20507,7 @@ bool computeTeachersMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 				continue;
 
 			TeachersMinGapsBetweenActivityTagBetweenMorningAndAfternoon_item item;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.canonicalSetOfTeachers=QSet<int>(cn->canonicalTeachersList.constBegin(), cn->canonicalTeachersList.constEnd());
-#else
-			item.canonicalSetOfTeachers=cn->canonicalTeachersList.toSet();
-#endif
 			item.minGaps=cn->minGaps;
 			item.activityTag=cn->_activityTagIndex;
 			
@@ -20622,11 +20517,7 @@ bool computeTeachersMinGapsBetweenActivityTagBetweenMorningAndAfternoon(QWidget*
 			for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 				Activity* act=&gt.rules.internalActivitiesList[ai];
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 				QSet<int> teachersSet(act->iTeachersList.constBegin(), act->iTeachersList.constEnd());
-#else
-				QSet<int> teachersSet=act->iTeachersList.toSet();
-#endif
 				teachersSet.intersect(item.canonicalSetOfTeachers);
 				if(teachersSet.isEmpty())
 					continue;
@@ -20680,11 +20571,7 @@ bool computeActivitiesOccupyMaxDifferentRooms(QWidget* parent)
 			
 			ActivitiesOccupyMaxDifferentRooms_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			item.maxDifferentRooms=cn->maxDifferentRooms;
 			
 			aomdrList.push_back(item);
@@ -20727,11 +20614,7 @@ bool computeActivitiesSameRoomIfConsecutive(QWidget* parent)
 			
 			ActivitiesSameRoomIfConsecutive_item item;
 			item.activitiesList=cn->_activitiesIndices;
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 			item.activitiesSet=QSet<int>(item.activitiesList.constBegin(), item.activitiesList.constEnd());
-#else
-			item.activitiesSet=item.activitiesList.toSet();
-#endif
 			
 			asricList.push_back(item);
 			//ActivitiesSameRoomIfConsecutive_item* p_item=&asricList[asricList.count()-1];
@@ -20926,7 +20809,7 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 				else{
 					int t=activitiesHomeRoomsHomeRooms[a].indexOf(spr->_room);
 					activitiesHomeRoomsHomeRooms[a].clear();
-					activitiesHomeRoomsPercentage[a]=max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
+					activitiesHomeRoomsPercentage[a]=std::max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
 					if(t!=-1){
 						activitiesHomeRoomsHomeRooms[a].append(spr->_room);
 					}
@@ -20966,7 +20849,7 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 						if(activitiesHomeRoomsHomeRooms[a].indexOf(rm)!=-1)
 							shared.append(rm);
 					}
-					activitiesHomeRoomsPercentage[a]=max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
+					activitiesHomeRoomsPercentage[a]=std::max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
 					activitiesHomeRoomsHomeRooms[a]=shared;
 				}
 			}
@@ -20999,7 +20882,7 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 				else{
 					int t=activitiesHomeRoomsHomeRooms[a].indexOf(spr->_room);
 					activitiesHomeRoomsHomeRooms[a].clear();
-					activitiesHomeRoomsPercentage[a]=max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
+					activitiesHomeRoomsPercentage[a]=std::max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
 					if(t!=-1){
 						activitiesHomeRoomsHomeRooms[a].append(spr->_room);
 					}
@@ -21039,7 +20922,7 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 						if(activitiesHomeRoomsHomeRooms[a].indexOf(rm)!=-1)
 							shared.append(rm);
 					}
-					activitiesHomeRoomsPercentage[a]=max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
+					activitiesHomeRoomsPercentage[a]=std::max(activitiesHomeRoomsPercentage[a], spr->weightPercentage);
 					activitiesHomeRoomsHomeRooms[a]=shared;
 				}
 			}
@@ -21474,19 +21357,11 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 					ConstraintSubjectPreferredRooms* spr=(ConstraintSubjectPreferredRooms*)ctr;
 					
 					if(begin){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms=QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd());
-#else
-						it.preferredRooms=spr->_rooms.toSet();
-#endif
 						begin=false;
 					}
 					else{
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms.intersect(QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd()));
-#else
-						it.preferredRooms.intersect(spr->_rooms.toSet());
-#endif
 					}
 				}
 				else if(ctr->type==CONSTRAINT_SUBJECT_ACTIVITY_TAG_PREFERRED_ROOM){
@@ -21506,19 +21381,11 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 					ConstraintSubjectActivityTagPreferredRooms* spr=(ConstraintSubjectActivityTagPreferredRooms*)ctr;
 					
 					if(begin){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms=QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd());
-#else
-						it.preferredRooms=spr->_rooms.toSet();
-#endif
 						begin=false;
 					}
 					else{
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms.intersect(QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd()));
-#else
-						it.preferredRooms.intersect(spr->_rooms.toSet());
-#endif
 					}
 				}
 				else if(ctr->type==CONSTRAINT_ACTIVITY_TAG_PREFERRED_ROOM){
@@ -21538,19 +21405,11 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 					ConstraintActivityTagPreferredRooms* spr=(ConstraintActivityTagPreferredRooms*)ctr;
 					
 					if(begin){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms=QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd());
-#else
-						it.preferredRooms=spr->_rooms.toSet();
-#endif
 						begin=false;
 					}
 					else{
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms.intersect(QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd()));
-#else
-						it.preferredRooms.intersect(spr->_rooms.toSet());
-#endif
 					}
 				}
 				else if(ctr->type==CONSTRAINT_ACTIVITY_PREFERRED_ROOM){
@@ -21570,19 +21429,11 @@ bool computeActivitiesRoomsPreferences(QWidget* parent)
 					ConstraintActivityPreferredRooms* spr=(ConstraintActivityPreferredRooms*)ctr;
 					
 					if(begin){
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms=QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd());
-#else
-						it.preferredRooms=spr->_rooms.toSet();
-#endif
 						begin=false;
 					}
 					else{
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
 						it.preferredRooms.intersect(QSet<int>(spr->_rooms.constBegin(), spr->_rooms.constEnd()));
-#else
-						it.preferredRooms.intersect(spr->_rooms.toSet());
-#endif
 					}
 				}
 			}
@@ -21776,7 +21627,7 @@ bool computeMaxBuildingChangesPerDayForStudents(QWidget* parent)
 				if(maxBuildingChangesPerDayForStudentsMaxChanges[sbg]<0)
 					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=min(maxBuildingChangesPerDayForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=std::min(maxBuildingChangesPerDayForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_BUILDING_CHANGES_PER_DAY){
@@ -21800,7 +21651,7 @@ bool computeMaxBuildingChangesPerDayForStudents(QWidget* parent)
 				if(maxBuildingChangesPerDayForStudentsMaxChanges[sbg]<0)
 					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=min(maxBuildingChangesPerDayForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerDayForStudentsMaxChanges[sbg]=std::min(maxBuildingChangesPerDayForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
 			}
 		}
 	}
@@ -22195,7 +22046,7 @@ bool computeMaxBuildingChangesPerWeekForStudents(QWidget* parent)
 				if(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]<0)
 					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=spr->maxBuildingChangesPerWeek;
 				else
-					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=min(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerWeek);
+					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=std::min(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerWeek);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_BUILDING_CHANGES_PER_WEEK){
@@ -22219,7 +22070,7 @@ bool computeMaxBuildingChangesPerWeekForStudents(QWidget* parent)
 				if(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]<0)
 					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=spr->maxBuildingChangesPerWeek;
 				else
-					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=min(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerWeek);
+					maxBuildingChangesPerWeekForStudentsMaxChanges[sbg]=std::min(maxBuildingChangesPerWeekForStudentsMaxChanges[sbg], spr->maxBuildingChangesPerWeek);
 			}
 		}
 	}
@@ -22258,7 +22109,7 @@ bool computeMinGapsBetweenBuildingChangesForStudents(QWidget* parent)
 				if(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]<0)
 					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=spr->minGapsBetweenBuildingChanges;
 				else
-					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=max(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg], spr->minGapsBetweenBuildingChanges);
+					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=std::max(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg], spr->minGapsBetweenBuildingChanges);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MIN_GAPS_BETWEEN_BUILDING_CHANGES){
@@ -22282,7 +22133,7 @@ bool computeMinGapsBetweenBuildingChangesForStudents(QWidget* parent)
 				if(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]<0)
 					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=spr->minGapsBetweenBuildingChanges;
 				else
-					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=max(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg], spr->minGapsBetweenBuildingChanges);
+					minGapsBetweenBuildingChangesForStudentsMinGaps[sbg]=std::max(minGapsBetweenBuildingChangesForStudentsMinGaps[sbg], spr->minGapsBetweenBuildingChanges);
 			}
 		}
 	}
@@ -22320,7 +22171,7 @@ bool computeMaxBuildingChangesPerDayForTeachers(QWidget* parent)
 			if(maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=spr->maxBuildingChangesPerDay;
 			else
-				maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=min(maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerDay);
+				maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=std::min(maxBuildingChangesPerDayForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerDay);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_BUILDING_CHANGES_PER_DAY){
 			ConstraintTeachersMaxBuildingChangesPerDay* spr=(ConstraintTeachersMaxBuildingChangesPerDay*)gt.rules.internalSpaceConstraintsList[i];
@@ -22343,7 +22194,7 @@ bool computeMaxBuildingChangesPerDayForTeachers(QWidget* parent)
 				if(maxBuildingChangesPerDayForTeachersMaxChanges[tch]<0)
 					maxBuildingChangesPerDayForTeachersMaxChanges[tch]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerDayForTeachersMaxChanges[tch]=min(maxBuildingChangesPerDayForTeachersMaxChanges[tch], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerDayForTeachersMaxChanges[tch]=std::min(maxBuildingChangesPerDayForTeachersMaxChanges[tch], spr->maxBuildingChangesPerDay);
 			}
 		}
 	}
@@ -22729,7 +22580,7 @@ bool computeMaxBuildingChangesPerWeekForTeachers(QWidget* parent)
 			if(maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=spr->maxBuildingChangesPerWeek;
 			else
-				maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=min(maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerWeek);
+				maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=std::min(maxBuildingChangesPerWeekForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerWeek);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_BUILDING_CHANGES_PER_WEEK){
 			ConstraintTeachersMaxBuildingChangesPerWeek* spr=(ConstraintTeachersMaxBuildingChangesPerWeek*)gt.rules.internalSpaceConstraintsList[i];
@@ -22752,7 +22603,7 @@ bool computeMaxBuildingChangesPerWeekForTeachers(QWidget* parent)
 				if(maxBuildingChangesPerWeekForTeachersMaxChanges[tch]<0)
 					maxBuildingChangesPerWeekForTeachersMaxChanges[tch]=spr->maxBuildingChangesPerWeek;
 				else
-					maxBuildingChangesPerWeekForTeachersMaxChanges[tch]=min(maxBuildingChangesPerWeekForTeachersMaxChanges[tch], spr->maxBuildingChangesPerWeek);
+					maxBuildingChangesPerWeekForTeachersMaxChanges[tch]=std::min(maxBuildingChangesPerWeekForTeachersMaxChanges[tch], spr->maxBuildingChangesPerWeek);
 			}
 		}
 	}
@@ -22790,7 +22641,7 @@ bool computeMinGapsBetweenBuildingChangesForTeachers(QWidget* parent)
 			if(minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID]<0)
 				minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID]=spr->minGapsBetweenBuildingChanges;
 			else
-				minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID]=max(minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID], spr->minGapsBetweenBuildingChanges);
+				minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID]=std::max(minGapsBetweenBuildingChangesForTeachersMinGaps[spr->teacher_ID], spr->minGapsBetweenBuildingChanges);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MIN_GAPS_BETWEEN_BUILDING_CHANGES){
 			ConstraintTeachersMinGapsBetweenBuildingChanges* spr=(ConstraintTeachersMinGapsBetweenBuildingChanges*)gt.rules.internalSpaceConstraintsList[i];
@@ -22813,7 +22664,7 @@ bool computeMinGapsBetweenBuildingChangesForTeachers(QWidget* parent)
 				if(minGapsBetweenBuildingChangesForTeachersMinGaps[tch]<0)
 					minGapsBetweenBuildingChangesForTeachersMinGaps[tch]=spr->minGapsBetweenBuildingChanges;
 				else
-					minGapsBetweenBuildingChangesForTeachersMinGaps[tch]=max(minGapsBetweenBuildingChangesForTeachersMinGaps[tch], spr->minGapsBetweenBuildingChanges);
+					minGapsBetweenBuildingChangesForTeachersMinGaps[tch]=std::max(minGapsBetweenBuildingChangesForTeachersMinGaps[tch], spr->minGapsBetweenBuildingChanges);
 			}
 		}
 	}
@@ -22852,7 +22703,7 @@ bool computeMaxRoomChangesPerDayForStudents(QWidget* parent)
 				if(maxRoomChangesPerDayForStudentsMaxChanges[sbg]<0)
 					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=min(maxRoomChangesPerDayForStudentsMaxChanges[sbg], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=std::min(maxRoomChangesPerDayForStudentsMaxChanges[sbg], spr->maxRoomChangesPerDay);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_ROOM_CHANGES_PER_DAY){
@@ -22876,7 +22727,7 @@ bool computeMaxRoomChangesPerDayForStudents(QWidget* parent)
 				if(maxRoomChangesPerDayForStudentsMaxChanges[sbg]<0)
 					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=min(maxRoomChangesPerDayForStudentsMaxChanges[sbg], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerDayForStudentsMaxChanges[sbg]=std::min(maxRoomChangesPerDayForStudentsMaxChanges[sbg], spr->maxRoomChangesPerDay);
 			}
 		}
 	}
@@ -22915,7 +22766,7 @@ bool computeMaxRoomChangesPerWeekForStudents(QWidget* parent)
 				if(maxRoomChangesPerWeekForStudentsMaxChanges[sbg]<0)
 					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=spr->maxRoomChangesPerWeek;
 				else
-					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=min(maxRoomChangesPerWeekForStudentsMaxChanges[sbg], spr->maxRoomChangesPerWeek);
+					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=std::min(maxRoomChangesPerWeekForStudentsMaxChanges[sbg], spr->maxRoomChangesPerWeek);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_ROOM_CHANGES_PER_WEEK){
@@ -22939,7 +22790,7 @@ bool computeMaxRoomChangesPerWeekForStudents(QWidget* parent)
 				if(maxRoomChangesPerWeekForStudentsMaxChanges[sbg]<0)
 					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=spr->maxRoomChangesPerWeek;
 				else
-					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=min(maxRoomChangesPerWeekForStudentsMaxChanges[sbg], spr->maxRoomChangesPerWeek);
+					maxRoomChangesPerWeekForStudentsMaxChanges[sbg]=std::min(maxRoomChangesPerWeekForStudentsMaxChanges[sbg], spr->maxRoomChangesPerWeek);
 			}
 		}
 	}
@@ -22978,7 +22829,7 @@ bool computeMinGapsBetweenRoomChangesForStudents(QWidget* parent)
 				if(minGapsBetweenRoomChangesForStudentsMinGaps[sbg]<0)
 					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=spr->minGapsBetweenRoomChanges;
 				else
-					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=max(minGapsBetweenRoomChangesForStudentsMinGaps[sbg], spr->minGapsBetweenRoomChanges);
+					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=std::max(minGapsBetweenRoomChangesForStudentsMinGaps[sbg], spr->minGapsBetweenRoomChanges);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MIN_GAPS_BETWEEN_ROOM_CHANGES){
@@ -23002,7 +22853,7 @@ bool computeMinGapsBetweenRoomChangesForStudents(QWidget* parent)
 				if(minGapsBetweenRoomChangesForStudentsMinGaps[sbg]<0)
 					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=spr->minGapsBetweenRoomChanges;
 				else
-					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=max(minGapsBetweenRoomChangesForStudentsMinGaps[sbg], spr->minGapsBetweenRoomChanges);
+					minGapsBetweenRoomChangesForStudentsMinGaps[sbg]=std::max(minGapsBetweenRoomChangesForStudentsMinGaps[sbg], spr->minGapsBetweenRoomChanges);
 			}
 		}
 	}
@@ -23040,7 +22891,7 @@ bool computeMaxRoomChangesPerDayForTeachers(QWidget* parent)
 			if(maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=spr->maxRoomChangesPerDay;
 			else
-				maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=min(maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerDay);
+				maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID]=std::min(maxRoomChangesPerDayForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerDay);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_ROOM_CHANGES_PER_DAY){
 			ConstraintTeachersMaxRoomChangesPerDay* spr=(ConstraintTeachersMaxRoomChangesPerDay*)gt.rules.internalSpaceConstraintsList[i];
@@ -23063,7 +22914,7 @@ bool computeMaxRoomChangesPerDayForTeachers(QWidget* parent)
 				if(maxRoomChangesPerDayForTeachersMaxChanges[tch]<0)
 					maxRoomChangesPerDayForTeachersMaxChanges[tch]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerDayForTeachersMaxChanges[tch]=min(maxRoomChangesPerDayForTeachersMaxChanges[tch], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerDayForTeachersMaxChanges[tch]=std::min(maxRoomChangesPerDayForTeachersMaxChanges[tch], spr->maxRoomChangesPerDay);
 			}
 		}
 	}
@@ -23101,7 +22952,7 @@ bool computeMaxRoomChangesPerWeekForTeachers(QWidget* parent)
 			if(maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=spr->maxRoomChangesPerWeek;
 			else
-				maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=min(maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerWeek);
+				maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID]=std::min(maxRoomChangesPerWeekForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerWeek);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_ROOM_CHANGES_PER_WEEK){
 			ConstraintTeachersMaxRoomChangesPerWeek* spr=(ConstraintTeachersMaxRoomChangesPerWeek*)gt.rules.internalSpaceConstraintsList[i];
@@ -23124,7 +22975,7 @@ bool computeMaxRoomChangesPerWeekForTeachers(QWidget* parent)
 				if(maxRoomChangesPerWeekForTeachersMaxChanges[tch]<0)
 					maxRoomChangesPerWeekForTeachersMaxChanges[tch]=spr->maxRoomChangesPerWeek;
 				else
-					maxRoomChangesPerWeekForTeachersMaxChanges[tch]=min(maxRoomChangesPerWeekForTeachersMaxChanges[tch], spr->maxRoomChangesPerWeek);
+					maxRoomChangesPerWeekForTeachersMaxChanges[tch]=std::min(maxRoomChangesPerWeekForTeachersMaxChanges[tch], spr->maxRoomChangesPerWeek);
 			}
 		}
 	}
@@ -23162,7 +23013,7 @@ bool computeMinGapsBetweenRoomChangesForTeachers(QWidget* parent)
 			if(minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID]<0)
 				minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID]=spr->minGapsBetweenRoomChanges;
 			else
-				minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID]=max(minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID], spr->minGapsBetweenRoomChanges);
+				minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID]=std::max(minGapsBetweenRoomChangesForTeachersMinGaps[spr->teacher_ID], spr->minGapsBetweenRoomChanges);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MIN_GAPS_BETWEEN_ROOM_CHANGES){
 			ConstraintTeachersMinGapsBetweenRoomChanges* spr=(ConstraintTeachersMinGapsBetweenRoomChanges*)gt.rules.internalSpaceConstraintsList[i];
@@ -23185,7 +23036,7 @@ bool computeMinGapsBetweenRoomChangesForTeachers(QWidget* parent)
 				if(minGapsBetweenRoomChangesForTeachersMinGaps[tch]<0)
 					minGapsBetweenRoomChangesForTeachersMinGaps[tch]=spr->minGapsBetweenRoomChanges;
 				else
-					minGapsBetweenRoomChangesForTeachersMinGaps[tch]=max(minGapsBetweenRoomChangesForTeachersMinGaps[tch], spr->minGapsBetweenRoomChanges);
+					minGapsBetweenRoomChangesForTeachersMinGaps[tch]=std::max(minGapsBetweenRoomChangesForTeachersMinGaps[tch], spr->minGapsBetweenRoomChanges);
 			}
 		}
 	}
@@ -23223,7 +23074,7 @@ bool computeMaxRoomChangesPerRealDayForTeachers(QWidget* parent)
 			if(maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=spr->maxRoomChangesPerDay;
 			else
-				maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=min(maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerDay);
+				maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=std::min(maxRoomChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID], spr->maxRoomChangesPerDay);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_ROOM_CHANGES_PER_REAL_DAY){
 			ConstraintTeachersMaxRoomChangesPerRealDay* spr=(ConstraintTeachersMaxRoomChangesPerRealDay*)gt.rules.internalSpaceConstraintsList[i];
@@ -23246,7 +23097,7 @@ bool computeMaxRoomChangesPerRealDayForTeachers(QWidget* parent)
 				if(maxRoomChangesPerRealDayForTeachersMaxChanges[tch]<0)
 					maxRoomChangesPerRealDayForTeachersMaxChanges[tch]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerRealDayForTeachersMaxChanges[tch]=min(maxRoomChangesPerRealDayForTeachersMaxChanges[tch], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerRealDayForTeachersMaxChanges[tch]=std::min(maxRoomChangesPerRealDayForTeachersMaxChanges[tch], spr->maxRoomChangesPerDay);
 			}
 		}
 	}
@@ -23280,12 +23131,12 @@ bool computeMaxRoomChangesPerRealDayForStudents(QWidget* parent)
 					return false;
 			}
 
-			for(int sbg : spr->iSubgroupsList){
+			for(int sbg : std::as_const(spr->iSubgroupsList)){
 				maxRoomChangesPerRealDayForSubgroupsPercentages[sbg]=100;
 				if(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]<0)
 					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=min(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=std::min(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxRoomChangesPerDay);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_ROOM_CHANGES_PER_REAL_DAY){
@@ -23309,7 +23160,7 @@ bool computeMaxRoomChangesPerRealDayForStudents(QWidget* parent)
 				if(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]<0)
 					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=spr->maxRoomChangesPerDay;
 				else
-					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=min(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxRoomChangesPerDay);
+					maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg]=std::min(maxRoomChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxRoomChangesPerDay);
 			}
 		}
 	}
@@ -23347,7 +23198,7 @@ bool computeMaxBuildingChangesPerRealDayForTeachers(QWidget* parent)
 			if(maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]<0)
 				maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=spr->maxBuildingChangesPerDay;
 			else
-				maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=min(maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerDay);
+				maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID]=std::min(maxBuildingChangesPerRealDayForTeachersMaxChanges[spr->teacher_ID], spr->maxBuildingChangesPerDay);
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_TEACHERS_MAX_BUILDING_CHANGES_PER_REAL_DAY){
 			ConstraintTeachersMaxBuildingChangesPerRealDay* spr=(ConstraintTeachersMaxBuildingChangesPerRealDay*)gt.rules.internalSpaceConstraintsList[i];
@@ -23370,7 +23221,7 @@ bool computeMaxBuildingChangesPerRealDayForTeachers(QWidget* parent)
 				if(maxBuildingChangesPerRealDayForTeachersMaxChanges[tch]<0)
 					maxBuildingChangesPerRealDayForTeachersMaxChanges[tch]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerRealDayForTeachersMaxChanges[tch]=min(maxBuildingChangesPerRealDayForTeachersMaxChanges[tch], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerRealDayForTeachersMaxChanges[tch]=std::min(maxBuildingChangesPerRealDayForTeachersMaxChanges[tch], spr->maxBuildingChangesPerDay);
 			}
 		}
 	}
@@ -23404,12 +23255,12 @@ bool computeMaxBuildingChangesPerRealDayForStudents(QWidget* parent)
 					return false;
 			}
 
-			for(int sbg : spr->iSubgroupsList){
+			for(int sbg : std::as_const(spr->iSubgroupsList)){
 				maxBuildingChangesPerRealDayForSubgroupsPercentages[sbg]=100;
 				if(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]<0)
 					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=min(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=std::min(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
 			}
 		}
 		else if(gt.rules.internalSpaceConstraintsList[i]->type==CONSTRAINT_STUDENTS_MAX_BUILDING_CHANGES_PER_REAL_DAY){
@@ -23433,7 +23284,7 @@ bool computeMaxBuildingChangesPerRealDayForStudents(QWidget* parent)
 				if(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]<0)
 					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=spr->maxBuildingChangesPerDay;
 				else
-					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=min(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
+					maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg]=std::min(maxBuildingChangesPerRealDayForSubgroupsMaxChanges[sbg], spr->maxBuildingChangesPerDay);
 			}
 		}
 	}
@@ -23630,12 +23481,12 @@ void computeSubgroupsTeachersForActivitiesOfTheDay()
 {
 	for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 		//students
-		QSet<int> st_smhd=QSet<int>(subgroupsWithMaxDaysPerWeekForActivities[ai].constBegin(), subgroupsWithMaxDaysPerWeekForActivities[ai].constEnd());
-		QSet<int> st_smtd=QSet<int>(subgroupsWithMaxThreeConsecutiveDaysForActivities[ai].constBegin(), subgroupsWithMaxThreeConsecutiveDaysForActivities[ai].constEnd());
-		QSet<int> st_smd=QSet<int>(subgroupsWithMaxRealDaysPerWeekForActivities[ai].constBegin(), subgroupsWithMaxRealDaysPerWeekForActivities[ai].constEnd());
-		QSet<int> st_sma=QSet<int>(subgroupsWithMaxAfternoonsPerWeekForActivities[ai].constBegin(), subgroupsWithMaxAfternoonsPerWeekForActivities[ai].constEnd());
-		QSet<int> st_smntags=QSet<int>(subgroupsWithTagsForActivities[ai].constBegin(), subgroupsWithTagsForActivities[ai].constEnd());
-		QSet<int> st_smm=QSet<int>(subgroupsWithMaxMorningsPerWeekForActivities[ai].constBegin(), subgroupsWithMaxMorningsPerWeekForActivities[ai].constEnd());
+		QSet<int> st_smhd(subgroupsWithMaxDaysPerWeekForActivities[ai].constBegin(), subgroupsWithMaxDaysPerWeekForActivities[ai].constEnd());
+		QSet<int> st_smtd(subgroupsWithMaxThreeConsecutiveDaysForActivities[ai].constBegin(), subgroupsWithMaxThreeConsecutiveDaysForActivities[ai].constEnd());
+		QSet<int> st_smd(subgroupsWithMaxRealDaysPerWeekForActivities[ai].constBegin(), subgroupsWithMaxRealDaysPerWeekForActivities[ai].constEnd());
+		QSet<int> st_sma(subgroupsWithMaxAfternoonsPerWeekForActivities[ai].constBegin(), subgroupsWithMaxAfternoonsPerWeekForActivities[ai].constEnd());
+		QSet<int> st_smntags(subgroupsWithTagsForActivities[ai].constBegin(), subgroupsWithTagsForActivities[ai].constEnd());
+		QSet<int> st_smm(subgroupsWithMaxMorningsPerWeekForActivities[ai].constBegin(), subgroupsWithMaxMorningsPerWeekForActivities[ai].constEnd());
 
 		QSet<int> st_smda=st_smhd+st_smtd+st_smd+st_sma+st_smntags;
 		QSet<int> st_smdm=st_smhd+st_smtd+st_smd+st_smm+st_smntags;
@@ -23653,23 +23504,23 @@ void computeSubgroupsTeachersForActivitiesOfTheDay()
 		subgroupsForActivitiesOfTheDayMornings[ai]=st_lmdm;
 
 		QSet<int> st_stchl=st_smhd+st_smntags;
-		QList<int> st_ltchl=QList<int>(st_stchl.constBegin(), st_stchl.constEnd());
+		QList<int> st_ltchl(st_stchl.constBegin(), st_stchl.constEnd());
 		std::stable_sort(st_ltchl.begin(), st_ltchl.end());
 		subgroupsForActivitiesOfTheDay[ai]=st_ltchl;
 	}
 	
 	for(int ai=0; ai<gt.rules.nInternalActivities; ai++){
 		//teachers
-		QSet<int> smhd=QSet<int>(teachersWithMaxDaysPerWeekForActivities[ai].constBegin(), teachersWithMaxDaysPerWeekForActivities[ai].constEnd());
-		QSet<int> sntd=QSet<int>(teachersWithNoTwoConsecutiveDaysForActivities[ai].constBegin(), teachersWithNoTwoConsecutiveDaysForActivities[ai].constEnd());
-		QSet<int> smtd=QSet<int>(teachersWithMaxThreeConsecutiveDaysForActivities[ai].constBegin(), teachersWithMaxThreeConsecutiveDaysForActivities[ai].constEnd());
-		QSet<int> smd=QSet<int>(teachersWithMaxRealDaysPerWeekForActivities[ai].constBegin(), teachersWithMaxRealDaysPerWeekForActivities[ai].constEnd());
-		QSet<int> smntags=QSet<int>(teachersWithTagsForActivities[ai].constBegin(), teachersWithTagsForActivities[ai].constEnd());
-		QSet<int> sma=QSet<int>(teachersWithMaxAfternoonsPerWeekForActivities[ai].constBegin(), teachersWithMaxAfternoonsPerWeekForActivities[ai].constEnd());
-		QSet<int> smm=QSet<int>(teachersWithMaxMorningsPerWeekForActivities[ai].constBegin(), teachersWithMaxMorningsPerWeekForActivities[ai].constEnd());
+		QSet<int> smhd(teachersWithMaxDaysPerWeekForActivities[ai].constBegin(), teachersWithMaxDaysPerWeekForActivities[ai].constEnd());
+		QSet<int> sntd(teachersWithNoTwoConsecutiveDaysForActivities[ai].constBegin(), teachersWithNoTwoConsecutiveDaysForActivities[ai].constEnd());
+		QSet<int> smtd(teachersWithMaxThreeConsecutiveDaysForActivities[ai].constBegin(), teachersWithMaxThreeConsecutiveDaysForActivities[ai].constEnd());
+		QSet<int> smd(teachersWithMaxRealDaysPerWeekForActivities[ai].constBegin(), teachersWithMaxRealDaysPerWeekForActivities[ai].constEnd());
+		QSet<int> smntags(teachersWithTagsForActivities[ai].constBegin(), teachersWithTagsForActivities[ai].constEnd());
+		QSet<int> sma(teachersWithMaxAfternoonsPerWeekForActivities[ai].constBegin(), teachersWithMaxAfternoonsPerWeekForActivities[ai].constEnd());
+		QSet<int> smm(teachersWithMaxMorningsPerWeekForActivities[ai].constBegin(), teachersWithMaxMorningsPerWeekForActivities[ai].constEnd());
 
 		//2025-05-30
-		QSet<int> smht=QSet<int>(teachersWithMaxHoursPerTermForActivities[ai].constBegin(), teachersWithMaxHoursPerTermForActivities[ai].constEnd());
+		QSet<int> smht(teachersWithMaxHoursPerTermForActivities[ai].constBegin(), teachersWithMaxHoursPerTermForActivities[ai].constEnd());
 
 		QSet<int> smda=smhd+sntd+smtd+smd+sma+smntags+smht; //smht must be empty in the Mornings-Afternoons mode (smht is nonempty only in the Terms mode,
 		QSet<int> smdm=smhd+sntd+smtd+smd+smm+smntags+smht; //so adding it here is useless, but it does not hurt).
@@ -23687,7 +23538,7 @@ void computeSubgroupsTeachersForActivitiesOfTheDay()
 		teachersForActivitiesOfTheDayMornings[ai]=lmdm;
 
 		QSet<int> stchl=smhd+sntd+smntags+smht;
-		QList<int> ltchl=QList<int>(stchl.constBegin(), stchl.constEnd());
+		QList<int> ltchl(stchl.constBegin(), stchl.constEnd());
 		std::stable_sort(ltchl.begin(), ltchl.end());
 		teachersForActivitiesOfTheDay[ai]=ltchl;
 	}
@@ -24587,7 +24438,7 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 					nIncompatReal=(gt.rules.nDaysPerWeek/2-subgroupsMaxRealDaysPerWeekMaxDays[s])*2*gt.rules.nHoursPerDay;
 				}
 				
-				nIncompatible[i]+=max(nIncompat, nIncompatReal);
+				nIncompatible[i]+=std::max(nIncompat, nIncompatReal);
 			}
 
 			//teachers max real days per week
@@ -24604,7 +24455,7 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 					nIncompatReal=(gt.rules.nDaysPerWeek/2-teachersMaxRealDaysPerWeekMaxDays[t])*2*gt.rules.nHoursPerDay;
 				}
 				
-				nIncompatible[i]+=max(nIncompat, nIncompatReal);
+				nIncompatible[i]+=std::max(nIncompat, nIncompatReal);
 			}
 		}
 
@@ -24622,7 +24473,7 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 			if(cnt<0.0){
 				//assert(cnt+0.01>=0.0); //maybe rouding error, but not too high
 				if(!(cnt+0.01>=0.0)){
-					cout<<"Probable ERROR in file "<<__FILE__<<", line "<<__LINE__<<", cnt should be >=0.0"<<endl;
+					std::cout<<"Probable ERROR in file "<<__FILE__<<", line "<<__LINE__<<", cnt should be >=0.0"<<std::endl;
 				}
 				cnt=0.0;
 			}
@@ -24688,7 +24539,7 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 			adjMatrix.insert(c2c->secondActivityIndex, c2c->firstActivityIndex);
 		}
 	}
-		
+	
 	QHash<int, int> repr;
 	//repr.clear();
 	
@@ -25111,12 +24962,12 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 	}
 	
 	if(VERBOSE){
-		cout<<"The order of activities (id-s):"<<endl;
+		std::cout<<"The order of activities (id-s):"<<std::endl;
 		for(int i=0; i<gt.rules.nInternalActivities; i++){
-			cout<<"No: "<<i+1;
+			std::cout<<"No: "<<i+1;
 		
 			Activity* act=&gt.rules.internalActivitiesList[copyOfInitialPermutation[i]];
-			cout<<", Id="<<act->id;
+			std::cout<<", Id="<<act->id;
 			
 			bool spacerBefore=false, spacerAfter=false;
 			if(act->isSplit()){
@@ -25129,40 +24980,40 @@ void sortActivities(QWidget* parent, const QHash<int, int>& reprSameStartingTime
 					spacerAfter=false;
 				}
 			}
-			cout<<", ";
+			std::cout<<", ";
 			if(spacerBefore)
-				cout<<"    ";
+				std::cout<<"    ";
 			if(act->isSplit())
-				cout<<"Duration: "<<act->duration<<"/"<<act->totalDuration;
+				std::cout<<"Duration: "<<act->duration<<"/"<<act->totalDuration;
 			else
-				cout<<"Duration: "<<act->duration;
-			cout<<", ";
+				std::cout<<"Duration: "<<act->duration;
+			std::cout<<", ";
 			if(spacerAfter)
-				cout<<"    ";
+				std::cout<<"    ";
 			
-			cout<<"Teachers: ";
+			std::cout<<"Teachers: ";
 			QString tj=act->teachersNames.join(" ");
-			cout<<qPrintable(tj);
-			cout<<", Subject: "<<qPrintable(act->subjectName);
+			std::cout<<qPrintable(tj);
+			std::cout<<", Subject: "<<qPrintable(act->subjectName);
 			if(act->activityTagsNames.count()>0){
 				QString atj=act->activityTagsNames.join(" ");
-				cout<<", Activity tags: "<<qPrintable(atj);
+				std::cout<<", Activity tags: "<<qPrintable(atj);
 			}
-			cout<<", Students: ";
+			std::cout<<", Students: ";
 			QString sj=act->studentsNames.join(" ");
-			cout<<qPrintable(sj);
+			std::cout<<qPrintable(sj);
 			
-			cout<<", nIncompatible[copyOfInitialPermutation[i]]="<<nIncompatible[copyOfInitialPermutation[i]];
+			std::cout<<", nIncompatible[copyOfInitialPermutation[i]]="<<nIncompatible[copyOfInitialPermutation[i]];
 			if(nMinDaysConstraintsBroken[copyOfInitialPermutation[i]]>0.0)
-				cout<<", nMinDaysConstraintsBroken[copyOfInitialPermutation[i]]="<<nMinDaysConstraintsBroken[copyOfInitialPermutation[i]];
+				std::cout<<", nMinDaysConstraintsBroken[copyOfInitialPermutation[i]]="<<nMinDaysConstraintsBroken[copyOfInitialPermutation[i]];
 				
 			if(gt.rules.groupActivitiesInInitialOrderList.count()>0)
 				if(fatherActivityInInitialOrder[copyOfInitialPermutation[i]]>=0)
-					cout<<" (grouped with id "<<gt.rules.internalActivitiesList[fatherActivityInInitialOrder[copyOfInitialPermutation[i]]].id<<")";
+					std::cout<<" (grouped with id "<<gt.rules.internalActivitiesList[fatherActivityInInitialOrder[copyOfInitialPermutation[i]]].id<<")";
 			
-			cout<<endl;
+			std::cout<<std::endl;
 		}
-		cout<<"End - the order of activities (id-s):"<<endl;
+		std::cout<<"End - the order of activities (id-s):"<<std::endl;
 	}
 
 	QString s="";

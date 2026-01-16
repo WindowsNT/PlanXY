@@ -14,8 +14,7 @@ File timetable_defs.h
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -34,9 +33,10 @@ File timetable_defs.h
 
 #include <QtGlobal>
 
-#include "utilities.h"
-
 class QWidget;
+
+class Rules;
+void setRulesModifiedAndOtherThings(Rules* rules);
 
 extern const QString IL1; //indentation levels
 extern const QString IL2;
@@ -59,6 +59,16 @@ extern QString DIRECTORY_AUTOSAVE;
 extern QString SUFFIX_FILENAME_AUTOSAVE;
 
 extern bool CONFIRM_ACTIVATE_DEACTIVATE_ACTIVITIES_CONSTRAINTS;
+
+extern bool SHORTCUT_PLUS;
+extern bool SHORTCUT_M;
+extern bool SHORTCUT_DELETE;
+extern bool SHORTCUT_A;
+extern bool SHORTCUT_D;
+extern bool SHORTCUT_C;
+extern bool SHORTCUT_U;
+extern bool SHORTCUT_J;
+extern bool SHORTCUT_W;
 
 /**
 The FET version

@@ -170,6 +170,17 @@ std::map<std::string, std::wstring> LessonRowFromID(sqlite::sqlite& sql, int cid
 
 std::map<std::string, std::wstring> PersonRowFromID(sqlite::sqlite& sql, int cid)
 {
+	if (cid >= 30000)
+	{
+		// Return TAMB%i
+		std::map<std::string, std::wstring> r;
+		r["ID"] = std::to_wstring(cid);
+		wchar_t t[100] = {};
+		swprintf_s(t, 100, L"TAMB%i", cid);
+		r["LASTNAME"] = t;
+		r["FIRSTNAME"] = L"";
+		return r;
+	}
 	char t[1000] = {};
 	sprintf_s(t, 1000, "SELECT * FROM PERSONS WHERE ID = %i", cid);
 	sqlite::query q1(sql.h(), t);

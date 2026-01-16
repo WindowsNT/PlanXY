@@ -14,8 +14,7 @@ File generate.h
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -47,6 +46,10 @@ class Activity;
 
 class QWidget;
 
+class FetTranslate: public QObject{
+	Q_OBJECT
+};
+
 /**
 This class incorporates the routines for time and space allocation of activities
 */
@@ -54,10 +57,9 @@ class Generate: public QObject{
 	Q_OBJECT
 	
 public:
-#ifdef FET_COMMAND_LINE
-	std::atomic<bool> writeCurrentAndHighestTimetable; //for fet-cl, we poll a file and if it exists we will write the current and highest-stage timetables.
-#endif
-
+//#ifdef FET_COM MAND_LINE
+//	std::atomic<bool> writeCurrentAndHighestTimetable; //for fet-cl, we poll a file and if it exists we will write the current and highest-stage timetables.
+//#endif
 	//QMutex myMutex;
 	std::mutex myMutex;
 	
@@ -256,9 +258,7 @@ private:
 
 	bool isExceptionTime(int ai, int t, const QSet<int>& ets);
 
-#ifdef FET_COMMAND_LINE
 	void checkWriteCurrentAndHighestTimetable();
-#endif
 
 public:
 	MRG32k3a rng;
@@ -362,6 +362,8 @@ public:
 	inline bool getPreferredRoom(const QList<int>& globalConflActivities, int level, const Activity* act, int ai, int d, int h, int& roomSlot, int& selectedSlot, QList<int>& localConflActivities, bool& canBeUnspecifiedPreferredRoom, QList<int>& realRoomsList);
 	inline bool getRoom(int level, const Activity* act, int ai, int d, int h, int& roomSlot, int& selectedSlot, QList<int>& conflActivities, int& nConflActivities, QList<int>& realRoomsList);
 
+	inline bool getOptimumActivitiesToDisplace(int level, const QList<QList<int>>& activitiesList, const QList<bool>& canEmpty, QList<int>& chosenActivitiesList);
+
 	Solution c;
 	
 	int nPlacedActivities;
@@ -383,8 +385,8 @@ public:
 	
 	bool precompute(QWidget* parent, QTextStream* maxPlacedActivityStream=nullptr);
 	
-	void generateWithSemaphore(int maxSeconds, bool& restarted, bool& impossible, bool& timeExceeded, bool threaded, QTextStream* maxPlacedActivityStream=nullptr);
-	void generate(int maxSeconds, bool& restarted, bool& impossible, bool& timeExceeded, bool threaded, QTextStream* maxPlacedActivityStream=nullptr);
+	void generateWithSemaphore(int maxSeconds, bool& restarted, bool& impossible, bool& timeExceeded, bool threaded, bool commandLine, QTextStream* maxPlacedActivityStream=nullptr);
+	void generate(int maxSeconds, bool& restarted, bool& impossible, bool& timeExceeded, bool threaded, bool commandLine, QTextStream* maxPlacedActivityStream=nullptr);
 	
 	void moveActivity(int ai, int fromslot, int toslot, int fromroom, int toroom, const QList<int>& fromRealRoomsList, const QList<int>& toRealRoomsList);
 	
@@ -399,6 +401,7 @@ Q_SIGNALS:
 	
 private:
 	bool isThreaded;
+	bool isCommandLine;
 	
 	int currentlyNPlacedActivities;
 	time_t starting_time;

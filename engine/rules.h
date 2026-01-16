@@ -14,8 +14,7 @@ File rules.h
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -47,8 +46,6 @@ File rules.h
 
 #include <QPair>
 
-#include <list>
-
 class QXmlStreamReader;
 
 class QWidget;
@@ -74,6 +71,11 @@ public:
 	void operator+=(const char* str);
 };
 
+class EngineMessageBox{
+public:
+	static void critical(QWidget* parent, const QString& title, const QString& message);
+};
+
 class QDataStream;
 class Rules;
 
@@ -91,10 +93,10 @@ class Rules{
 	Q_DECLARE_TR_FUNCTIONS(Rules)
 
 public:
-#ifndef FET_COMMAND_LINE
+//#ifndef FET_COM MAND_LINE
 	void addUndoPoint(const QString& description, bool autosave=true, bool resetCounter=false);
 	void restoreState(QWidget* parent, int iterationsBackward); //iterationsBackward<0 means Redo, >0 means Undo, and ==0 is not allowed
-#endif
+//#endif
 
 	void recomputeActivitiesSetForTimeConstraint(TimeConstraint* ctr);
 	void insertTimeConstraintInHash(TimeConstraint* ctr);
@@ -234,6 +236,14 @@ public:
 	QHash<QString, QSet<int>> activitiesForSubjectHash;
 	QHash<QString, QSet<int>> activitiesForActivityTagHash;
 	QHash<QString, QSet<int>> activitiesForStudentsSetHash;*/
+	
+	//internal
+	//2025-12-10. Used only for groups/subgroups which are automatically added when starting the generation,
+	//when a year/group contains no groups/subgroups. For instance, '6a Automatic Subgroup' -> '6a'.
+	//Used in the two timetable view students days horizontal/vertical dialogs, to get the name of the real
+	//superior set, to be able to correctly call Time/SpaceConstraint::isRelatedToStudentsSet(...).
+	//If a name is not in this hash, then it is real (exists in the fet data file, added by the user).
+	QHash<QString, QString> correspondingRealStudentsSetName;
 
 	/*
 	The following variables contain redundant data and are used internally
@@ -444,7 +454,7 @@ public:
 	
 	/**
 	True if the students sets contain one common subgroup.
-	This function is used in constraints isRelatedToStudentsSet
+	Used in the constraints' isRelatedToStudentsSet(...) function
 	*/
 	bool setsShareStudents(const QString& studentsSet1, const QString& studentsSet2);
 
@@ -1017,6 +1027,8 @@ private:
 	TimeConstraint* readActivitiesOccupyMinTimeSlotsFromSelection(QXmlStreamReader& xml, FakeString& xmlReadingLog);
 	TimeConstraint* readActivitiesMaxSimultaneousInSelectedTimeSlots(QXmlStreamReader& xml, FakeString& xmlReadingLog);
 	TimeConstraint* readActivitiesMinSimultaneousInSelectedTimeSlots(QXmlStreamReader& xml, FakeString& xmlReadingLog);
+
+	TimeConstraint* readActivitiesMaxTotalNumberOfStudentsInSelectedTimeSlots(QXmlStreamReader& xml, FakeString& xmlReadingLog);
 
 	TimeConstraint* readMaxTotalActivitiesFromSetInSelectedTimeSlots(QXmlStreamReader& xml, FakeString& xmlReadingLog);
 

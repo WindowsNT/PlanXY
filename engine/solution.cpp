@@ -14,8 +14,7 @@ File solution.cpp
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -187,8 +186,8 @@ double Solution::fitness(Rules& r, FakeString* conflictsString){
 #if 0
 	//I cannot put this test. I got situations of assert failed with 15.2 != 15.2 ??? Maybe rounding errors
 	if(this->_fitness!=conflictsTotal){
-		cout<<"this->_fitness=="<<this->_fitness<<endl;
-		cout<<"conflictsTotal=="<<conflictsTotal<<endl;
+		std::cout<<"this->_fitness=="<<this->_fitness<<std::endl;
+		std::cout<<"conflictsTotal=="<<conflictsTotal<<std::endl;
 	}
 	assert(this->_fitness==conflictsTotal);//TODO
 #endif

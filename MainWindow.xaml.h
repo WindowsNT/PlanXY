@@ -307,11 +307,13 @@ namespace winrt::WuiFET::implementation
 				Frame fr = topnv.FindName(L"contentFrame").as<Frame>();
 				if (fr)
 				{
+#ifndef _DEBUG
 					if ((project && project->file.length() && !project->HasActiveDetachData()) || windows.size() > 1)
 					{
 						fr.Navigate(winrt::xaml_typename<winrt::WuiFET::DataPage>(), winrt::box_value<long long>((long long)project.get()));
 					}
 					else
+#endif
 					{
 						fr.Navigate(winrt::xaml_typename<winrt::WuiFET::MainPage>(), winrt::box_value<long long>((long long)project.get()));
 					}

@@ -10,8 +10,7 @@
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU Affero General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
+ *   published by the Free Software Foundation, version 3 of the License.  *
  *                                                                         *
  ***************************************************************************/
 
@@ -24,27 +23,15 @@
 
 #include <QObject>
 
-#ifndef FET_COMMAND_LINE
-#include <QWidget>
-#else
-class QWidget{
-};
-#endif
+class QWidget;
 
-#ifdef FET_COMMAND_LINE
-class FetCommandLine: public QObject{
-	Q_OBJECT
-};
+class QProgressDialog;
 
-void commandLineMessage(QWidget* parent, const QString& title, const QString& message);
+void commandLineMessage(QWidget* parent, const QString& title, const QString& message,
+ bool isWarning, bool isError);
 int commandLineMessage(QWidget* parent, const QString& title, const QString& message,
- const QString& button0Text, const QString& button1Text, const QString& button2Text, int defaultButton, int escapeButton);
-#else
-//Just to disable a Qt moc warning
-class DummyFetGuiClass: public QObject{
-	Q_OBJECT
-};
-#endif
+ const QString& button0Text, const QString& button1Text, const QString& button2Text, int defaultButton, int escapeButton,
+ bool isWarning, bool isError);
 
 //Rules
 
@@ -176,11 +163,12 @@ public:
 
 //QProgressDialog
 
-#ifdef FET_COMMAND_LINE
+class EngineProgressDialog{
+	QProgressDialog* qpd;
 
-class QProgressDialog{
 public:
-	QProgressDialog(QWidget* parent);
+	EngineProgressDialog(QWidget* parent);
+	~EngineProgressDialog();
 	void setWindowTitle(const QString& title);
 	void setLabelText(const QString& title);
 	void setRange(int a, int b);
@@ -188,7 +176,5 @@ public:
 	void setValue(int v);
 	bool wasCanceled();
 };
-
-#endif
 
 #endif

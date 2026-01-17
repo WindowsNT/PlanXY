@@ -50,6 +50,7 @@
             <NavigationViewItem  Icon="Calendar" Content="{x:Bind txt(125);,Mode=OneWay}" x:Name="ViewGenerate" >
                 <NavigationViewItem.KeyboardAccelerators>
                     <KeyboardAccelerator Key="G" Modifiers="Menu" />
+                    <KeyboardAccelerator Key="F5"  />
                 </NavigationViewItem.KeyboardAccelerators>
             </NavigationViewItem>
             <NavigationViewItem  Icon="Directions" Content="{x:Bind txt(75);,Mode=OneWay}" x:Name="ResultList" >

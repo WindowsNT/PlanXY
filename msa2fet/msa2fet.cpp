@@ -623,6 +623,7 @@ void LoadParametersMSA(int ValidateLevel)
 		MaxContinuousHoursAt = y.vv("MaxContinuousHoursAt").GetValueInt(6);
 		G_MaxGapsWeek = y.vv("G_MaxGapsWeek").GetValueInt(4);
 		A_MaxGapsWeek = y.vv("A_MaxGapsWeek").GetValueInt(6);
+		TambCombo = !y.vv("TambNonCombo").GetValueInt(0);
 		if (ValidateLevel >= 1)
 		{
 			MaxContinuousHoursGen = 0;

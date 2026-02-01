@@ -293,6 +293,7 @@ void ChangeAssets(const wchar_t* src, const wchar_t* dir_dest)
 }
 
 wchar_t MainDirectory[MAX_PATH] = {};
+#include "rdstore.hpp"
 int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
 {
     SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
@@ -337,6 +338,8 @@ int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
     std::wstring sf = de + L"\\settings.xml";
     SettingsX = std::make_shared<XML3::XML>(sf.c_str());
 
+
+    StoreRedirect();
 
     winrt::init_apartment(winrt::apartment_type::single_threaded);
     ::winrt::Microsoft::UI::Xaml::Application::Start(

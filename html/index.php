@@ -160,14 +160,6 @@
   <section id="download" class="py-20 bg-white text-center">
     <h2 class="text-3xl font-bold mb-6">Download</h2>
     <p class="max-w-2xl mx-auto text-gray-600 mb-8">
-      Download the auto-updating single executable for Windows 10/11 x64 below.
-    </p>
-    <a href="https://www.turbo-play.com/update4/29410c69-7a2b-4a2b-9893-9de712a5cd77/planxy.exe"
-       class="inline-block bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
-      Download for Windows 10/11
-    </a>
-	<br><br>
-    <p class="max-w-2xl mx-auto text-gray-600 mb-8">
       Download from the App Store.
     </p>
 	<a href="https://apps.microsoft.com/detail/9nfv4333x7jr?hl=en&gl=GR&ocid=pdpshare" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition">Download from Microsoft Store</a>

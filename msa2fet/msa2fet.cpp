@@ -289,12 +289,6 @@ std::vector<K> AllKidLoaded;
 #include "ttgapgen.hpp"
 
 /*
-		2024
-			// Sal-Boufake anath (remove)
-			// Skarimba Kwtitou 6 hours kat
-			// Metallinos P Erase fake Jazz Band
-			// Karypidou must set AB and Proxenias for A3
-			// Needs "PARAM" set in TEACHERSINCLASSES to 1 FOR SOLFEGE because we can't deduct from hours (its both 2)
 */
 
 std::wstring Decode2(const wchar_t* src);
@@ -413,6 +407,9 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 		if (tid == 0)
 			continue;
 
+		if (tid == 423)
+			nop2();
+
 		for (auto& day : xt)
 		{
 			int dd = 0;
@@ -518,7 +515,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 				}
 				else
 				{
-					if (tid == 0 || lid == 0 || cid == 0)
+					if (tid == 0 || lid == 0)
 						continue;
 				}
 

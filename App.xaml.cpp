@@ -338,7 +338,6 @@ int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
     std::wstring sf = de + L"\\settings.xml";
     SettingsX = std::make_shared<XML3::XML>(sf.c_str());
 
-
     StoreRedirect();
 
     winrt::init_apartment(winrt::apartment_type::single_threaded);

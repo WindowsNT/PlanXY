@@ -271,6 +271,8 @@ struct K
 
 std::vector<K> AllKidLoaded;
 
+int CountTambClasses = 5;
+
 
 #include "config.h"
 #include "days.h"

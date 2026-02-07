@@ -429,6 +429,7 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 
 				}
 				int aid = 0, cid = 0, lid = 0, kid = 0;
+				std::string tag1;
 				int syn = 0;
 				for (int pass = 0; pass < 2; pass++)
 				{
@@ -442,6 +443,12 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 							{
 
 							}
+						}
+
+
+						if (sub.GetElementName() == "Activity_Tag")
+						{
+							tag1 = sub.vv("name").GetValue();
 						}
 
 						if (sub.GetElementName() == "Subject" && lid == 0)
@@ -523,13 +530,14 @@ void BuildNewVersion(const char* dbf, [[maybe_unused]]  std::string groups1, std
 				if (aid == 0)
 					aid = 82;
 
+
 				if (has_teacher[tid][hh][dd] == 0)
 				{
 					has_teacher[tid][hh][dd] = 1;
 					if (kid == 0)
-						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,LID,CID,AID,DD,HH,ULESSON) VALUES (%i,%i,%i,%i,%i,%i,%i,'%s')", 1, tid, lid, cid, aid, dd, hh,ulesson.a_str());
+						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,LID,CID,AID,DD,HH,ULESSON,TAG1) VALUES (%i,%i,%i,%i,%i,%i,%i,'%s','%s')", 1, tid, lid, cid, aid, dd, hh,ulesson.a_str(), tag1.c_str());
 					else
-						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,KID,LID,CID,AID,DD,HH,ULESSON) VALUES (%i,%i,%i,%i,%i,%i,%i,%i,'%s')", 1, tid, kid, lid, cid, aid, dd, hh, ulesson.a_str());
+						sprintf_s(t, 1000, "INSERT INTO FET_RESULTS (SID,TID,KID,LID,CID,AID,DD,HH,ULESSON,TAG1) VALUES (%i,%i,%i,%i,%i,%i,%i,%i,'%s','%s')", 1, tid, kid, lid, cid, aid, dd, hh, ulesson.a_str(),tag1.c_str());
 					sql_statements.push_back(t);
 				}
 

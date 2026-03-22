@@ -294,6 +294,7 @@ void ChangeAssets(const wchar_t* src, const wchar_t* dir_dest)
 
 wchar_t MainDirectory[MAX_PATH] = {};
 #include "rdstore.hpp"
+#include "addstring.hpp"
 int __stdcall wWinMain(HINSTANCE h, HINSTANCE, [[maybe_unused]] PWSTR t, int)
 {
     SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
